@@ -195,7 +195,7 @@ rahulm@seas.upenn.edu}
     \item Validation
 \end{itemize}
 
-\chapter{Understand The Environment}
+\chapter{Understand The Physiological Environment}
 \begin{itemize}
 	\item What is the environment that the pacemaker works in?
     \item How does the environment work?
@@ -250,7 +250,7 @@ Implantable pacemakers and ICDs follow the principle of EP testing. For a dual c
 
 \Hao{A figure for heart and pacemaker}
 
-\chapter{Model The Environment}
+\chapter{Model The Physiological Environment}
 \begin{itemize}
 	\item How to encode domain knowledge of the physiological environment into models?
     \item What are the applications that the models will be used?
@@ -266,7 +266,7 @@ Models (especially environment models) should be designed in accordance with the
 In the following sections, we demonstrate how to construct heart models for closed-loop verification of implantable pacemaker. Note that for two different applications the models are constructed differently as we address their respective requirements for environment models. 
 
 
-\section{Deterministic Models For Closed-loop Testing}
+\section{Heart Models For Closed-loop Testing}
 \begin{itemize}
 	\item Why the models at this level have to be deterministic? Where can they be used?
     \item How electrophysiology reflects the functions of the heart?
@@ -275,14 +275,14 @@ In the following sections, we demonstrate how to construct heart models for clos
     \item How VHM interacts with pacemaker?
     
 \end{itemize}
-During closed-loop testing, the devices interact with the environment (or its models) under different environmental conditions. The closed-loop executions are monitored and violations of safety/efficacy requirements are reported. In model-based closed-loop testing, the environment models are expected to mimic the behaviors of actual environment and its interaction with the device. Thus the environment models are in general deterministic so that the execution traces are reproducible. Any complex dynamics during state transitions also need to be captured so that violations within longer executions traces can be captured. 
+During closed-loop testing, the devices interact with the environment (or its models) under different environmental conditions. The closed-loop executions are monitored and violations of safety/efficacy requirements are reported. In model-based closed-loop testing, the environment models are expected to mimic the behaviors of actual environment and its interaction with the device. Thus the environment models are in general deterministic so that the execution traces are reproducible. Complex dynamics during state transitions also need to be captured to validate violations within longer executions traces. 
 
 \subsection{Modeling Philosophy}
 
 \textbf{Interface to the device: }The pacemaker can only sense and actuate from two locations within the heart, the spatial fidelity requirement for the heart model is thus low. The diagnosis of heart conditions only relies on the timing of the electrical events, thus the behaviors of the model can be reduced to timing only, if a temporal model of the heart is rich enough to represent majority of heart conditions. \\
 \textbf{Model expressiveness: }Electrophysiology (EP) is an active field in cardiology based on the fact that the mechanical functions of the heart are largely correlated with the electrical activities. During an EP testing procedure, the physicians diagnose heart conditions by examining the patterns and intervals of local electrical activations (temporal) measured from electrodes placed into different locations of the heart (spatial). 
 
-Based on the analysis above, an EP-based spatial and temporal model of the heart is capable of representing the electrical behaviors of certain heart condition, and more importantly, its interaction with pacemaker. 
+Based on the analysis above, an EP-based spatial and temporal model of the heart is capable of representing the electrical behaviors of different heart conditions, and more importantly, their interaction with a pacemaker. 
 
 \subsection{Heart Model Components}
 We introduce the model components that can be used to configure heart models corresponding to different heart conditions. As introduced in Chapter 2, the action potential of a heart tissue has 3 timing periods during which the tissue responds to external electrical stimuli differently. We use an extended timed-automata formulation (\cite{timed_automata}) to model the timing behaviors of a heart tissue during each cycle. We refer the tissue model as \emph{Node automaton} and \figref{node_automata} shows the structure of a node automaton $i$. 3 states correspond to 3 timing periods of the action potential. From \textsf{Rest} state, the node can either self activate or activated by external stimuli (Act\_node) and go to \textsf{ERP} state. During \textsf{ERP} state the node does not respond to external stimuli (blocked). During \textsf{RRP} state, the node can still be activated and go to \textsf{ERP} state, however the ERP period and the conduction delay of the tissue are affected by the "earliness" of the activation arrived during the RRP period, which is tracked by a shared variable $C(i)$. The new ERP period is determined by a function over clock value $g(f(t))$ which mimic the beat-to-beat dynamics described in \cite{josephson}. The function $g$ and $f$ are given by:
@@ -383,7 +383,7 @@ The most challenging aspect during closed-loop model checking is environment mod
 %\vspace{-10pt}
 \end{figure} 
 \subsection{Initial Abstraction}
-For the initial heart model, spatially we assume that every heart tissue are modeled. Temporally we model each heart tissue as an automaton shown in \figref{HM_abs}.b. The beat-to-beat dynamics of heart tissue discussed in the last section is abstracted with non-determinism, as the ERP period and conduction delay of the tissue are in non-deterministic ranges instead of deterministic functions. The model covers all possible timing behaviors of a heart tissue. 
+For the initial heart model, spatially we assume that every heart tissue are modeled. Temporally we model each heart tissue as an automaton shown in \figref{HM_abs}.b. The beat-to-beat dynamics of heart tissue discussed in the last section is abstracted using non-determinism, as the ERP period and conduction delay of the tissue are non-deterministically chosen from ranges instead of deterministic functions. The model covers all possible timing behaviors of a heart tissue. 
 
 \subsection{Abstract Conduction With Paths}
 At the first abstraction step, we only model the following kinds of heart tissue with node automata and abstract other heart tissue with path automata:
