@@ -383,17 +383,19 @@ The most challenging aspect during closed-loop model checking is environment mod
 %\vspace{-10pt}
 \end{figure} 
 \subsection{Initial Abstraction}
-For the initial heart model, spatially we assume that every heart tissue are modeled. Temporally we model each heart tissue as an automaton shown in \figref{HM_abs}.b. The beat-to-beat dynamics of heart tissue discussed in the last section is abstracted using non-determinism, as the ERP period and conduction delay of the tissue are non-deterministically chosen from ranges instead of deterministic functions. The model covers all possible timing behaviors of a heart tissue. 
+For the initial heart model, spatially we assume that every heart tissue are modeled. Temporally we model each heart tissue as an automaton $N0$ shown in \figref{HM_abs}.b. The beat-to-beat dynamics of heart tissue discussed in the last section is abstracted using non-determinism, as the ERP period and conduction delay of the tissue are non-deterministically chosen from ranges instead of deterministic functions. The model covers all possible timing behaviors of a heart tissue. 
 
-\subsection{Abstract Conduction With Paths}
-At the first abstraction step, we only model the following kinds of heart tissue with node automata and abstract other heart tissue with path automata:
+\subsection{Abstract Conduction Delays With Paths}
+At the first abstraction step, we seperate the conduction delay (modeled by the cond state in $N0$) from the new node automata $N1$ and model the conduction between two nodes using path automaton $P1$. Since the beat-to-beat dynamics are abstracted with non-determinism, the RRP state is merged with the Rest state in $N1$. 
+
+we only model the following kinds of heart tissue with node automata and abstract other heart tissue with path automata:
 \begin{itemize}
 	\item Self-depolarizing tissue
     \item Tissue with long ERP period
     \item Tissue forming conduction loops
 \end{itemize}
 
-
+\subsection{Merging}
 abstract heart tissue
 % \subsubsection{Abstracting Beat-to-beat Dynamics}
 % \subsubsection{Abstracting Conduction Delays with Path}
@@ -434,10 +436,10 @@ An example: \Hao{Need a photo of table of typical parameter values}
 	\item What are the different methods to validate physiological models?
     \item How much confidence can these validation provide?
 \end{itemize}
-The validity of the environment models determines the validity of the closed-loop verification results. Since models are always approximations of the actual environment, there is always discrepancies between the model and the actual patient (group). The challenge then is to determine how much safety guarantee that model-based closed-loop verification can provide. 
+The validity of the environment models affects the validity of the closed-loop verification results. Since models are always approximations of the actual environment, there is always discrepancies between the model and the actual patient (group). The challenge then is to determine how much safety guarantee that model-based closed-loop verification can provide. 
 
 \section{Validate deterministic models}
-For deterministic models there are two steps
+For deterministic models there are two applications: 1) model a patient with certain heart condition, 2) model a \emph{specific} patient with certain heart condition. For the first application, it is important to show that the model successfully models the underlying mechanism of the heart condition, while for the second application the model should be able to generate same data as the real patient given the same input. 
 
 \subsection{Validating the underlying mechanism}
 
