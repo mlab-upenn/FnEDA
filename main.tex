@@ -504,7 +504,10 @@ Physiological requirements for medical devices specify the closed-loop condition
 
  \emph{The interval between two ventricular contractions should always be less or equal to 1000ms.} 
 
-Note that there is no mention of the operation of the pacemaker and how the pacemaker should achieve the requirement.  
+Note that this requirement focus purely on the condition of the patient, and there is no mention of the operation of the pacemaker or how the pacemaker should achieve the requirement. The corresponding specification of a single chamber pacemaker is:
+
+\emph{The pacemaker should deliver ventricular pacing, if there is no sensed ventricular event 1000ms since the last ventricular event (sensed or paced).}
+ 
 \section{Physiological Requirements For the heart}
 \begin{itemize}
 	\item Conditional requirements
