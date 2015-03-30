@@ -439,7 +439,7 @@ An example: \Hao{Need a photo of table of typical parameter values}
 The validity of the environment models affects the validity of the closed-loop verification results. Since models are always approximations of the actual environment, there is always discrepancies between the model and the actual patient (group). The challenge then is to determine how much safety guarantee that model-based closed-loop verification can provide. 
 
 \section{Validate deterministic models}
-For deterministic models there are two applications: 1) model a patient with certain heart condition, 2) model a \emph{specific} patient with certain heart condition. For the first application, it is important to show that the model successfully models the underlying mechanism of the heart condition, while for the second application the model should be able to generate same data as the real patient given the same input. 
+For deterministic models there are two applications: 1) model a patient with certain heart condition, 2) model a \emph{specific} patient with certain heart condition. For the first application, it is important to show that the model successfully models the underlying mechanism of the heart condition, while for the second application the model should be able to generate same data as the corresponding patient given the same input. 
 
 \subsection{Validating the underlying mechanism}
 
@@ -487,20 +487,24 @@ For non-deterministic models
  
 \chapter{Physiological Requirements}
 \begin{itemize}
-	\item How requirements are different to specifications?
+	\item How requirements are different from specifications?
     \item What are the forms of the requirements?
     \item How can the requirements be represented?
     \item Are those requirements binary?
     \item Are those requirements equally important?
 \end{itemize}
-/////////////////////////////////////////////
+
 % \begin{itemize}
 % 	\item In contrast to specifications
 %     \item Specified on physiological conditions during closed-loop interaction between the patient and the device.
 %     \item Timing requirements
 %     \item Monitor construction
 % \end{itemize}
+Physiological requirements for medical devices specify the closed-loop conditions that the devices are designed to achieve with its outputs to the patient. Unlike \emph{specifications} which specify desired device actions in response to the inputs from the patients, physiological requirements focus on the conditions of the patient with and without the device, which would indicate whether the device has fufilled its intended goals. For example, the most basic goal for a pacemaker is to maintain the ventricular rate above certain level. The corresponding physiological requirement is:
 
+ \emph{The interval between two ventricular contractions should always be less or equal to 1000ms.} 
+
+Note that there is no mention of the operation of the pacemaker and how the pacemaker should achieve the requirement.  
 \section{Physiological Requirements For the heart}
 \begin{itemize}
 	\item Conditional requirements
