@@ -1,0 +1,46 @@
+\chapter{Physiological Requirements}
+\begin{itemize}
+	\item How requirements are different from specifications?
+    \item What are the forms of the requirements?
+    \item How can the requirements be represented?
+    \item Are those requirements binary?
+    \item Are those requirements equally important?
+\end{itemize}
+
+% \begin{itemize}
+% 	\item In contrast to specifications
+%     \item Specified on physiological conditions during closed-loop interaction between the patient and the device.
+%     \item Timing requirements
+%     \item Monitor construction
+% \end{itemize}
+Physiological requirements for medical devices specify the closed-loop conditions that the devices are designed to achieve with its outputs to the patient. Unlike \emph{specifications} which specify desired device actions in response to the inputs from the patients, physiological requirements focus on the conditions of the patient with and without the device, which would indicate whether the device has fulfilled its intended goals. For example, the most basic goal for a pacemaker is to maintain the ventricular rate above certain level. The corresponding physiological requirement is:
+
+ \emph{The interval between two ventricular contractions should always be less or equal to 1000ms.} 
+
+Note that this requirement focus purely on the condition of the patient (ventricular contractions), and there is no mention of the operation of the pacemaker or how the pacemaker should achieve the requirement. An example specification of a single chamber pacemaker corresponding to the requirement is:  
+
+\emph{The pacemaker should deliver ventricular pacing, if there is no sensed ventricular event 1000ms since the last ventricular event (sensed or paced).}
+ 
+The specification is described using internal terminologies of the pacemaker software (paced and sensed events), and specified the action of the pacemaker corresponding to certain inputs. For more complex requirements, multiple specifications have to work together to achieve the requirement. Therefore there may exist executions that satisfy all the specifications but not the requirement. Verifying physiological requirements requires knowledge of the physiological condition and how device interacts with the physiological environment, thus can only be executed in closed-loop. 
+
+Devices are designed to improve certain physiological conditions, the performance of the devices is evaluated on the difference between the patient conditions without the device and with the device. The device should also avoid deteriorating certain patient conditions, thus physiological requirements are specified in the form of:
+$$C_{pre}\rightarrow C_{post}$$
+in which $C_{pre}$ is the physiological conditions without the device,  and $C_{post}$ is the physiological condition with the device. For model-based closed-loop verification, $C_{pre}$ is often in form of a set of constraints on patient parameters. As a special case, $C_{pre}$ can equal to $true$, means that $C_{post}$ should be satisfied under all possible conditions.
+
+Among all the physiological requirements for a device, not all of them are equally important. More important requirements should be given higher prioritiesAccording to the importance of the requirement
+
+For convenience, requirements are usually specified with binary results (satisfied/unsatisfied). quantitative
+
+hierarchical
+
+
+\section{Physiological Requirements For the heart}
+\begin{itemize}
+	\item Conditional requirements
+\end{itemize}
+
+\section{Requirement Representations}
+\subsection{TCTL}
+\subsection{Simulink Block}
+ 
+\section{Requirement Hierarchy*}
