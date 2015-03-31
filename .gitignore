@@ -41,3 +41,13 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+main.aux
+main.bbl
+*.blg
+main.log
+main.aux
+*.tps
+main.toc
+*.tcp
+main.pdf
+*.out
