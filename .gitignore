@@ -51,3 +51,5 @@ main.toc
 *.tcp
 main.pdf
 *.out
+main.aux
+main.pdf
