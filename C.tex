@@ -1,19 +1,30 @@
-\chapter{Environment Model Identification}
+\chapter{Identifying the Environment Model }
 \begin{itemize}
-	\item Why model identification is important?
+	\item What is the importance of model identification?
     \item How to identify?
     \item What's the data availability and quality?
     \item Are there differences for identifying different kind of models?
     \item What are the challenges?
 \end{itemize}
-Physiological models are developed to represent certain physiological condition in general, or the physiological condition of a specific patient. Therefore the structure of the model and corresponding parameters have to be identified. These information can be obtained from physiological data, which are from: 1) data collected during procedures, and 2) physiological literature in which physiological data are analyzed and summarized. Due to limitation on the interactions with the patient, the availability and quality of physiological data may be bad and there are not enough information to identify all the parameters in the model. It is essential to choose the right level of abstraction so that the model is identifiable (to a large extend). Having physiological correspondence for the model structure and parameters can simplify the identification process. The rigorousness of the model identification step is also an important factor for the validity of the model. 
+Physiological models are developed to represent certain physiological condition in general, or the physiological condition of a specific patient. Therefore the structure of the model and corresponding parameters have to be identified. These information can be obtained from physiological data, which are from: 1) data collected during physiological procedures, and/or 2) physiological literature in which physiological data are analyzed and summarized. Due to limitation on the interactions with the patient, the availability and quality of physiological data are generally bad and there are not enough information to identify all the parameters in the model. It is essential to choose the right level of abstraction so that the model is identifiable (to a large extend). Having physiological correspondence for the model structure and parameters can also simplify the identification process. The rigorousness of the model identification step is also an important factor for the validity of the model. 
 
 In the following sections, we briefly discuss our model identification effort for heart models used in two closed-loop verification applications, and their corresponding challenges. 
 
-\section{Heart Model Identification in Closed-loop Simulation}
+\section{Heart Model Identification for Closed-loop Simulation}
 In closed-loop simulation, a heart model should be identified to represent a specific patient under certain heart condition. The constraints for model parameters can be obtained from patient data during \emph{ElectroPhysiological (EP) Testing}. During EP testing, the physicians deliver electrical pacing sequence from electrodes placed inside the patient's heart while extracting timing parameters from observed pattern and timing of electrical events. Since the goal for any EP testing procedure is not to determine all the timing parameters for a patient, the amount of parameters that can be identified from the patient data is limited.    
 
-An example: determine ERP and conduction delay for a two node one path heart
+\figref{modelID} illustrates how timing parameters can be extracted during an EP testing procedure. Assume that there are two electrodes placed in the right atrium and right ventricle of the heart respectively (\figref{modelID}.a), and EGM signals can be measured (\figref{modelID}.b). The physician can also apply pacing sequences through the electrodes which can trigger different response from the patient's heart. Key parameters of the heart can be extracted by analyzing the \emph{timing} and \emph{pattern} of the local activations and be used to identify the heart model. \figref{modelID}.c shows a heart model strucure 
+\begin{figure}[!t]
+\centering
+		\includegraphics[width=0.9  \textwidth]{figs/modelID.png}
+		
+%\vspace{-10pt}
+\caption{\small (a) Node automaton. Dotted transition is only valid for pacemaker tissue like SA node; (b) Path automaton; (c) Model of the electrical conduction system of the heart using a network of node \& path automata~\cite{vhm_ecrts10}.}
+\label{fig:modelID}
+%\vspace{-15pt}
+\end{figure} 
+
+
 \section{Heart Model Identification in Closed-loop Model Checking}
 In model checking, the heart models in general have simple structure and less parameters due to non-deterministic abstraction. The heart models are developed in consistent with Electrophysiology terminologies, thus each node and path automata and their timing parameters have physiological correspondence which can be found in literature (\cite{josephson}). The range for non-deterministic parameters directly correspond to the range for possible values of corresponding physiological parameters. Therefore model identification for model checking is much simpler. 
 
@@ -25,7 +36,7 @@ An example: \Hao{Need a photo of table of typical parameter values}
 
 
 
-\chapter{Validate The Environment Model}
+\chapter{Validating the Environment Model}
 \begin{itemize}
 	\item What are the different methods to validate physiological models?
     \item How much confidence can these validation provide?
