@@ -26,11 +26,14 @@ In closed-loop simulation, a heart model should be identified to represent a spe
 $$ERP1+RRP1+Rest=700ms$$
 The interval between $a1$ and $v1$ is 150ms, so we have:
 $$Td1+Td2=150ms$$
-In EGM sequence 2, the pacing interval from Electrode A is 300ms, so we have:
+In EGM sequence 2, the pacing interval from Electrode A is 300ms. By observing that the interval between $p1-v1$ is less than the interval between $p2-v2$, we know that $p2$ arrives during the RRP period of the AV node. So we have:
 $$ERP1+RRP1\leq 300ms$$
-In EGM sequence 3, the pacing interval is further reduced to 250ms, so we have:
+In EGM sequence 3, the pacing interval is further reduced to 250ms. There is no $v2$ corresponding to $p2$, indicating $p2$ arrives during the ERP period of the AV node. So we have:
 $$ERP1\leq 250ms$$
-We can see that by conducting experiments 
+We can see that each experiment provides certain time constraints for model parameters. By systematically conducting experiments certain model parameters can be uniquely identified within a relatively small range. However even with simplified model structure like the one in the example, not all model parameters can be uniquely identified due to limited number of electrodes and limited number of experiments during a real procedure.
+
+
+
 
 
 
@@ -52,22 +55,22 @@ An example: \Hao{Need a photo of table of typical parameter values}
 \end{itemize}
 The validity of the environment models affects the validity of the closed-loop verification results. Since models are always approximations of the actual environment, there is always discrepancies between the model and the actual patient (group). The challenge then is to determine how much safety guarantee that model-based closed-loop verification can provide. 
 
-\section{Validating deterministic models}
-For deterministic models there are two levels of validity: 1) model a patient with certain heart condition, 2) model a \emph{specific} patient with certain heart condition. For the first application, it is important to show that the model successfully models the underlying mechanism of the heart condition, while for the second application the model should be able to generate same data as the corresponding patient given the same input. 
+\section{Validating Models for Closed-loop Simulation}
+A model is valid to be used in closed-loop simulation if it is capable of generating the same output given the same input. %To use a physiological model for closed-loop simulation, there are two levels of validity: 1) model a patient with certain heart condition, 2) model a \emph{specific} patient with certain heart condition. Level 1 validity ensures that the model successfully models the underlying mechanism of the heart condition, while level 2 validity guarantees the capability of the model to generate same data as the corresponding patient given the same input. Note that satisfying level 2 without satisfying level 1 may result in over-fitting.
 
 \subsection{Validating the underlying mechanism}
-
+ 
 
 \begin{figure*}[!t]
 \centering
-		\subfigure 	[\small Testing result for a real patient (~\cite{josephson})] 
+		\subfigure 	[\small (~\cite{josephson})] 
 		{
-		\includegraphics[width=0.45\textwidth]{figs/WB_book.pdf}
+		\includegraphics[width=0.5\textwidth]{figs/book_1.png}
 		\label{fig:book_1}
 		} 
-		\subfigure [\small Testing result for VHM simulation] 
+		\subfigure [\small ] 
 		{	
-			\includegraphics[width=0.40\textwidth]{figs/WB_new.pdf} 
+			\includegraphics[width=0.45\textwidth]{figs/type_1.png} 
 			\label{fig:type_1}
 		}
 \label{fig:Case_1}
