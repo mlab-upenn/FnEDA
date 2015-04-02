@@ -11,7 +11,7 @@ Models (especially environment models) should be designed in accordance with the
 
 \textbf{Model Complexity} is generally measured in terms of the size of state space and/or computation complexity of state transitions, which affects the computation cost (memory and time) for closed-loop verification. The complexity requirements of an environment model is usually determined by 1) The complexity of the interactions between the environment model and the system model and 2) The complexity of the environment condition specified in the physiological requirements.
 
-\textbf{Model Identifiability} is a metric of the feasibility/difficulty of identifying model parameters from data. It affects the validity of the model which is a key element for closed-loop verification. Model identifiability is generally affected by 1) Model complexity and 2) Data availability/quality. In general, the more complex the model structure is, the harder the model can be fully identified. For physiological modeling, the data availability is almost always an issue.
+\textbf{Model Identifiability} is a metric of the feasibility/difficulty of identifying model parameters from data. It affects the validity of the model which is a key element for closed-loop verification. Model identifiability is generally affected by 1) Model complexity and 2) Data availability/quality. In general, the more complex the model structure is, the harder the model can be fully identified. There are two methods for model construction: non-parametric modeling in which no prior knowledge is assumed and the model construction is purely data-driven, and parametric modeling in which prior knowledge of the system is taken into account. For physiological modeling the data is generally scarce and there are abundant literature providing prior knowledge of the environment, it is more intuitive to use parametric modeling approaches.
 
 
 In the following sections, we introduce the physiological context that the pacemaker operates in, and how to construct heart models for closed-loop verification of implantable pacemaker. Note that for two different applications the models are constructed differently as we address their respective requirements for environment models. 
@@ -65,7 +65,7 @@ Heart tissue with different timing parameters assemble the electrical conduction
 %\end{figure*} 
 
 %\section{Electrophysiological Testing}
-\Hao{A figure for heart and pacemaker}
+%\Hao{A figure for heart and pacemaker}
 
 %\chapter{Modeling the Physiological Environment}
 %\begin{itemize}
@@ -155,7 +155,7 @@ where $path\_len$ denotes the length of the path and $v$ is the conduction veloc
 After \emph{Tante} or \emph{Tretro} time expires, the path automaton sends out \emph{Act\_node(b)} or \emph{Act\_node(a)} respectively. A transition to \emph{Conflict} state occurs followed by the transition to \emph{Idle} state. The intermediate state \emph{Conflict} is designed to prevent back-flow, where the path is activated by the node \emph{b} it has just activated. If during \emph{Ante} or \emph{Retro} state another \emph{Act\_path} event is received from the other node connected to the path automaton, a transition to \emph{Double} state will occur, corresponding to the two-way conduction. In this case, the activation signals eventually cancel each other and the transition to \emph{Idle} state is taken.
 
 \subsection{Modeling the Electrical Conduction System}
-The node and path automata are the basic components for heart modeling. Different hearts under different conditions have different timing parameters and/or different conduction topology. We connect node and path automata with different timing parameters into a network to represent different heart conditions. (\figref{general_setup}) 
+The node and path automata are the basic building blocks for heart modeling. Different hearts under different conditions have different timing parameters and/or different conduction topology. We connect node and path automata with different timing parameters into a network to represent different heart conditions. (\figref{general_setup}) 
 
 \subsection{Interaction With The Heart Model}
 In EP testing and pacemaker application, the local electrical activities, measured as electrogram (EGM) signals, are used to diagnose heart conditions. During heart model construction, we can assign a node automaton at electrode locations and the transitions to the ERP state can be used to represent the local activation events. In a more general setup where electrodes are assigned anywhere within the heart model, a probe model is designed to generate synthetic EGM signals using temporal information and spatial information from the network of node and path automata. \figref{egm_s} shows the morphology of EGM signal changes with different conduction velocity and probe configurations. Due to space limitation, detailed description of the probe model can be found in \cite{vhm_embc11}.
