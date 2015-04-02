@@ -53,12 +53,21 @@ An example: \Hao{Need a photo of table of typical parameter values}
 	\item What are the different methods to validate physiological models?
     \item How much confidence can these validation provide?
 \end{itemize}
-The validity of the environment models affects the validity of the closed-loop verification results. Since models are always approximations of the actual environment, there is always discrepancies between the model and the actual patient (group). The challenge then is to determine how much safety guarantee that model-based closed-loop verification can provide. In this chapter we use our heart models as example to demonstrate
+The validity of the environment models affects the validity of the closed-loop verification results. Since models are always approximations of the actual environment, there is always discrepancies between the model and the actual patient (group). The challenge then is to evaluate the amount of safety guarantee that model-based closed-loop verification can provide. For the two closed-loop verification applications, the validity metric for the environment model is slightly different: in closed-loop model checking, the model's \textbf{coverage} on environmental behaviors is more important, while in closed-loop simulation, the \textbf{accuracy} of the model is more important. In this chapter we use our heart models as example to demonstrate several validation procedures that can improve the validity of the environment model.
 
 \section{Validating Models for Closed-loop Simulation}
-A physiological model is considered valid to be used in closed-loop simulation if 1) it is capable of generating the same output as the patient given the same input; 2) it is general enough to represent other patient with similar condition by adjusting its parameters. The second point is to ensure that the model successfully captures the underlying mechanism instead of over-fitting the data. There are two methods for model construction: non-parametric modeling in which is purely data-driven and parametric modeling in which 
+A physiological model is considered valid to be used in closed-loop simulation if 1) it is capable of generating the same output as the patient given the same input; 2) it is general enough to represent other patient with similar condition by adjusting its parameters. The second point is to ensure that the model successfully captures the underlying mechanism instead of over-fitting the data. There are two methods for model construction: non-parametric modeling in which no prior knowledge is assumed and the model construction is purely data-driven, and parametric modeling in which prior knowledge of the system is taken into account. For physiological modeling the data is generally scarce and there are abundant literature providing prior knowledge of the environment, it is more intuitive to use parametric modeling approaches.
 
 %To use a physiological model for closed-loop simulation, there are two levels of validity: 1) model a patient with certain heart condition, 2) model a \emph{specific} patient with certain heart condition. Level 1 validity ensures that the model successfully models the underlying mechanism of the heart condition, while level 2 validity guarantees the capability of the model to generate same data as the corresponding patient given the same input. Note that satisfying level 2 without satisfying level 1 may result in over-fitting.
+\begin{figure}[!t]
+\centering
+		\includegraphics[width=0.9  \textwidth]{figs/probes.png}
+		
+%\vspace{-10pt}
+\caption{\small }
+\label{fig:egm}
+%\vspace{-15pt}
+\end{figure} 
 
  \subsection{Case 1: }
 \begin{figure*}[!t]
