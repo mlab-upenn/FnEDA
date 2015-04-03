@@ -21,13 +21,13 @@ Note that this requirement focus purely on the condition of the patient (ventric
 
 \emph{The pacemaker should deliver ventricular pacing, if there is no sensed ventricular event 1000ms since the last ventricular event (sensed or paced).}
  
-The specification is described using internal terminologies of the pacemaker software (paced and sensed events), and specified the action of the pacemaker corresponding to certain inputs. For more complex requirements, multiple specifications have to work together to achieve the requirement. Therefore there may exist executions that satisfy all the specifications but not the requirement. Verifying physiological requirements requires knowledge of the physiological condition and how device interacts with the physiological environment, thus can only be executed in closed-loop. 
+The specification is described using internal terminologies of the pacemaker software (paced and sensed events), and specified the action of the pacemaker corresponding to certain inputs. For more complex requirements, multiple specifications have to work together to achieve the requirement. Therefore there may exist executions that satisfy all the specifications but not the corresponding requirement. Verifying physiological requirements requires knowledge of the physiological condition and how device interacts with the physiological environment, thus can only be performed in closed-loop. 
 
 Devices are designed to improve certain physiological conditions, the performance of the devices is evaluated on the difference between the patient conditions without the device and with the device. The device should also avoid deteriorating certain patient conditions, thus physiological requirements are specified in the form of:
 $$C_{pre}\rightarrow C_{post}$$
 in which $C_{pre}$ is the physiological conditions without the device,  and $C_{post}$ is the physiological condition with the device. For model-based closed-loop verification, $C_{pre}$ is often in form of a set of constraints on patient parameters. As a special case, $C_{pre}$ can equal to $true$, means that $C_{post}$ should be satisfied under all possible conditions.
 
-Among all the physiological requirements for a device, not all of them are equally important. More important requirements should be given higher prioritiesAccording to the importance of the requirement
+Among all the physiological requirements for a device, not all of them are equally important. More important requirements should be given higher priorities. According to the importance of the requirement
 
 For convenience, requirements are usually specified with binary results (satisfied/unsatisfied). quantitative
 
