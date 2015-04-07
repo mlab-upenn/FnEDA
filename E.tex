@@ -5,7 +5,7 @@
 \end{itemize}
 
 \section{Basic Specifications}
-The DDD pacemaker has 5 basic timing cycles triggered by external and internal events, as shown in \figref{PM_timers}. We decomposed our pacemaker model into 5 components which correspond to the 5 timers. $P=LRI\| AVI\| URI\| PVARP\| VRP$. These components synchronize with each other using broadcast channels and shared variables (as shown in \figref{PMdesign}). 
+The DDD pacemaker has 5 basic timing cycles triggered by external and internal events, as shown in \figref{PMtimers}. We decomposed our pacemaker model into 5 components which correspond to the 5 timers. $P=LRI\| AVI\| URI\| PVARP\| VRP$. These components synchronize with each other using broadcast channels and shared variables (as shown in \figref{PMdesign}). 
 
 \subsubsection{Lower Rate Interval (LRI)}
 \vspace{-5pt}
@@ -150,5 +150,16 @@ we have $H_4\| P\| PURI\_test\models \varphi_{URI}$.\section{Advanced Functions}
 \end{itemize}
 
 \section{Crosstalk}
+Oversensing is a general term for inappropriate sensing caused by noise or far-field signals. It's very common among pacemaker malfunctions and it may result in failure to pace, competitive pacing and inappropriate therapy. Crosstalk is a special case for oversensing which occurs when the pacemaker stimulus in one chamber is sensed in the other chamber. It happens when two leads are close to each other or pacing signal in the other chamber is too strong. It is common that the ventricular lead is placed in the right ventricle outflow tract, which is close to the atrium. \figref{crosstalk}(a) shows simulated EGMs from a patient with bradycardia and complete heart block. During atrial pacing (AP), the pacing signal is sensed by the ventricular lead 53 ms after the AP. (Marker 1) It is treated as ventricular sense (VS) signal and thus inhibit the subsequent ventricular pacing (VP). This is indicated by no QRS-wave in the ECG channel. (Marker 2) For a patient with complete heart block this will cause dangerous ventricular asystole.  
 
+Increasing the sensing threshold of the ventricular channel can prevent false sensing. In \figref{crosstalk}(b), the small signals in ventricular EGM are ignored and ventricular pacing are successfully delivered. 
+\begin{figure*}[!t]
+\center
+\vspace{-10pt}
+		\includegraphics[width=\textwidth]{figs/crosstalk_all.pdf}
+\vspace{-20pt}
+\caption{Crosstalk between pacemaker leads with high sensitivity in the ventricle, adjusted sensitivity and ventricular safety pacing}
+\label{fig:crosstalk}
+\vspace{-15pt}
+\end{figure*}
 \section{Lead Displacement}
