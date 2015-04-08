@@ -27,12 +27,11 @@ Devices are designed to improve certain physiological conditions, the performanc
 $$C_{pre}\rightarrow C_{post}$$
 in which $C_{pre}$ is the physiological conditions without the device,  and $C_{post}$ is the physiological condition with the device. For model-based closed-loop verification, $C_{pre}$ is often in form of a set of constraints on patient parameters. As a special case, $C_{pre}$ can equal to $true$, means that $C_{post}$ should be satisfied under all possible conditions.
 
-Due to the limited capability of medical devices, not all physiological requirements Among all the physiological requirements for a device, not all of them are equally important and sometimes it is impossible to satisfy them all. More important requirements should be given higher priorities. According to the importance of the requirement
+One of the challenge for developing medical device software is to convert physiological requirements, generally in forms of descriptions of physiological conditions, into mathematical descriptions that can be used by verification tools.  In model-based verification, these physiological conditions have to be mapped onto constraints on model parameters. In the following section, we use the heart model as example to show this process.
+
+The devices are supposed to deal with all possible environment conditions. However in certain extreme conditions, not all physiological requirements can be satisfied due to the limitations of device functions. In these scenarios the device should be able to prioritize more important properties. This challenge is 
 
 For convenience, requirements are usually specified with binary results (satisfied/unsatisfied). quantitative
-
-hierarchical
-
 
 \section{Physiological Requirements For the heart}
 \begin{itemize}
