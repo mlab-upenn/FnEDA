@@ -35,11 +35,39 @@ In this chapter, we use pacemaker as example to demonstrate how to convert physi
 
 %For convenience, requirements are usually specified with binary results (satisfied/unsatisfied). quantitative
 
-\section{Physiological Requirements For the heart}
-\begin{itemize}
-	\item Conditional requirements
-\end{itemize}
+\section{Encoding Physiological Conditions}
+\figref{state} list some example heart conditions and their corresponding constraints on heart model parameters.
+\begin{figure}[!t]
+	\center
+%		\vspace{-10pt}
+	\includegraphics[width=0.70\textwidth]{figs/state.pdf}
+	\center
+	
+	\caption{Patient state and equivalence in VHM}
+	\label{fig:state}
+\end{figure}
 
+\section{Requirement Hierarchy}
+For a closed-loop system $S=H || P$ and two requirements $\varphi_1$ and $\varphi_2$ such that $\mathbb{P}_{\varphi_1}<\mathbb{P}_{\varphi_2}$, the following statement should always hold:
+
+$$H\not\models\varphi_1$$
+\begin{figure}[!t]
+	\center
+	\includegraphics[width=0.7\textwidth]{figs/properties.pdf}
+	\center
+	\caption{General requirements for the close-loop system}
+		%\vspace{-15pt}
+	\label{fig:properties}
+\end{figure}
+
+\begin{figure}[!b]
+	\center
+	\includegraphics[width=0.8\textwidth]{figs/conditional.pdf}
+	\center
+	\caption{Conditional requirements for the close-loop system}
+		%\vspace{-15pt}
+	\label{fig:conditional}
+\end{figure}
 \section{Requirement Representations}
 \subsection{TCTL}
 \subsection{Simulink Block}

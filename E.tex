@@ -1,33 +1,34 @@
 \chapter{A Dual Chamber Pacemaker Specification}
+
 \begin{itemize}
 	\item What are the basic functions?
-    \item What happens if new functionalities are applied to the basic model?
+   \item What happens if new functionality are applied to the basic model?
 \end{itemize}
 
 \section{Basic Specifications}
 The DDD pacemaker has 5 basic timing cycles triggered by external and internal events, as shown in \figref{PMtimers}. We decomposed our pacemaker model into 5 components which correspond to the 5 timers. $P=LRI\| AVI\| URI\| PVARP\| VRP$. These components synchronize with each other using broadcast channels and shared variables (as shown in \figref{PMdesign}). 
 
 \subsubsection{Lower Rate Interval (LRI)}
-\vspace{-5pt}
+%\vspace{-5pt}
 The Lower Rate Interval (LRI) component is shown in \figref{PMdesign}(a). This component defines the longest interval allowed between two ventricular events, thus keeping the heart rate above a minimum value. In DDD mode, the LRI interval is divided into a V-A interval (TLRI-TAVI) and a A-V interval (TAVI). The LRI component maintains a maximum V-A delay while the AVI component maintains a maximum A-V delay so together they maintain the maximum V-V delay. In the LRI component, the clock is reset when a ventricular event \textsf{(VS, VP)} is received. If no atrial event has been sensed \textsf{(AS)}, the component will deliver atrial pacing \textsf{(AP)} after TLRI-TAVI. The UPPAAL design of LRI component is shown in \figref{PMdesign}(a).
 
 %\vspace{-5pt}
 \subsubsection{Atrio-Ventricular Interval (AVI) and Upper Rate Interval (URI)}
-\vspace{-5pt}
+%\vspace{-5pt}
 The function of the AVI component is to maintain the appropriate delay between the atrial activation and the ventricular activation. It defines the longest interval between an atrial event and a ventricular event. If no ventricular event has been sensed \textsf{(VS)} within TAVI after an atrial event \textsf{(AS, AP)}, the component will deliver ventricular pacing \textsf{(VP)}. In order to prevent the pacemaker from pacing the ventricle too fast, a URI component uses a global clock \emph{clk} to track the time after a ventricular event \textsf{(VS, VP)}. The URI limits the ventricular pacing rate by enforcing a lower bound on the times between consecutive ventricle events. If the global clock value is less than TURI when the AVI component is about to deliver \textsf{VP}, AVI will hold VP and deliver it after the global clock reaches TURI. The UPPAAL design of AVI and URI component is shown in \figref{PMdesign}(b) and (c).%The UPPAAL design of AVI component is shown in 
 
 %\vspace{-10pt}
 \subsubsection{Post Ventricular Atrial Refractory Period (PVARP) and Post Ventricular Atrial Blanking (PVAB)}
-\vspace{-5pt}
+%\vspace{-5pt}
 Ventricular events, especially Ventricular Pace (VP) are sometimes so strong that the atrial lead can sense the activation as well. This signal may be falsely recognized as an atrial event and disrupt normal pacemaker function. This scenario is called crosstalk and was discussed in our previous work \cite{vhm_embc11}. In order to prevent this undesired behavior, there is a blanking period (PVAB) followed by a refractory period (PVARP) for the atrial events after each ventricular event \textsf{(VS, VP)}. Atrial events during PVAB are ignored and atrial events during PVARP trigger \textsf{AR!} events which can be used in some advanced diagnostic algorithms. The UPPAAL design of PVARP component is shown in \figref{PMdesign}(d).
 
 %\vspace{-10pt}
 \subsubsection{Ventricular Refractory Period (VRP)}
-\vspace{-5pt}
+%\vspace{-5pt}
 Correspondingly, the VRP follows each ventricular event \textsf{(VP, VS)} to filter noise and early events in the ventricular channel which could otherwise cause undesired pacemaker behavior. \figref{PMdesign}(e) shows the UPPAAL design of VRP component.
 
 
-\begin{figure}[!]
+\begin{figure}[!t]
 \center
 %\vspace{-10pt}
 \includegraphics[width=0.7\textwidth]{figs/PM_timers.pdf}
@@ -118,7 +119,7 @@ In each component two copies for both modes are modeled, and switch between each
 				\label{fig:safety1}
 		} 
 		\subfigure[Monitor \textsf{PURI\_test}] {	
-			\includegraphics[width=0.4 5\textwidth]{figs/uri_test.pdf}
+			\includegraphics[width=0.45\textwidth]{figs/uri_test.pdf}
 			\label{fig:uri_test}
 		}
 		%\vspace{-10pt}
