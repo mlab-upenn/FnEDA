@@ -4,7 +4,7 @@
 	\item What are the basic functions?
    \item What happens if new functionality are applied to the basic model?
 \end{itemize}
-
+The software component of medical devices are becoming more and more complex and are
 \section{Basic Specifications}
 The DDD pacemaker has 5 basic timing cycles triggered by external and internal events, as shown in \figref{PMtimers}. We decomposed our pacemaker model into 5 components which correspond to the 5 timers. $P=LRI\| AVI\| URI\| PVARP\| VRP$. These components synchronize with each other using broadcast channels and shared variables (as shown in \figref{PMdesign}). 
 
