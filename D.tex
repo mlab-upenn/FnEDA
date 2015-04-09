@@ -46,11 +46,24 @@ In this chapter, we use pacemaker as example to demonstrate how to convert physi
 	\caption{Patient state and equivalence in VHM}
 	\label{fig:state}
 \end{figure}
-
+\section{Conditional Requirements}
+Physiological requirements are in general conditional requirements. Specifying conditional requirements enables stronger constraints on the closed-loop system. \figref{conditional} shows a list of conditional requirements used during the pacemaker case study. 
+\begin{figure}[!b]
+	\center
+	\includegraphics[width=0.8\textwidth]{figs/conditional.pdf}
+	\center
+	\caption{Conditional requirements for the close-loop system}
+		%\vspace{-15pt}
+	\label{fig:conditional}
+\end{figure}
 \section{Requirement Hierarchy}
-For a closed-loop system $S=H || P$ and two requirements $\varphi_1$ and $\varphi_2$ such that $\mathbb{P}_{\varphi_1}<\mathbb{P}_{\varphi_2}$, the following statement should always hold:
+For a closed-loop system including a heart $H$ and a pacemaker $P$: $S=H || P$ and two requirements $\varphi_1$ and $\varphi_2$ such that $\mathbb{P}_{\varphi_1}<\mathbb{P}_{\varphi_2}$, the following statement should always hold:
 
-$$H\not\models\varphi_1$$
+$$H\models\varphi_2\rightarrow H||P\models\varphi_2$$
+meaning if a higher priority requirement is satisfied by the open-loop environment, it should be satisfied by the closed-loop system as well. An example violation of the statement is:
+$$H\not\models\varphi_1 \&\& H\models\varphi_2 \&\& H||P\models\varphi_1 \&\& H||P\not\models\varphi_2$$
+which should not be allowed. In our closed-loop verification of pacemaker, the list of physiological requirements with assigned priorities are showing in \figref{properties}.
+
 \begin{figure}[!t]
 	\center
 	\includegraphics[width=0.7\textwidth]{figs/properties.pdf}
@@ -60,16 +73,8 @@ $$H\not\models\varphi_1$$
 	\label{fig:properties}
 \end{figure}
 
-\begin{figure}[!b]
-	\center
-	\includegraphics[width=0.8\textwidth]{figs/conditional.pdf}
-	\center
-	\caption{Conditional requirements for the close-loop system}
-		%\vspace{-15pt}
-	\label{fig:conditional}
-\end{figure}
-\section{Requirement Representations}
-\subsection{TCTL}
-\subsection{Simulink Block}
- 
-\section{Requirement Hierarchy*}
+
+%\section{Requirement Representations}
+%\subsection{TCTL}
+%\subsection{Simulink Block}
+
