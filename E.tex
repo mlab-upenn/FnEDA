@@ -1,11 +1,10 @@
 \chapter{A Dual Chamber Pacemaker Specification}
-
 \begin{itemize}
 	\item What are the basic functions?
    \item What happens if new functionality are applied to the basic model?
 \end{itemize}
-The software component of medical devices are becoming more and more complex and are
-\section{Basic Specifications}
+The software component of medical devices are becoming more and more complex. Problems may arise when adding new functionality to already verified software. In this chapter we demonstrate the basic specification of a dual chamber pacemaker, as well as a mode-switch function on top of the basic functions. The specifications are based on the algorithm description in \cite{compass}.
+\section{Basic Specifications of a DDD Pacemaker}
 The DDD pacemaker has 5 basic timing cycles triggered by external and internal events, as shown in \figref{PMtimers}. We decomposed our pacemaker model into 5 components which correspond to the 5 timers. $P=LRI\| AVI\| URI\| PVARP\| VRP$. These components synchronize with each other using broadcast channels and shared variables (as shown in \figref{PMdesign}). 
 
 \subsubsection{Lower Rate Interval (LRI)}
@@ -110,7 +109,7 @@ In each component two copies for both modes are modeled, and switch between each
             \item What is the model complexity requirements for each physiological requirement? When and how to refine the environment model?
             \item Exploring the whole state space sounds great. What are the limitations of model checking? 
 \end{itemize}
-
+In model-based software design, the system can be abstracted by a model. With proper model formalism and tools, the whole state space of the system can be checked
 \begin{figure*}
 \centering
 %\vspace{-10pt}
