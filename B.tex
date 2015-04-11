@@ -194,21 +194,45 @@ The most challenging aspect during closed-loop model checking is environment mod
 \label{fig:HM_abs}
 %\vspace{-10pt}
 \end{figure} 
-\subsection{Initial Abstraction}
-For the initial heart model, spatially we assume that every heart tissue are modeled. Temporally we model each heart tissue as an automaton $N0$ shown in \figref{HM_abs}.b. The beat-to-beat dynamics of heart tissue discussed in the last section is abstracted using non-determinism, as the ERP period and conduction delay of the tissue are non-deterministically chosen from ranges instead of deterministic functions. The model covers all possible timing behaviors of a heart tissue. 
+\subsection{Abstraction 0: Initial Abstraction}
+For the initial heart model, spatially we assume that every heart tissue are modeled. Temporally we model each heart tissue as an automaton $N0$ shown in \figref{HM_abs}.b. The beat-to-beat dynamics of heart tissue discussed in the last section is abstracted using non-determinism, as the ERP period and conduction delay of the tissue are non-deterministically chosen from ranges instead of deterministic functions. The whole heart can be modeled by composing tissue models with different parameters $H_0=N_0^1\|N_0^2\cdots N_0^n$. However, for a real heart the number $n$ is very large and their connectivity and parameter values are difficult, and perhaps impossible, to determine, which makes verification with $H_0$ infeasible. 
 
-\subsection{Abstract Conduction Delays With Paths}
-At the first abstraction step, we seperate the conduction delay (modeled by the cond state in $N0$) from the new node automata $N1$ and model the conduction between two nodes using path automaton $P1$. Since the beat-to-beat dynamics are abstracted with non-determinism, the RRP state is merged with the Rest state in $N1$. 
+\subsection{Abstraction 1: Abstract Conduction Delays With Paths}
+At the first abstraction step, we seperate the conduction delay (modeled by the cond state in $N0$) from the new node automata $N1$ and model the conduction between two nodes using path automaton $P1$. Since the beat-to-beat dynamics are abstracted with non-determinism, the RRP state is merged with the Rest state in $N1$. The procedure gives us the intuition to abstract the heart as a conduction network as shown in \figref{HM_abs} (c). 
 
-we only model the following kinds of heart tissue with node automata and abstract other heart tissue with path automata:
-\begin{itemize}
-	\item Self-depolarizing tissue
-    \item Tissue with long ERP period
-    \item Tissue forming conduction loops
-\end{itemize}
+\subsection{Abstraction 2: Merging Equivalent States}
+The heart model $H_1'$ still has equivalent locations. In Abstraction 2 we further abstract the node and path automata. With non-determinism, the node automaton react to \textsf{Act\_node!} event the same way in \textsf{RRP} and \textsf{Rest} state. In the new node automaton $N_2$ we merge the \textsf{RRP} state with the \textsf{Rest} state with:
+$$N_2.Trest\_min = N_1.Trest\_min+N_1.Trrp\_min$$
+$$N_2.Trest\_max = N_1.Trest\_max+N_1.Trrp\_max$$
+Since during \textsf{ERP} state, the node automata won't react to any \textsf{Act\_node!} event, for a $N_1^1\| P_1\| N_1^2$ setting, the symbolic state $ER\|DO\|ER$ is equivalent to $ER\|ID\|ER$. Under the assumption that the ERP period of a node automaton is much longer than the conduction delay of a path automaton, it is guaranteed that both node automata will be in \textsf{ERP} location when the path exits the \textsf{Double} location. In the path automaton, the \textsf{Double} and \textsf{Conflict} location is merged with the \textsf{Idle} state. The location abstraction and mapping is in \figref{abs} (b). The heart can be modeled as $H_2=N_2^1\| P_2^1\| N_2^2\| P_2^2\| N_2^3$.
 
-\subsection{Merging}
-abstract heart tissue
+\subsection{Abstraction 3: Replacing Blocking with Non-deterministic Conduction}
+In Abstraction 3, we replace the blocking behavior of the \textsf{ERP} location of the node with non-deterministic conduction in the path automaton. There exists a transition\\ 
+$RE\| ID\| RE$ 
+$\xrightarrow[Act\_path\_1!]{Act\_node\_1?}$ 
+$\xrightarrow{Act\_path\_1?}$ 
+$RE\| ID\| RE$\\
+in $N_3^1\| P_3^1\| N_3^2$ to replace transition\\
+$ER\| ID\| ER$ 
+$\xrightarrow{Act\_node\_1?}$ 
+$ER\| ID\| ER$\\
+in $N_2^1\| P_2^1\| N_2^2$
+
+
+Without the ERP constraint the AV node is no longer needed and the heart can be modeled as $H_3=N_3^1\| P_3\| N_3^2$. The location abstraction and mapping is in \figref{abs} (c). The detailed proof for this timed simulation relation is in the appendix. 
+\subsection{Abstraction 4: Random Heart Model (RHM)}
+In Abstraction 4, we further simplify the heart model by removing the conduction path between two nodes. By setting $Trest\_min$ for both nodes to 0 the new heart model $H_4=N_3^1\|N_3^2$ covers all possible behavior of $H_3$. The location abstraction and mapping is in \figref{abs} (d). This random heart model with two nodes is the most abstract model that will be used at the beginning of the closed-loop verification process in Section 5.
+%\textbf{AG}$\varphi\equiv\neg$\textbf{EF}($\neg\varphi$) 
+
+Eventually we have a series of heart models with:
+
+$N_0^1\|N_0^2\cdots N_0^n$\\
+$\preceq_t N_1^1\|P_1^1\|N_1^2\cdots P_1^{m}\|N_1^n$\\
+$\preceq_t N_1^1\| P_1^1 \| N_1^2\| P_1^2 \| N_1^3$\\
+$\preceq_t N_2^1\| P_2^1\| N_2^2\| P_2^2\| N_2^2$\\
+$\preceq_t N_3^1\| P_3\| N_3^2$\\
+$\preceq_t N_4^1\| N_4^2$
+
 % \subsubsection{Abstracting Beat-to-beat Dynamics}
 % \subsubsection{Abstracting Conduction Delays with Path}
 % \subsubsection{Merging Activation-generating Nodes}
