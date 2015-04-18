@@ -58,3 +58,5 @@ main.pdf
 *.gz
 
 *.log
+
+*.gz(busy)
