@@ -193,9 +193,6 @@ The Upper Rate Limit property still holds but the Lower Rate Limit property is v
 \end{figure}
 \subsection{Verification Result}
 After implementing the Mode-switch algorithm, we verified the model against the same existence property. We expect the violation of this property, since during VDI mode the ventricular rate of the heart model is less than the Upper Rate Limit and will not trigger ventricular pacing. However, this property is still satisfied, indicating the mode-switch algorithm failed to eliminate the PMT scenario. The evidence trace returned by UPPAAL shows that a subset of atrial events fall into the blanking period after a ventricular event (see \figref{liveness}). As a result, two fast events are reduced to one slow event and mode switch may never happen. This scenario does exist in all our refined heart models, we conclude that the trace is physiologically feasible. The mode-switch algorithm in our pacemaker model can not terminate all PMT behaviors as specified.
-
-\subsection{Trace Validation on Real Pacemaker and Pacemaker Refinement}
-In the previous subsections, we have found two potential safety violations in our pacemaker model. However, this does not mean the actual pacemaker has the same violation. Jiang et al. have implemented the VHM model onto a programmable integrated circuit (FPGA) platform and had it interact with a real pacemaker at run-time \cite{PVS}. The closed-loop behavior can be checked in closed-loop with a real pacemaker. If the trace is not feasible in the closed-loop system, the pacemaker model needs to be refined to eliminate the execution. However, refining the pacemaker model requires more detailed representation of the pacemaker software, which was not available to us at that time.
 \begin{figure}
 \centering
 %\vspace{-20pt}

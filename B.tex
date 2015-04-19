@@ -20,17 +20,17 @@ In the following sections, we introduce the physiological context that the pacem
 		\includegraphics[width=0.9  \textwidth]{figs/egm.pdf}
 		
 %\vspace{-10pt}
-\caption{\small }
+\caption{\small (a) Lead placement for a dual chamber pacemaker. (b) Electrogram (EGM) signals measured from pacemaker leads and corresponding internal pacemaker events}
 \label{fig:probes}
 %\vspace{-15pt}
 \end{figure} 
 \section{Physiological Context for Implantable Pacemaker}
 The heart generates periodic electrical impulses to control heart rates according to physiological needs. These impulses conduct through the heart, triggering coordinated muscle contractions and pump blood to the rest of the body. The underlying pattern and timing of these impulses determine the heart's rhythm and are the key to proper heart functions. Derangements in this rhythm are referred to as \emph{arrhythmia}, which impair the heart's ability to pump blood and compromise the patients' health. Arrhythmia are categorized into so-called \textsf{Tachycardia} and \textsf{Bradycardia}. Tachycardia features undesirable fast heart rate which results in inefficient blood pumping. Bradycardia features slow heart rate which results in insufficient blood supply. Bradycardia are due to failure of impulse generation with anomalies in the SA node, or failure of impulse propagation where the conduction from atria to the ventricles is delayed or blocked. 
 
-The electrical activities of the heart can be monitored and used to diagnose arrhythmia. The most well-known method is Electrocardiogram (ECG or EKG), which measure the integration of electrical activities of the heart measured along different axis on the body surface. The electrical activities can also be measured by inserting electrodes through the vein into the heart. The electrodes are placed against the inside heart wall and localized electrical activities can be measured. (\figref{probes}.a) Physicians can also deliver pacing sequence through the electrodes to explore the heart conditions. This procedure is referred to as Electrophysiological (EP) Testing  (\cite{josephson}) and the signals are referred to as electrograms (EGMs) (\figref{probes}.b). %The timing and morphology of the  ECG and EGM singnals can be used to diagnose arrhythmia.
+The electrical activities of the heart can be monitored and used to diagnose arrhythmia. The most well-known method is Electrocardiogram (ECG or EKG), which measure the integration of electrical activities of the heart measured along different axis on the body surface. The electrical activities can also be measured by inserting electrodes through the vein into the heart. The electrodes are placed against the inside heart wall and localized electrical activities can be measured. Physicians can also deliver pacing sequence through the electrodes to explore the heart conditions. This procedure is referred to as Electrophysiological (EP) Testing  (\cite{josephson}) and the signals are referred to as electrograms (EGMs) (\figref{probes}.b). %The timing and morphology of the  ECG and EGM singnals can be used to diagnose arrhythmia.
 
 %Implantable pacemakers follow the principle of EP testing. For a dual chamber pacemaker, two leads are inserted into the right atrium and right ventricle, respectively. The pacemaker senses the intrinsic generation and conduction of the electrical signals in the two chambers and deliver electrical pacing when the heart rate and/or atria-to-ventricles conduction interval are abnormal.
-The implantable cardiac pacemakers are rhythm management devices designed to treat bradycardia. A typical dual chamber pacemaker has two leads inserted into the heart through the veins which can measure the local electrical activities of the right atrium and right ventricle, respectively. According to the timing between sensed impulses the pacemaker can deliver electrical pacing to the corresponding chamber to maintain proper heart rhythm.
+The implantable cardiac pacemakers are rhythm management devices designed to treat bradycardia. A typical dual chamber pacemaker has two leads inserted into the heart through the veins which can measure the local electrical activities of the right atrium and right ventricle, respectively (\figref{probes}.a) . According to the timing between sensed impulses the pacemaker can deliver electrical pacing to the corresponding chamber to maintain proper heart rhythm.
 \begin{figure}[!t]
 \center
 %\vspace{-10pt}
@@ -134,7 +134,7 @@ where $T_{min}$ and $T_{max}$ are the minimum and maximum value for \emph{Terp} 
 		} 
 \label{fig:h_automatas}
 %\vspace{-10pt}
-\caption{\small (a) Node automaton. Dotted transition is only valid for pacemaker tissue like SA node; (b) Path automaton; (c) Model of the electrical conduction system of the heart using a network of node \& path automata ~\cite{vhm_ecrts10}.}
+\caption{\small (a) Node automaton. Dotted transition is only valid for pacemaker tissue like SA node; (b) Path automaton; (c) Model of the electrical conduction system of the heart using a network of node \& path automata ~\cite{VHM_proc}.}
 %\vspace{-15pt}
 \end{figure*} 
 
@@ -190,21 +190,21 @@ The most challenging aspect during closed-loop model checking is environment mod
 %\vspace{-10pt}
 \includegraphics[width=0.9\textwidth]{figs/Heart_abs.pdf}
 %\vspace{-10pt}
-\caption{(a) The generation of Action potential; (b) Action potential; (c1) The second activation arrived during ERP; (c2) Arrived during RRP; (c3) Arrived after refractory. (\cite{STTT13})}
+\caption{(a) Electrical voltage change measured on the heart tissue and its adjacent tissue region (dotted) upon activation. The whole process is divided into timing periods with different behaviors. (b) The original tissue model which captures the refactory timing behaviors of the heart tissue. (c) The conduction property is separated to the path automaton and the heart can be modeled as conduction network. (d) Equivalent locations are merged. (e) The blocking property of the ERP location is replaced by a non-deterministic conduction in the path automaton. (f) Conduction between nodes are replaced by self-activations of the nodes. (\cite{STTT13})}
 \label{fig:HM_abs}
 %\vspace{-10pt}
 \end{figure} 
 \subsection{Abstraction 0: Initial Abstraction}
-For the initial heart model, spatially we assume that every heart tissue are modeled. Temporally we model each heart tissue as an automaton $N0$ shown in \figref{HM_abs}.b. The beat-to-beat dynamics of heart tissue discussed in the last section is abstracted using non-determinism, as the ERP period and conduction delay of the tissue are non-deterministically chosen from ranges instead of deterministic functions. The whole heart can be modeled by composing tissue models with different parameters $H_0=N_0^1\|N_0^2\cdots N_0^n$. However, for a real heart the number $n$ is very large and their connectivity and parameter values are difficult, and perhaps impossible, to determine, which makes verification with $H_0$ infeasible. 
+For the initial heart model, spatially we assume that every heart tissue are modeled. Temporally we model each heart tissue as an automaton $N0$ shown in \figref{HM_abs}.b. The beat-to-beat dynamics of heart tissue modeled by the deterministic model is abstracted using non-determinism, as the ERP period and conduction delay of the tissue are non-deterministically chosen from ranges instead of deterministic functions. The whole heart can be modeled by composing tissue models with different parameters $H_0=N_0^1\|N_0^2\cdots N_0^n$. However, for a real heart the number $n$ is very large and their connectivity and parameter values are difficult, and perhaps impossible, to determine, which makes verification with $H_0$ infeasible. 
 
 \subsection{Abstraction 1: Abstract Conduction Delays With Paths}
-At the first abstraction step, we seperate the conduction delay (modeled by the cond state in $N0$) from the new node automata $N1$ and model the conduction between two nodes using path automaton $P1$. Since the beat-to-beat dynamics are abstracted with non-determinism, the RRP state is merged with the Rest state in $N1$. The procedure gives us the intuition to abstract the heart as a conduction network as shown in \figref{HM_abs} (c). 
+At the first abstraction step, we separate the conduction delay (modeled by the cond state in $N0$) from the new node automata $N1$ and model the conduction between two nodes using path automaton $P1$. Since the beat-to-beat dynamics are abstracted with non-determinism, the RRP state is merged with the Rest state in $N1$. The procedure gives us the intuition to abstract the heart as a conduction network as shown in \figref{HM_abs} (c). 
 
 \subsection{Abstraction 2: Merging Equivalent States}
-The heart model $H_1'$ still has equivalent locations. In Abstraction 2 we further abstract the node and path automata. With non-determinism, the node automaton react to \textsf{Act\_node!} event the same way in \textsf{RRP} and \textsf{Rest} state. In the new node automaton $N_2$ we merge the \textsf{RRP} state with the \textsf{Rest} state with:
+The heart model $H_1'$ still has equivalent locations. In Abstraction 2 we further abstract the node and path automata by merging equivalent states. In the new node automaton $N_2$ we merge the \textsf{RRP} state with the \textsf{Rest} state with:
 $$N_2.Trest\_min = N_1.Trest\_min+N_1.Trrp\_min$$
 $$N_2.Trest\_max = N_1.Trest\_max+N_1.Trrp\_max$$
-Since during \textsf{ERP} state, the node automata won't react to any \textsf{Act\_node!} event, for a $N_1^1\| P_1\| N_1^2$ setting, the symbolic state $ER\|DO\|ER$ is equivalent to $ER\|ID\|ER$. Under the assumption that the ERP period of a node automaton is much longer than the conduction delay of a path automaton, it is guaranteed that both node automata will be in \textsf{ERP} location when the path exits the \textsf{Double} location. In the path automaton, the \textsf{Double} and \textsf{Conflict} location is merged with the \textsf{Idle} state. The location abstraction and mapping is in \figref{abs} (b). The heart can be modeled as $H_2=N_2^1\| P_2^1\| N_2^2\| P_2^2\| N_2^3$.
+Under the assumption that the ERP period of a node automaton is much longer than the conduction delay of a path automaton,  the \textsf{Double} and \textsf{Conflict} location of the path automaton is merged with the \textsf{Idle} state. The heart can be modeled as $H_2=N_2^1\| P_2^1\| N_2^2\| P_2^2\| N_2^3$.
 
 \subsection{Abstraction 3: Replacing Blocking with Non-deterministic Conduction}
 In Abstraction 3, we replace the blocking behavior of the \textsf{ERP} location of the node with non-deterministic conduction in the path automaton. There exists a transition\\ 
@@ -218,10 +218,9 @@ $\xrightarrow{Act\_node\_1?}$
 $ER\| ID\| ER$\\
 in $N_2^1\| P_2^1\| N_2^2$
 
-
-Without the ERP constraint the AV node is no longer needed and the heart can be modeled as $H_3=N_3^1\| P_3\| N_3^2$. The location abstraction and mapping is in \figref{abs} (c). The detailed proof for this timed simulation relation is in the appendix. 
+Without the ERP constraint the AV node is no longer needed and the heart can be modeled as $H_3=N_3^1\| P_3\| N_3^2$.  The detailed proof for this timed simulation relation can be found in \cite{STTT13}. 
 \subsection{Abstraction 4: Random Heart Model (RHM)}
-In Abstraction 4, we further simplify the heart model by removing the conduction path between two nodes. By setting $Trest\_min$ for both nodes to 0 the new heart model $H_4=N_3^1\|N_3^2$ covers all possible behavior of $H_3$. The location abstraction and mapping is in \figref{abs} (d). This random heart model with two nodes is the most abstract model that will be used at the beginning of the closed-loop verification process in Section 5.
+In Abstraction 4, we further simplify the heart model by removing the conduction path between two nodes. By setting $Trest\_min$ for both nodes to 0 the new heart model $H_4=N_3^1\|N_3^2$ covers all possible behavior of $H_3$. This random heart model with two nodes is the most abstract model that will be used at the beginning of the closed-loop model checking process.
 %\textbf{AG}$\varphi\equiv\neg$\textbf{EF}($\neg\varphi$) 
 
 Eventually we have a series of heart models with:
