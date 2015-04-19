@@ -14,7 +14,7 @@ In the following sections, we briefly discuss our model identification effort fo
 		\includegraphics[width=0.9  \textwidth]{figs/modelID.png}
 		
 %\vspace{-10pt}
-\caption{\small (a) Node automaton. Dotted transition is only valid for pacemaker tissue like SA node; (b) Path automaton; (c) Model of the electrical conduction system of the heart using a network of node \& path automata~\cite{vhm_ecrts10}.}
+\caption{\small (a) The illustration of the probe locations. (b) 3 pacing sequences with different timing outcomes. (c) The heart model with undecided parameters}
 \label{fig:modelID}
 %\vspace{-15pt}
 \end{figure} 
@@ -38,9 +38,17 @@ We can see that each experiment provides certain time constraints for model para
 
 
 \section{Heart Model Identification in Closed-loop Model Checking}
-In model checking, the heart models in general have simple structure and less parameters due to non-deterministic abstraction. The heart models are developed in consistent with Electrophysiology terminologies, thus each node and path automata and their timing parameters have physiological correspondence which can be found in literature (\cite{josephson}). The range for non-deterministic parameters directly correspond to the range for possible values of corresponding physiological parameters. Therefore model identification for model checking is much simpler. 
+In model checking, the heart models in general have simple structure and less parameters due to non-deterministic abstraction. The heart models are developed in consistent with Electrophysiology terminologies, thus each node and path automata and their timing parameters have physiological correspondence which can be found in literature (\figref{intervals}). The range for non-deterministic parameters directly correspond to the range for possible values of corresponding physiological parameters. Therefore model identification for model checking is much simpler. 
 
-An example: \Hao{Need a photo of table of typical parameter values}
+\begin{figure}[!t]
+\centering
+		\includegraphics[width=0.8\textwidth]{figs/intervals.pdf}
+		
+%\vspace{-10pt}
+\caption{\small Timing intervals measured during clinical studies \cite{josephson}}
+\label{fig:intervals}
+%\vspace{-15pt}
+\end{figure} 
 
 
 
@@ -64,7 +72,7 @@ A physiological model is considered valid to be used in closed-loop simulation i
 		\includegraphics[width=0.9  \textwidth]{figs/probes.png}
 		
 %\vspace{-10pt}
-\caption{\small }
+\caption{\small (a) Probe locations for a general EP testing procedure. (b) EGM signals measured from the probes}
 \label{fig:egm}
 %\vspace{-15pt}
 \end{figure} 
