@@ -2,9 +2,17 @@
 
 \chapter{Certification}
 \begin{itemize}
-          	\item Can model-based closed-loop verification provide more safety guarantee than current practice? How much?
+          	\item What is the current practice for medical device certification? What are the limitations?
+          	\item Can model-based closed-loop verification provide more safety guarantee to complement current practice? By how much?
           \end{itemize}
+          
 \section{Current Practice}
-There are two mechanisms that a medical device can enter the market in U.S. The Premarket Notification, also known as 510(k), is the most common and simple way. In a 510(k) submission the device manufacturers have to provide evidence that the device is The general philosophy for FDA certification is the "`Least Burden Approach"'
+%In United States, medical devices have to be approved by FDA to be released into the market. 
+According to their potential risks the devices are categorized into 3 classes, Class I, Class II and Class III, corresponding to low-risk, medium-risk and high-risk devices \cite{class}. Life-sustaining devices like implantable pacemakers are classified as Class III and in general are subject to the most strict regulations.
+
+There are two processes that a medical device can enter the market in U.S.: the Premarket Notification, also known as 510(k) \cite{510k}, and the Pre-Market Approval (PMA) \cite{PMA}. In a 510(k) submission the device manufacturers are only required to provide evidence that the device is \emph{substantial equivalent} to a \emph{predicate device}, which has been approved for the market. Therefore, the 510(k) submission does not directly require clinical evidence for the safety and effectiveness of the device, thus is suitable for mostly low-risk devices like Class I and Class II devices.  The Pre-Market Approval (PMA) submission is a more stringent regulatory process in which direct clinical evidence is required to prove the safety and effectiveness of the device. However, not all Class III devices are subject to PMA submission. If a Class III device clears the 510(k) process and FDA has not requested PMA for that device, the device is still cleared for market release. A study shows that for Class III devices which PMA has been requested, the levels of evidence varies. Only 40\% of the PMA submissions are supported by controlled clinical trials, which provide the most rigorous clinical evidence \cite{cert_prob}.  
+
+
+
 \section{Model-based Proof of Confidence}
 %\cite{pancreas}
