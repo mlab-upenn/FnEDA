@@ -185,28 +185,101 @@ After implementing the Mode-switch algorithm, we verified the model against the 
 	\caption{(a) Safety Violation: VP is delayed due to the reset of timer during mode-switch, (b) Correctness Violation: The blocking period may block some atrial events, turning two \emph{Fast} events to one \emph{Slow} event \cite{TACAS12}}
 \vspace{-20pt}
 \end{figure} 
+\section{Abstraction Tree for Environment Modeling}
 
+\subsection*{Step 1: Abstraction Tree Construction}
+A set of heart models corresponding to different heart conditions are first developed. 
+The list can be expanded as new heart conditions are discovered.
+Because we start from a set of initial models, and each one may be abstracted using a number of abstraction rules, we have a choice of which rules to apply to which models, and the order in which to apply them. More details of the abstraction rules can be found in \cite{REGAR_tech}
+Depending on which rule is applied when, we end up with different abstract models.
+Thus an \emph{abstraction tree} $T_{HM}$ for the heart is created, as shown in \figref{HM_abs}. 
+%Note that applying rules in different order results different abstraction tree. 
+%The order used to obtain $HM\_tree$ is based on the domain knowledge that certain heart conditions may have similar behaviors and similar inputs to the pacemaker. 
+%This systematic grouping maintains the physiological-relevance of the heart model even at higher abstraction levels, and reduce the necessity to resolve ambiguities at lower abstraction levels when model checking certain requirements.
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=0.85\textwidth]{figs/abs.pdf}
+	%\vspace{-5pt}
+	\caption{\small Heart Model Abstraction Tree}
+	\vspace{-15pt}
+	\label{fig:HM_abs}
+\end{figure}
 
-\chapter{Closed-loop Model Simulation/Testing}
-\begin{itemize}
-	\item What are the limitations of model checking?
-    \item How can simulation complement that?
-\end{itemize}
-Model checking is performed on abstract models of the system and/or its environment, which means that if the model checker returns a counter-example, it will be an abstract execution. An abstract execution may correspond to multiple concrete executions and the ambiguity has to be resolved. Closed-loop simulation/testing are performed on more refined model or the actual system thus can complement model checking in terms of resolving ambiguities. In this chapter we show two examples that cannot be distinguished by abstract models.
-\section{Crosstalk}
-Oversensing is a general term for inappropriate sensing caused by noise or far-field signals. It's very common among pacemaker malfunctions and it may result in failure to pace, competitive pacing and inappropriate therapy. Crosstalk is a special case for oversensing which occurs when the pacemaker stimulus in one chamber is sensed in the other chamber. It happens when two leads are close to each other or pacing signal in the other chamber is too strong. It is common that the ventricular lead is placed in the right ventricle outflow tract, which is close to the atrium. \figref{crosstalk}(a) shows simulated EGMs from a patient with bradycardia and complete heart block. During atrial pacing (AP), the pacing signal is sensed by the ventricular lead 53 ms after the AP. (Marker 1) It is treated as ventricular sense (VS) signal and thus inhibit the subsequent ventricular pacing (VP). This is indicated by no QRS-wave in the ECG channel. (Marker 2) For a patient with complete heart block this will cause dangerous ventricular asystole.  
+\subsection*{Step 2: Requirement Encoding}
+The following requirement is designed to prevent the pacemaker from pacing too fast: 
+``If the intervals between self-activations of the atria are between 300ms to 1000ms (60bpm-200bpm), the intervals between ventricular paces should be no shorter than 500ms.''
+Self-activation of the atria can be expressed using the location and clock of of node automaton $N_A$.
+The requirement can be formalized using the monitor  $M_{sing}(VP,500,\infty)$:
+%\hatodo{mention $N_A$ is the atrium node automaton}
+\[Req1: N_A.loc=Rest \land N_A.t\in [300,1000] \Rightarrow \neg M_{sing}.loc==Err\]
+%\todo[inline]{some figure captions are all caps, others are not. please use same thing throughout}
+%\begin{figure}[!b]
+	%\centering
+	%\vspace{-10pt}
+	%\includegraphics[width=0.5\textwidth]{figs/abs_sim.pdf}
+%
+	%\caption{\small Abstraction Rule Application Example}
+%\vspace{-10pt}
+	%\label{fig:abs_exam}
+%\end{figure}
+ \subsection*{Step 3: Choosing Appropriate Heart Models For the Requirement}
+To verify the closed-loop system with pacemaker model $PM$ and abstraction tree $T_{HM}$ (\figref{HM_abs}) against requirement $Req1$, the most abstract appropriate models are selected from the tree. 
+The single event monitor $M_{sing}$ from \figref{monitor}.a with variables $Var(M_{sing})=\{M_{sing}.t,M_{sing}.loc\}$ is used for this requirement. 
+The variables in the requirement are:
+$Var(Req1)=\{N_A.t,N_A.loc,M_{sing}.loc\}$.
 
-Increasing the sensing threshold of the ventricular channel can prevent false sensing. In \figref{crosstalk}(b), the small signals in ventricular EGM are ignored and ventricular pacing are successfully delivered. 
-\begin{figure*}[!t]
-\center
-\vspace{-10pt}
-		\includegraphics[width=\textwidth]{figs/crosstalk_all.pdf}
-\vspace{-20pt}
-\caption{Crosstalk between pacemaker leads with high sensitivity in the ventricle, adjusted sensitivity and ventricular safety pacing}
-\label{fig:crosstalk}
-\vspace{-15pt}
-\end{figure*}
-\section{Lead Displacement}
-Lead displacement affects many patients and can result in inappropriate or ineffective therapy. \figref{dislodge_norm} shows the simulation result for the pacemaker function when the leads are in their designated location. From the figure we can observe: 1) Each P-wave is initialized by an Atrial Pace signal. 2) Each QRS complex is initiated by a ventricular pacing signal. 3) The interval between AP and VP is 150 ms, which matches the programed AVI period.
+At the root of the tree $H_{all}$, we have $\{N_A.t,N_A.loc\} \not \subset Var(H_{all})\cup Var(M_{sing})$. 
+So $H_{all}$ is not appropriate for $Req1$. 
+All the children of $H_{all}$: $H_n'',H_{at}'''',H_{vt}'''$ are appropriate for $Req1$,
+%we have $Var(Req1)\cup Var(M_{sing})\subset Var(H_n'')=Var(H_{at}'''')=Var(H_{vt}''')$, 
+thus these 3 heart models are output as the most abstract models that are appropriate for $Req1$.
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figs/abs_rev.pdf}
+	%\vspace{-5pt}
+	\caption{\small Finding the most concrete counter-examples using the abstraction tree}
+	\vspace{-10pt}
+	\label{fig:CE}
+\end{figure}
+	\vspace{-10pt}
+\subsection*{Step 4: Return the most Concrete Counter-Examples}
+After the appropriate models for $Req1$ are selected, we have the initial set
+$HM=\{H_n'',H_{at}'''',H_{vt}'''\}$.
+Then we run Algorithm 2. By model checking on all 3 initial models in UPPAAL we have: 
+$$H_n''||PM\not\models Req1;\; H_{at}''''||PM\not\models Req1;\; H_{vt}'''||PM\not\models Req1$$
+%$$[1,[]]=ModelChecking(H_n'',PM,Req1)$$
+ %$$[0,CE_1]=ModelChecking(H_{at}'''',PM,Req1)$$
+%$$[0,CE_2]=ModelChecking(H_{vt}''',PM,Req1)$$
+%\hatodoin{In the following text you use $CE_{at}$, etc. It's  best to use the letter subscripts in the above equations as well, so it's clear which cex comes from which heart model.}
+%For the two heart models $H_{at}'''',H_{vt}'''$ in which the requirement is violated, the algorithm keeps going down the abstraction tree, and upon termination counter-examples are returned for the following heart models
+The abstraction tree is then further explored. The heart models with counter-examples are illustrated in \figref{HM_abs}, and the most refined heart models with counter-examples are: $H_{n};H_{pvc};H_{af};H_{avn};H_{afib}$.
+%$$[0,CE_{at}]=ModelChecking(H_{at},PM,Req1)$$
+%$$[0,CE_{pvc}]=ModelChecking(H_{pvc},PM,Req1)$$
+%$$[0,CE_{af}]=ModelChecking(H_{af},PM,Req1)$$
+%$$[0,CE_{avn}]=ModelChecking(H_{avn},PM,Req1)$$
+%$$[0,CE_{afib}]=ModelChecking(H_{afib},PM,Req1)$$
 
-One common case for lead dislodge is shown in \figref{race_cond}, where the atrial lead has fallen into the right ventricle outflow tract. In this case the atrial lead senses from the ventricle rather than atrium and atrial pacing will initiate a ventricular event. \figref{dislodge} shows the simulated EGMs in this case. The figure reveals several facts: 1) No P wave is sensed or tracked (Marker 1). 2) Atrial Pace initiates an abnormal, wide QRS which is then sensed by the ventricle lead (Marker 2). 3) Intermittent appearance of VP on QRS 110 ms after the AP. The ventricular lead can receive signal from: 1) pacing signal sent from the atrial lead, 2) the intrinsic A-V conduction path. The two path are shown in \figref{race_cond} and form a timing race condition. When the signal from the atrial lead arrives the ventricular lead first, it will trigger VS. If the intrinsic signal arrives the ventricular lead during the VSP sensing window (defined in previous section), it will trigger VSP. Although the pacing is 'safe' because the pacing is early enough to avoid the vulnerable refractory period, the damage caused by pacing on depolarized tissue is currently a matter of much investigation.     
+%\begin{figure}[!t]
+		%\centering
+		%\includegraphics[width=0.9\textwidth]{figs/case.pdf}
+		%%\vspace{-5pt}
+		%\caption{\small Counter-examples}
+		  %\vspace{-10pt}
+		%\label{fig:CE}
+%\end{figure}
+	\vspace{-10pt}
+\subsection*{Step 5: Analysis of the Counter-examples}
+The counter-examples are then shared with physicians for analysis. In \figref{CE} we demonstrate 3 counter-examples. In the counter-examples, the first signal shows the intrinsic heart signals over time with up arrows as atrial activations and down arrows as ventricular activations. The second signal shows the pacemaker outputs with up arrows as atrial pacing and down arrows as ventricular pacing.%We only show the activations of the atrial node and ventricle pacing. 
+
+$CE_{n}$ is returned by $H_n$ and none of its children models violate the requirement. By careful analysis we found that $CE_{n}$ features the combination of fast intrinsic atrial rate and prolonged A-V conduction delay, which is the combination of heart conditions $H_{st}$ and $H_{av}$. This scenario shows that the abstraction rules can introduce physiological heart conditions that were not explicitly modeled in the initial model set. The pacemaker improved the open-loop heart condition by pacing the ventricles $AVI$ after each atrial event, which is a correct operation of the pacemaker despite the requirement violation. %\hatodo{is it TAVI or AVI like in the previous seciton?}
+
+%\hatodoin{Do you mean that $CE_{at}$ is not a bug? Does this mean that the requirement may be violated in ways that are not dangerous?}
+$CE_{pvc}$ has a very similar execution to $CE_{n}$. However, the activations of the atrial node are triggered by retrograde conduction from ventricular paces (marker \textsf{cond}). The atrial activations trigger another ventricular pace after $AVI$, which will trigger another retrograde conduction. In this case the heart rate is inappropriately high, which corresponds to a dangerous closed-loop behavior referred to as \emph{Endless Loop Tachycardia}.
+
+In $CE_{af}$ the atrial rate is very high, which is also a sub-optimal but not dangerous heart condition. 
+However, the ventricular rate can stay normal due to the blocking property of the AV node. 
+Despite the filters in the pacemaker, the pacemaker still paces the ventricle for every 3 atrial activations, which extends fast atrial rate to more dangerous fast ventricular rate. 
+%\hatodoin{Not very clear..do you mean that the intrinsoc centricular rate is fine because of AV filtering, but the PM is accelarating it?}
+This scenario is referred to as Atrial Tachycardia Response of a pacemaker. 
+
+From the analysis, pacemaker operations in $CE_{pvc}$ and $CE_{af}$ must be revised. However, the revision should not affect the behavior in $CE_{n}$. This example demonstrates that counter-examples from refined models provide more physiological context of the requirement violations, and distinguish the physiological conditions that can trigger the violations. The information is helpful for debugging and improving the algorithm. The physicians can also improve the physiological requirement so that these heart conditions can be then considered case by case.

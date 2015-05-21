@@ -1,3 +1,26 @@
+\chapter{Closed-loop Model Simulation/Testing}
+\begin{itemize}
+	\item What are the limitations of model checking?
+    \item How can simulation complement that?
+\end{itemize}
+Model checking is performed on abstract models of the system and/or its environment, which means that if the model checker returns a counter-example, it will be an abstract execution. An abstract execution may correspond to multiple concrete executions and the ambiguity has to be resolved. Closed-loop simulation/testing are performed on more refined model or the actual system thus can complement model checking in terms of resolving ambiguities. In this chapter we show two examples that cannot be distinguished by abstract models.
+\section{Crosstalk}
+Oversensing is a general term for inappropriate sensing caused by noise or far-field signals. It's very common among pacemaker malfunctions and it may result in failure to pace, competitive pacing and inappropriate therapy. Crosstalk is a special case for oversensing which occurs when the pacemaker stimulus in one chamber is sensed in the other chamber. It happens when two leads are close to each other or pacing signal in the other chamber is too strong. It is common that the ventricular lead is placed in the right ventricle outflow tract, which is close to the atrium. \figref{crosstalk}(a) shows simulated EGMs from a patient with bradycardia and complete heart block. During atrial pacing (AP), the pacing signal is sensed by the ventricular lead 53 ms after the AP. (Marker 1) It is treated as ventricular sense (VS) signal and thus inhibit the subsequent ventricular pacing (VP). This is indicated by no QRS-wave in the ECG channel. (Marker 2) For a patient with complete heart block this will cause dangerous ventricular asystole.  
+
+Increasing the sensing threshold of the ventricular channel can prevent false sensing. In \figref{crosstalk}(b), the small signals in ventricular EGM are ignored and ventricular pacing are successfully delivered. 
+\begin{figure*}[!t]
+\center
+\vspace{-10pt}
+		\includegraphics[width=\textwidth]{figs/crosstalk_all.pdf}
+\vspace{-20pt}
+\caption{Crosstalk between pacemaker leads with high sensitivity in the ventricle, adjusted sensitivity and ventricular safety pacing}
+\label{fig:crosstalk}
+\vspace{-15pt}
+\end{figure*}
+\section{Lead Displacement}
+Lead displacement affects many patients and can result in inappropriate or ineffective therapy. \figref{dislodge_norm} shows the simulation result for the pacemaker function when the leads are in their designated location. From the figure we can observe: 1) Each P-wave is initialized by an Atrial Pace signal. 2) Each QRS complex is initiated by a ventricular pacing signal. 3) The interval between AP and VP is 150 ms, which matches the programed AVI period.
+
+One common case for lead dislodge is shown in \figref{race_cond}, where the atrial lead has fallen into the right ventricle outflow tract. In this case the atrial lead senses from the ventricle rather than atrium and atrial pacing will initiate a ventricular event. \figref{dislodge} shows the simulated EGMs in this case. The figure reveals several facts: 1) No P wave is sensed or tracked (Marker 1). 2) Atrial Pace initiates an abnormal, wide QRS which is then sensed by the ventricle lead (Marker 2). 3) Intermittent appearance of VP on QRS 110 ms after the AP. The ventricular lead can receive signal from: 1) pacing signal sent from the atrial lead, 2) the intrinsic A-V conduction path. The two path are shown in \figref{race_cond} and form a timing race condition. When the signal from the atrial lead arrives the ventricular lead first, it will trigger VS. If the intrinsic signal arrives the ventricular lead during the VSP sensing window (defined in previous section), it will trigger VSP. Although the pacing is 'safe' because the pacing is early enough to avoid the vulnerable refractory period, the damage caused by pacing on depolarized tissue is currently a matter of much investigation.     
 
 
 \chapter{Certification}
