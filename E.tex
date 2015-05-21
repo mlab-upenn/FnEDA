@@ -186,11 +186,22 @@ After implementing the Mode-switch algorithm, we verified the model against the 
 \vspace{-20pt}
 \end{figure} 
 \section{Abstraction Tree for Environment Modeling}
+In the previous two sections, model abstractions and selections are perfomed manually, which require knowledge of both Electrophysiology and model checking. 
+Counter-examples returned from abstract models can be difficult to interpret by domain experts.
+One abstract counter-example could be produced by multiple physiologically valid conditions, which causes ambiguity.
+Thus, a rigorous framework is necessary to balance the need to cover a wide range of environmental conditions and the need to provide counter-examples to the physicians within their physiological context. The framework must also allow non-domain experts to perform verification, and establish `hand-off' points where the results of verification can be handed back 
+to the experts for interpretation.
 
+In this section, we use a set of domain-specific abstraction rules developed based on physiological knowledge to ensure the physiological relevance of the behaviors introduced into the abstract models.
+The rules are applied to a initial set of physiological models to obtain an abstraction tree, which will be used for closed-loop model checking of the pacemaker. 
+A straightforward search procedure is then used to conduct model checking using suitable heart models and return the most concrete and unambiguous counter-examples to the physicians for analysis.
+In this framework, physiological knowledge is only needed when constructing the initial model set and when analyzing counter-examples. 
+The application of the physiological abstraction rules and the verification procedure can be automated.
+The proposed method can potentially be generalized to other domains in which the device operates in a large variety of environmental conditions. More information regarding this research can be found in \cite{regar_tech}.
 \subsection*{Step 1: Abstraction Tree Construction}
 A set of heart models corresponding to different heart conditions are first developed. 
 The list can be expanded as new heart conditions are discovered.
-Because we start from a set of initial models, and each one may be abstracted using a number of abstraction rules, we have a choice of which rules to apply to which models, and the order in which to apply them. More details of the abstraction rules can be found in \cite{REGAR_tech}
+Because we start from a set of initial models, and each one may be abstracted using a number of abstraction rules, we have a choice of which rules to apply to which models, and the order in which to apply them. 
 Depending on which rule is applied when, we end up with different abstract models.
 Thus an \emph{abstraction tree} $T_{HM}$ for the heart is created, as shown in \figref{HM_abs}. 
 %Note that applying rules in different order results different abstraction tree. 
