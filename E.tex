@@ -203,7 +203,7 @@ A set of heart models corresponding to different heart conditions are first deve
 The list can be expanded as new heart conditions are discovered.
 Because we start from a set of initial models, and each one may be abstracted using a number of abstraction rules, we have a choice of which rules to apply to which models, and the order in which to apply them. 
 Depending on which rule is applied when, we end up with different abstract models.
-Thus an \emph{abstraction tree} $T_{HM}$ for the heart is created, as shown in \figref{HM_abs}. 
+Thus an \emph{abstraction tree} $T_{HM}$ for the heart is created, as shown in \figref{HM_tree}. 
 %Note that applying rules in different order results different abstraction tree. 
 %The order used to obtain $HM\_tree$ is based on the domain knowledge that certain heart conditions may have similar behaviors and similar inputs to the pacemaker. 
 %This systematic grouping maintains the physiological-relevance of the heart model even at higher abstraction levels, and reduce the necessity to resolve ambiguities at lower abstraction levels when model checking certain requirements.
@@ -213,7 +213,7 @@ Thus an \emph{abstraction tree} $T_{HM}$ for the heart is created, as shown in \
 	%\vspace{-5pt}
 	\caption{\small Heart Model Abstraction Tree}
 	\vspace{-15pt}
-	\label{fig:HM_abs}
+	\label{fig:HM_tree}
 \end{figure}
 
 \subsection*{Step 2: Requirement Encoding}
@@ -234,7 +234,7 @@ The requirement can be formalized using the monitor  $M_{sing}(VP,500,\infty)$:
 	%\label{fig:abs_exam}
 %\end{figure}
  \subsection*{Step 3: Choosing Appropriate Heart Models For the Requirement}
-To verify the closed-loop system with pacemaker model $PM$ and abstraction tree $T_{HM}$ (\figref{HM_abs}) against requirement $Req1$, the most abstract appropriate models are selected from the tree. 
+To verify the closed-loop system with pacemaker model $PM$ and abstraction tree $T_{HM}$ (\figref{HM_tree}) against requirement $Req1$, the most abstract appropriate models are selected from the tree. 
 The single event monitor $M_{sing}$ from \figref{monitor}.a with variables $Var(M_{sing})=\{M_{sing}.t,M_{sing}.loc\}$ is used for this requirement. 
 The variables in the requirement are:
 $Var(Req1)=\{N_A.t,N_A.loc,M_{sing}.loc\}$.
@@ -263,7 +263,7 @@ $$H_n''||PM\not\models Req1;\; H_{at}''''||PM\not\models Req1;\; H_{vt}'''||PM\n
 %$$[0,CE_2]=ModelChecking(H_{vt}''',PM,Req1)$$
 %\hatodoin{In the following text you use $CE_{at}$, etc. It's  best to use the letter subscripts in the above equations as well, so it's clear which cex comes from which heart model.}
 %For the two heart models $H_{at}'''',H_{vt}'''$ in which the requirement is violated, the algorithm keeps going down the abstraction tree, and upon termination counter-examples are returned for the following heart models
-The abstraction tree is then further explored. The heart models with counter-examples are illustrated in \figref{HM_abs}, and the most refined heart models with counter-examples are: $H_{n};H_{pvc};H_{af};H_{avn};H_{afib}$.
+The abstraction tree is then further explored. The heart models with counter-examples are illustrated in \figref{HM_tree}, and the most refined heart models with counter-examples are: $H_{n};H_{pvc};H_{af};H_{avn};H_{afib}$.
 %$$[0,CE_{at}]=ModelChecking(H_{at},PM,Req1)$$
 %$$[0,CE_{pvc}]=ModelChecking(H_{pvc},PM,Req1)$$
 %$$[0,CE_{af}]=ModelChecking(H_{af},PM,Req1)$$

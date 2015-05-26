@@ -1,14 +1,16 @@
-\chapter{Identifying the Environment Model }
-\begin{itemize}
-	\item What is the importance of model identification?
-    \item How to identify?
-    \item What's the data availability and quality?
-    \item Are there differences for identifying different kind of models?
-    \item What are the challenges?
-\end{itemize}
-Physiological models are developed to represent certain physiological condition in general, or the physiological condition of a specific patient. Therefore the structure of the model and corresponding parameters have to be identified. These information can be obtained from physiological data, which are from: 1) data collected during physiological procedures, and/or 2) physiological literature in which physiological data are analyzed and summarized. Due to limitation on the interactions with the patient, the availability and quality of physiological data are generally bad and there are generally not enough information to identify all the parameters in the model. It is essential to choose the right level of abstraction so that the model is identifiable (to a large extend). Having physiological correspondence for the model structure and parameters can also simplify the identification process. The rigorousness of the model identification step is also an important factor for the validity of the model. 
+\chapter{Identifying and Validating the Environment Model }
 
-In the following sections, we briefly discuss our model identification effort for heart models used in two closed-loop verification applications, and their corresponding challenges. 
+Physiological models are developed to represent certain clinical condition common across a population of patients, or the condition of a specific patient. Therefore the structure of the model and corresponding parameters have to be identified. This information can be obtained from physiological data from data collected during physiological procedures, and/or physiological literature in which population physiological data is analyzed and summarized. Due to limitation on the interactions with the patient (e.g. during a device implantation procedure or an ablation procedure), the quantity and quality of physiological data are generally poor as there is generally not enough information to identify all the parameters in the model.  A spatio-temporal structure of the model which is similar to the conduction patterns in the heart, helps simplify the process of identifying the model parameters. A rigorous procedure for the model identification step is an important contributor to the model validation step. 
+%%It is essential to choose the right level of abstraction so that the model is identifiable (to a large extent). Having physiological correspondence for the model structure and parameters can also simplify the identification process. 
+
+\begin{itemize}
+	\vspace{-5pt}
+	\item What is the importance of model identification for closed-loop simulation and model checking?
+	\vspace{-5pt}
+    	\item How are models identified from patient data and patient population parameters?
+\end{itemize}
+
+In the following section, we briefly discuss our model identification effort for heart models used in two closed-loop verification applications, and their corresponding challenges. This is followed by the procedures to validate the heart models before they are used for closed-loop verification and testing of the pacemaker.
 \begin{figure}[!t]
 \centering
 		\includegraphics[width=0.9  \textwidth]{figs/modelID.png}
@@ -37,7 +39,7 @@ We can see that each experiment provides certain time constraints for model para
 
 
 
-\section{Heart Model Identification in Closed-loop Model Checking}
+\subsection{Heart Model Identification in Closed-loop Model Checking}
 In model checking, the heart models in general have simple structure and less parameters due to non-deterministic abstraction. The heart models are developed in consistent with Electrophysiology terminologies, thus each node and path automata and their timing parameters have physiological correspondence which can be found in literature (\figref{intervals}). The range for non-deterministic parameters directly correspond to the range for possible values of corresponding physiological parameters. Therefore model identification for model checking is much simpler. 
 
 \begin{figure}[!t]
@@ -56,14 +58,14 @@ In model checking, the heart models in general have simple structure and less pa
 
 
 
-\chapter{Validating the Environment Model}
+\section{Validating the Environment Model}
 \begin{itemize}
 	\item What are the different methods to validate physiological models?
     \item How much confidence can these validation provide?
 \end{itemize}
 The validity of the environment models affects the validity of the closed-loop verification results. Since models are always approximations of the actual environment, there is always discrepancies between the model and the actual patient (group). The challenge then is to evaluate the amount of safety guarantee that model-based closed-loop verification can provide. For the two closed-loop verification applications, the validity metric for the environment model is slightly different: in closed-loop model checking, the model's \textbf{coverage} on environmental behaviors is more important, while in closed-loop simulation, the \textbf{accuracy} of the model is more important. In this chapter we use our heart models as example to demonstrate several validation procedures that can improve the validity of the environment model.
 
-\section{Validating Models for Closed-loop Simulation}
+\subsection{Validating Models for Closed-loop Simulation}
 A physiological model is considered valid to be used in closed-loop simulation if 1) it is capable of generating the same output as the patient given the same input; 2) it is general enough to represent other patient with similar condition by adjusting its parameters. The second point is to ensure that the model successfully captures the underlying mechanism instead of over-fitting the data. In the following example we demonstrate the capability of our heart models to model certain heart conditions according to the mechanism described in physiological literature, and the model exhibits expected output given the proposed inputs.
 
 %To use a physiological model for closed-loop simulation, there are two levels of validity: 1) model a patient with certain heart condition, 2) model a \em ph{specific} patient with certain heart condition. Level 1 validity ensures that the model successfully models the underlying mechanism of the heart condition, while level 2 validity guarantees the capability of the model to generate same data as the corresponding patient given the same input. Note that satisfying level 2 without satisfying level 1 may result in over-fitting.
@@ -108,7 +110,7 @@ During an EP testing procedure, the physician place catheters inside the patient
 % 	\label{fig:AFL}
 % \end{figure}
 
-\section{Validate Models for Closed-loop Model Checking}
+\subsection{Validate Models for Closed-loop Model Checking}
 In model checking, a lot of complex dynamics of the environment are abstracted so that the environment model covers large number of environmental behaviors using non-determinism. The validity of the model can be provided by a valid initial model and a rigorous abstraction processes. In \cite{STTT13}, we started with a valid model and by applying different abstraction steps we were able to generate a series of non-deterministic heart models. Between each abstraction levels, the heart models satisfy a timed simulation relationship (\cite{simulation}) which is described below. The timed simulation guarantees all behaviors are covered in the mode abstract model.
 
 For two timed automata $T^1=\left\langle S^1,S_0^1,\Sigma^1,X^1,inv^1,E^1\right\rangle$ and $T^2=\left\langle S^2,S_0^2,\Sigma^2,X^2,inv^2,E^2\right\rangle$, a timed simulation relation is a binary relation $\textsf{sim}\subseteq \Omega^1\times \Omega^2$ where $\Omega^1$ and $\Omega^2$ are sets of states of $T^1$ and $T^2$. We say $T^2$ \textsf{time simulates} $T^1$ ($T^1 \preceq_t T^2$) if the following conditions holds:
