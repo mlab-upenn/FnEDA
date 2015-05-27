@@ -112,7 +112,27 @@ During an EP testing procedure, the physician place catheters inside the patient
 % 	\caption{(a) The straight arrow shows the view of the AFL circuit from the right ventricle through the tricuspid valve into the right atrium, while the curved area shows the direction of conduction. (b) The circuit is bounded by the eustachian ridge (ER), connecting the  inferior vena cava (IVC) and the coronary sinus (CS), as well as the crista terminalis (CT), connecting the superior vena cava (SVC) and the IVC. The wavy line shows slow conduction through the CTI, bounded by the ER and the tricuspid valve (\emph{Adapted from} \cite{AFL_diag}). (c) The AFL circuit in the VHM extrapolates nodes and paths from the true physiology. The numbers show the values of conduction timers in the paths, with corresponding slow conduction path on the bottom.}
 % 	\label{fig:AFL}
 % \end{figure}
-
+\begin{figure*}[!t]
+\centering
+		\subfigure 	[\small Electrograms of induced Wenckebach block in a
+patient] 
+		{
+		\includegraphics[width=0.40\textwidth]{figs/wenckebach_book.pdf}
+		\label{fig:WB_book}
+		} 
+		\hspace{.1in}%
+		\subfigure [\small Electrograms of induced Wenckebach block in
+the heart model with BCL 420 msec] 
+		{	
+			\includegraphics[width=0.40\textwidth]{figs/WB_new.pdf} 
+			\label{fig:WB}
+		}
+\vspace{-5pt}
+\caption{}
+\vspace{-15pt}
+\end{figure*} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+This heart condition can also show Wenckebach type A-V nodal response. In this case, a sequence of pacing signals with a short coupling interval ($A_1-A_2<=AV.Terp+AV.Trrp$) is delivered in the atrium. This results in a gradual increase in the AV nodal conduction delay and then a dropped beat occurs in the ventricle due to the increased ERP period of the AV node. The EGMs for a real patient with Wenckebach type A-V nodal response are shown in \figref{WB_book}. With the VHM, we observe similar behavior, and the gradually increasing ERP and conduction delay are visualized in \figref{WB}.
 \subsection{Validating Models for Closed-loop Model Checking}
 In model checking, a lot of complex dynamics of the environment are abstracted so that the environment model covers large number of environmental behaviors using non-determinism. The validity of the model is obtained by a valid initial model and a rigorous abstraction processes. In \cite{STTT13}, we started with a valid detailed deterministic model (as described above) and by applying different abstraction steps we were able to generate a series of non-deterministic heart models. Between each abstraction step, the heart models satisfy a timed simulation relationship (\cite{simulation}) which is described below. The timed simulation guarantees all behaviors are covered in the mode abstract model.
 
@@ -123,5 +143,5 @@ For two timed automata $T^1=\left\langle S^1,S_0^1,\Sigma^1,X^1,inv^1,E^1\right\
 	\item Discrete transition: For every $(\left\langle s_1,v_1\right\rangle,\left\langle s_2,v_2\right\rangle)\in\textsf{sim}$, if $\left\langle s_1,v_1\right\rangle\xrightarrow{\sigma}\left\langle s_1',v_1'\right\rangle$, there exists $\left\langle s_2',v_2'\right\rangle$ such that $\left\langle s_2,v_2\right\rangle\xrightarrow{\sigma}\left\langle s_2',v_2'\right\rangle$ and $(\left\langle s_1',v_1'\right\rangle,\left\langle s_2',v_2'\right\rangle)\in\textsf{sim}$.
 \end{itemize}
 
-
+The validated heart models can then be used for closed-loop verification of implantable pacemaker. Both the identification and validation of the heart models can be used to provide more confidence to the verification results, which would be helpful during certification process.
  
