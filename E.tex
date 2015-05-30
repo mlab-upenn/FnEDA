@@ -132,7 +132,7 @@ In model-based software design, the system can be abstracted by a model. With pr
 %\vspace{-15pt}
 \end{figure*} 
 \section{Reachability of Unsafe Regions}
-The basic function of a pacemaker is to increase heart rate when necessary. As the result, we not only want to verify that the heart rate has been increased accordingly, but also ensure the pacemaker does not increase the heart rate too much. Since these requirements should hold for all possible heart conditions, the most abstract heart model $H_4$ is selected as the environment model. The following two requirements specify the unsafe regions  (too fast and too slow) within the closed-loop state space.
+The basic function of a pacemaker is to increase heart rate when necessary. As the result, we not only want to verify that the heart rate has been increased accordingly, but also ensure the pacemaker does not increase the heart rate too much. Since these requirements should hold for all possible heart conditions, the most abstract heart model $e$ is selected from \ref{fig:HM_abs} as the environment model. The following two requirements specify the unsafe regions  (too fast and too slow) within the closed-loop state space.
 
 \subsection{Lower Rate Limit}
 The most essential function for the pacemaker is to treat bradycardia by maintaining the ventricular rate above a certain threshold. We define the region where the ventricular rate is slow, as \textsf{unsafe}. The monitor \textsf{PLRI\_test} is designed to measure intervals between ventricular events and is shown in \figref{safety1}. For property \\
