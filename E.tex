@@ -59,7 +59,7 @@ Typically, in a heart without pacemaker, the AV node, which has a long refractor
 As there is no pacing in ODO mode, the heart is in open-loop with the pacemaker. In this particular case, every 3 atrial events (AS) correspond to 1 ventricular event (VS) during SVT. 
 As an arrhythmia, SVT is still considered as a safe heart condition since the ventricles operate under normal rate can and maintain adequate cardiac output. 
 
-However, in the closed loop case with the DDD pacemaker, the AVI component of a dual chamber pacemaker is equivalent to a virtual pathway in parallel to the intrinsic conduction pathway between the atria and the ventricles. The pacemaker tries to maintain 1:1 A-V conduction and thus increases the ventricular rate inappropriately to match the atrial rate. \figref{SVT_DDD} shows the pacemaker trace of the same SVT case with DDD pacemaker. Although half of the fast atrial events are filtered by the PVARP period ([AR]s), the DDD pacemaker still drives the closed-loop system into 2:1 A-V conduction with faster ventricular rate. Maintaining A-V delay is less important than maintaining an appropriate ventricular rate. The DDD pacemaker violates a higher priority requirement in order to satisfy a lower priority requirement, which is inappropriate.
+However, in the closed loop case with the DDD pacemaker, the AVI component of a dual chamber pacemaker is equivalent to a virtual pathway in parallel to the intrinsic conduction pathway between the atria and the ventricles. The pacemaker tries to maintain 1:1 A-V conduction and thus increases the ventricular rate inappropriately to match the atrial rate.  This is known as Pacemaker Mediated Tachycardia (PMT) as the heart would have been safe without the pacemaker and it's virtual pathway. \figref{SVT_DDD} shows the pacemaker trace of the same SVT case with DDD pacemaker. Although half of the fast atrial events are filtered by the PVARP period ([AR]s), the DDD pacemaker still drives the closed-loop system into 2:1 A-V conduction with faster ventricular rate. Maintaining A-V delay is less important than maintaining an appropriate ventricular rate. The DDD pacemaker violates a higher priority requirement in order to satisfy a lower priority requirement, which is inappropriate.
 \begin{figure*}[!t]
 \centering
 		\subfigure [\small]{			
@@ -107,16 +107,90 @@ In each component two copies for both modes are modeled, and switch between each
 		\label{fig:dur_count}
 \end{figure*} 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \chapter{Closed-loop Model Checking}
+There are two categories of device bugs: 
+1) the device may fail to conform to its \emph{specifications}, that is, the prescription of how it should react to certain inputs.  
+2) the device may fail to improve the conditions of the patient as promised, even if it conforms to its specifications. 
+The desired physiological conditions that the closed-loop system should achieve are captured in the \emph{physiological requirements}; for example, for a pacemaker, the heart rate should always be maintained above a certain threshold. 
+
+Bugs in the first category (non-conformance to specification) can be detected via systematic and extensive open-loop testing in which a set of input sequences is fed to the device, and its output is compared with the expected output.
+Bugs in the second category (violation of physiological requirements), on the other hand, require the interaction within the \emph{closed-loop system}, which consists of the device and its environment.
+For instance, the pacemaker and the heart as its environment. 
+In the medical device industry, closed-loop verification of the physiological requirements is mostly performed in terms of clinical trials, in which the actual devices are implanted in human subjects over an extended duration.
+Unfortunately, because of the extremely high cost of clinical trials (several million dollars and spanning several years,~\cite{trialcost}), the amount and variety of human subjects during the clinical trials are limited, which reduces the opportunity to find bugs. 
+Moreover, clinical trials are often conducted at the final design stage. Fixing bugs at this stage is very costly.
+
+Closed-loop model checking enables closed-loop evaluation of the physiological requirements at an earlier design stage, which requires formal model(s) of the physiological environment. In this chapter we will answer the following questions:
 \begin{itemize}
-	\item How to use models to cover environmental conditions specified in the physiological requirements, that the device may encounter?
-            \item Can model checking find violations that testing cannot find?
-            \item What are the effects of adding new features to the software? Can they disrupt the safety properties that the previous device hold?
-            \item What is the model complexity requirements for each physiological requirement? When and how to refine the environment model?
-            \item Exploring the whole state space sounds great. What are the limitations of model checking? 
+	\vspace{-5pt}
+	\item How can we model environmental conditions of the heart to capture all physiological requirements?
+	\vspace{-5pt}
+	\item Can model checking find violations that testing cannot find?
+	\vspace{-5pt}
+	\item When and how to refine the environment model?
+        \vspace{-5pt}
+        \item Exploring the whole state space sounds great. What are the limitations of model checking? 
 \end{itemize}
-In model-based software design, the system can be abstracted by a model. With proper model formalism and tools, the whole state space of the system can be checked
-\begin{figure*}
+%            \item What are the effects of adding new features to the software? Can they disrupt the safety properties that the previous device hold?
+
+In closed-loop model checking, there is only one device model. 
+However there can be a large number of environmental conditions which require different models to represent them. For instance, a heart with atrial flutter has an additional conduction pathway, causing fast atrial rate, that is not present in a healthy heart. The timing and structural differences of different heart conditions should be distinguished in corresponding heart models.
+%\todo[inline]{should we give an example of a heart condition?}
+A set of initial models of the environment can be constructed but the set is inherently incomplete because of the large number of environment conditions and their combinations. 
+As a result, performing model checking using every model in the set cannot ensure full coverage of the environmental conditions. In the following sections we will investigate how as we go from basic to more complex requirements, we require more sophisticated approaches to generate and navigate through a variety of environment models. We introduce the concept of an \emph{Abstraction Tree} to systematically encode requirements and choose the appropriate heart models for the requirement. By analyzing the concrete counter-examples we are able to distinguish if the problem is a bug within the device or due to the lack of expressivity in the environment model. 
+
+\section{Testing vs Verification}
+
+\newcommand{\ub}{\bar{u}}
+\newcommand{\yb}{\bar{y}}
+
+\emph{\textbf{Testing}} is a method for checking that a system does indeed obey its specification. 
+In testing, an algorithm will 
+\begin{itemize}
+	\item initialize the system to some initial state $x_0$ in $X_0$.
+	E.g., for a pacemaker device, this would describe the initial values for the various refractory periods, among other things.
+	\item Generate sequences of input strings $\bar{u}_k$ from some set $A$, in reaction to which the system will produce output strings $\bar{y}_k$,
+	\item a \emph{monitor} logs the output strings and determines whether the pair $(\bar{u}_k,\bar{y}_k)$ satisfies the specification or not.	
+\end{itemize}
+
+Because the set of valid initial states $X_0$ and the set of valid input strings $A$ may be infinite (or simply too large), the testbench must decide on how to intelligently choose a \emph{finite} number of $(x_0,\ub)$.
+They must be chosen such that if the system does not produce wrong behavior with these pairs, then it is unlikely to produce errors under the \emph{full} valid set of pairs, namely, $X_0 \times A$.
+This is the main challenge of testing: how to sample an infinite or large set of behaviors such that it is representative (in the above sense) of the full set of behaviors that $S$ is capable of?
+Another important issue in testing is for how long to test the system: i.e. what should be the length of the $k^{th}$ string $\ub_k$? 
+E.g., if $\ub_k$ has length 1000, the bug might manifest itself on $y_1\ldots y_{1001}$, but not $y_1\ldots y_{1000}$.
+
+Regardless of testing algorithm, testing remains incomplete, in the sense that short of testing every possible behavior, bugs may lie hidden in the behavior that we did not witness.
+
+\emph{\textbf{Verification}} refers to formal verification.
+It is applicable to finite state systems\footnote{Some infinite-state systems can be formally verified after an abstraction process which essentially produces an equivalent system that has finitely many states.}, 
+and requires formal semantics for the system's operation. 
+Roughly, this means we must have a mathematical unambiguous definition of how the system produces its output.
+A verification algorithm, or \emph{model checker}, will explore the \emph{entire finite state-space} of the system in a systematic manner. 
+Intuitively, if the entire state-space has been explored in all possible ways, and no incorrect behavior has been displayed, then the system is correct. 
+Thus, verification is inherently \emph{complete}: if the model checker determines that the system is correct (under the conditions $A$ and $X_0$), then we can rest assured that that is indeed the case.
+Unlike testing, there is no question of whether we missed (didn't run) an initial condition that can display a bug.
+There is also no question of test duration.
+However in practice, some bound on the duration of the verification must be placed to avoid excessively long runs. 
+If the model checker can't determine correctness in that time bound, then the verification is inconclusive.
+
+Verification is computationally expensive and usually more burdensome to setup, but comes with a guarantee on the answer. 
+Testing is computationally cheaper and less burdensome to setup, but the guarantees it provides are significantly weaker.
+Testing, on the other hand, may be the only option for some complex systems that are beyond the capacity of today's model checkers, or which do not possess formal semantics.
+
+In this chapter we cover formal verification of the closed-loop system and address testing in the following chapter.
+
+\section{Reachability of Unsafe Regions for Basic Pacemaker Function}
+The basic function of a pacemaker is to increase heart rate when necessary. As the result, we not only want to verify that the heart rate has been increased accordingly, but also ensure the pacemaker does not increase the heart rate too much. Since these requirements should hold for all possible heart conditions, the most abstract heart model $e$ is selected from Fig. 	\ref{fig:HM_abs} as the environment model. The following two requirements specify the unsafe regions  (too fast and too slow) within the closed-loop state space.
+
+\subsection{Lower Rate Limit}
+\vspace{-10pt}
+The most essential function for the pacemaker is to treat bradycardia by maintaining the ventricular rate above a certain threshold. We define the region where the ventricular rate is slow, as \textsf{unsafe}. The monitor \textsf{PLRI\_test} is designed to measure intervals between ventricular events and is shown in \figref{safety1}. For property \\
+\textsf{$\varphi_{LRI}=$A[] (PLRI\_test.secV imply PLRI\_test.t$\leq$TLRI)}\\ we have $H_4\| P\| PLRI\_test\models\varphi_{LRI}$.
+
+\begin{figure*}[t]
 \centering
 %\vspace{-10pt}
 		\subfigure[Monitor \textsf{PLRI\_test}] {
@@ -129,17 +203,20 @@ In model-based software design, the system can be abstracted by a model. With pr
 		}
 		%\vspace{-10pt}
 	\caption{(a) Monitor for LRL: Interval between two ventricular events should be less than TLRI, (b) Monitor for URL: Interval between a ventricular event and a VP should be longer than TURI}
-%\vspace{-15pt}
+\vspace{-10pt}
 \end{figure*} 
-\section{Reachability of Unsafe Regions}
-The basic function of a pacemaker is to increase heart rate when necessary. As the result, we not only want to verify that the heart rate has been increased accordingly, but also ensure the pacemaker does not increase the heart rate too much. Since these requirements should hold for all possible heart conditions, the most abstract heart model $e$ is selected from \ref{fig:HM_abs} as the environment model. The following two requirements specify the unsafe regions  (too fast and too slow) within the closed-loop state space.
-
-\subsection{Lower Rate Limit}
-The most essential function for the pacemaker is to treat bradycardia by maintaining the ventricular rate above a certain threshold. We define the region where the ventricular rate is slow, as \textsf{unsafe}. The monitor \textsf{PLRI\_test} is designed to measure intervals between ventricular events and is shown in \figref{safety1}. For property \\
-\textsf{$\varphi_{LRI}=$A[] (PLRI\_test.secV imply PLRI\_test.t$\leq$TLRI)}\\ we have $H_4\| P\| PLRI\_test\models\varphi_{LRI}$.
 
 \subsection{Upper Rate Limit}
+\vspace{-10pt}
 The pacemaker is not designed to treat tachycardia so it can only pace the heart to increase its rate and cannot slow it down. However, it is still important to guarantee it does not pace the ventricles beyond a maximum rate to ensure safe operations. To this effect, an Upper Rate Interval (URI) is specified such that the pacemaker can increase the ventricular rate up to this limit. 
+
+\begin{figure}[b]
+		\centering
+		\includegraphics[width=0.4\textwidth]{figs/vv.pdf}
+		\caption{\small Monitor \textsf{Pv\_v} for SVT: There exists an endless sequence in which interval between ventricular events is at most TURI}
+		  %\vspace{-15pt}
+		\label{fig:vv}
+\end{figure}
   
 We require that a ventricle pace (VP) can only occur at least $TURI$ after a ventricle event (VS, VP). The monitor \textsf{PURI\_test} is shown in \figref{uri_test}. For the property\\
 $\varphi_{URI}=$\textsf{A[] (PURI\_test.secV imply PURI\_test.t$\geq$TURI)} \\
@@ -147,37 +224,29 @@ we have $H_4\| P\| PURI\_test\models \varphi_{URI}$.
 
 \section{Model Checking the Mode-Switch Algorithm}
 
-\subsection{Existence of PMT during SVT}
+\subsection{Existence of Pacemaker Mediated Tachycardia during SVT}
 The monitor \textsf{Pv\_v} is designed to show existence of PMT during SVT. It goes to the error state if the ventricular rate drops below the Upper Rate Limit (\figref{vv}).  
-\begin{figure}
-		\centering
-		\includegraphics[width=0.4\textwidth]{figs/vv.pdf}
-		\caption{\small Monitor \textsf{Pv\_v} for SVT: There exists an endless sequence in which interval between ventricular events is at most TURI}
-		  %\vspace{-15pt}
-		\label{fig:vv}
-\end{figure}
 
-We specify\\
+
+We specify 
 $\varphi_{MS}=E[] (not Pv\_v.err)$\\
-which verifies the existence of PMT. The heart model $H_3$ is not suitable for this property since the non-deterministic conduction of component $P_3$ does not capture the blocking property of the AV node, which is the key in PMT. We use a more refined model $H_2$ which has AV node modeled. To identify the PMT scenario, we first set $H_2.N^1.Trest\_min<100$ so that the atrial rate can be high and $H_2.N^2.Trest\_min>TURI$ so that the intrinsic heart rate is less than TURI. The property is first verified on pacemaker without the mode-switch algorithm. We have\\
-$H_2\|P\|Pv\_v\models\varphi_{MS}$
-and the evidence returned by the model checker illustrates the PMT scenario.
+which verifies the existence of PMT. The heart model $H_e$ in Fig. \ref{fig:HM_abs} is not suitable for this property since the non-deterministic conduction of component $P_3$ does not capture the blocking property of the AV node, which is the key in PMT. We use a more refined model $H_d$ which has AV node modeled. To identify the PMT scenario, we first set $H_d.N^1.Trest\_min<100$ so that the atrial rate can be high and $H_d.N^2.Trest\_min>TURI$ so that the intrinsic heart rate is less than TURI. The property is first verified on pacemaker without the mode-switch algorithm. We have $H_d\|P\|Pv\_v\models\varphi_{MS}$ and the evidence returned by the model checker illustrates the PMT scenario.
 
 % There are two separate AVI and LRI components for each mode and switches to the corresponding ones when synchronization signals are received. The clock values are kept so that essential intervals are kept. 
 \subsection{Verification against fundamental safety properties}
-With the pacemaker with mode-switch algorithm: $P_2$=\textsf{LRI'$\|$AVI'$\|$URI$\|$PVARP$\|$VRP$\|$INT$\|$CNT$\|$DUR}, we verify the same fundamental safety properties on the pacemaker model with mode-switch algorithm. We have:
-$$H_2\|P_2\|PURI\_test\models\varphi_{URI}$$
-$$H_2\|P_2\|PLRI\_test\not\models\varphi_{LRI}$$
+For a pacemaker with the mode-switch algorithm: $P_2$=\textsf{LRI'$\|$AVI'$\|$URI$\|$PVARP$\|$VRP$\|$INT$\|$CNT$\|$DUR}, we verify the same fundamental safety properties on the pacemaker model with mode-switch algorithm. We have:
+$$H_d\|P_2\|PURI\_test\models\varphi_{URI}$$
+$$H_d\|P_2\|PLRI\_test\not\models\varphi_{LRI}$$
 The Upper Rate Limit property still holds but the Lower Rate Limit property is violated. The counterexample is proved to be valid after checking the trace of more refined heart models. By analyzing the trace we found that when the pacemaker is switching from VDI mode to DDD mode, the responsibility to deliver VP switched from LRI component to AVI component. Since the clock reference is different (Ventricular events in LRI component and Atrial events in AVI component), the clock value for delivering the next VP is not preserved. As a result, if an atrial event which triggered the mode-switch from VDI to DDD happens within [TLRI-TAVI, TLRI) after the last ventricular event, the next ventricular pacing will be delayed by at most TAVI time, which violates the Lower Rate Limit property (\figref{safety}). 
-\begin{figure}
-		\centering
-		\includegraphics[width=0.4\textwidth]{figs/vv.pdf}
-		\caption{\small Monitor \textsf{Pv\_v} for SVT: There exists an endless sequence in which interval between ventricular events is at most TURI}
-		  %\vspace{-15pt}
-		\label{fig:vv}
-\end{figure}
-\subsection{Verification of the Mode-switch Algorithm}
-After implementing the Mode-switch algorithm, we verified the model against the same existence property. We expect the violation of this property, since during VDI mode the ventricular rate of the heart model is less than the Upper Rate Limit and will not trigger ventricular pacing. However, this property is still satisfied, indicating the mode-switch algorithm failed to eliminate the PMT scenario. The evidence trace returned by UPPAAL shows that a subset of atrial events fall into the blanking period after a ventricular event (see \figref{liveness}). As a result, two fast events are reduced to one slow event and mode switch may never happen. This scenario does exist in all our refined heart models, we conclude that the trace is physiologically feasible. The mode-switch algorithm in our pacemaker model can not terminate all PMT behaviors as specified.
+%%\begin{figure}
+%%		\centering
+%%		\includegraphics[width=0.4\textwidth]{figs/vv.pdf}
+%%		\caption{\small Monitor \textsf{Pv\_v} for SVT: There exists an endless sequence in which interval between ventricular events is at most TURI}
+%%		  %\vspace{-15pt}
+%%		\label{fig:vv}
+%%\end{figure}
+\subsection{Verification of the Mode-Switch Algorithm}
+After implementing the mode-switch algorithm, we verified the model against the same existence property. We expect the violation of this property, since during VDI mode the ventricular rate of the heart model is less than the Upper Rate Limit and will not trigger ventricular pacing. However, this property is still satisfied, indicating the mode-switch algorithm failed to eliminate the PMT scenario. The evidence trace returned by UPPAAL shows that a subset of atrial events fall into the blanking period after a ventricular event (see \figref{liveness}). As a result, two fast events are reduced to one slow event and mode switch may never happen. This scenario does exist in all our refined heart models, we conclude that the trace is physiologically feasible. The mode-switch algorithm in our pacemaker model can not terminate all PMT behaviors as specified.
 \begin{figure}
 \centering
 %\vspace{-20pt}
@@ -243,15 +312,25 @@ The requirement can be formalized using the monitor  $M_{sing}(VP,500,\infty)$:
 %\end{figure}
  \subsection*{Step 3: Choosing Appropriate Heart Models For the Requirement}
 To verify the closed-loop system with pacemaker model $PM$ and abstraction tree $T_{HM}$ (\figref{HM_tree}) against requirement $Req1$, the most abstract appropriate models are selected from the tree. 
-The single event monitor $M_{sing}$ from \figref{monitor}.a with variables $Var(M_{sing})=\{M_{sing}.t,M_{sing}.loc\}$ is used for this requirement. 
+The single event monitor $M_{sing}$ from \figref{monitor}(a) with variables $Var(M_{sing})=\{M_{sing}.t,M_{sing}.loc\}$ is used for this requirement. Model checking is performed on the closed-loop system including the heart model $M_H$, the pacemaker model $M_P$, and the monitor $M$. The requirement $\varphi_P$ can be then represented with TCTL formula:
+ \textsf{A[] (not M.Err)}
+
 The variables in the requirement are:
 $Var(Req1)=\{N_A.t,N_A.loc,M_{sing}.loc\}$.
+\begin{figure}[b]
+		\centering
+		\includegraphics[width=0.8\textwidth]{figs/monitor.pdf}
+		%\vspace{-5pt}
+		\caption{\small (a) $M_{sing}$ for single event; (b) $M_{doub}$ for two events}
+		  \vspace{-10pt}
+		\label{fig:monitor}
+\end{figure}
 
 At the root of the tree $H_{all}$, we have $\{N_A.t,N_A.loc\} \not \subset Var(H_{all})\cup Var(M_{sing})$. 
 So $H_{all}$ is not appropriate for $Req1$. 
 All the children of $H_{all}$: $H_n'',H_{at}'''',H_{vt}'''$ are appropriate for $Req1$,
 %we have $Var(Req1)\cup Var(M_{sing})\subset Var(H_n'')=Var(H_{at}'''')=Var(H_{vt}''')$, 
-thus these 3 heart models are output as the most abstract models that are appropriate for $Req1$.
+thus these three heart models are output as the most abstract models that are appropriate for $Req1$.
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=0.8\textwidth]{figs/abs_rev.pdf}
@@ -271,7 +350,7 @@ $$H_n''||PM\not\models Req1;\; H_{at}''''||PM\not\models Req1;\; H_{vt}'''||PM\n
 %$$[0,CE_2]=ModelChecking(H_{vt}''',PM,Req1)$$
 %\hatodoin{In the following text you use $CE_{at}$, etc. It's  best to use the letter subscripts in the above equations as well, so it's clear which cex comes from which heart model.}
 %For the two heart models $H_{at}'''',H_{vt}'''$ in which the requirement is violated, the algorithm keeps going down the abstraction tree, and upon termination counter-examples are returned for the following heart models
-The abstraction tree is then further explored. The heart models with counter-examples are illustrated in \figref{HM_tree}, and the most refined heart models with counter-examples are: $H_{n};H_{pvc};H_{af};H_{avn};H_{afib}$.
+The abstraction tree is then further explored. The heart models with counter-examples are illustrated in \figref{CE}, and the most refined heart models with counter-examples are: $H_{n};H_{pvc};H_{af};H_{avn};H_{afib}$.
 %$$[0,CE_{at}]=ModelChecking(H_{at},PM,Req1)$$
 %$$[0,CE_{pvc}]=ModelChecking(H_{pvc},PM,Req1)$$
 %$$[0,CE_{af}]=ModelChecking(H_{af},PM,Req1)$$
@@ -288,14 +367,14 @@ The abstraction tree is then further explored. The heart models with counter-exa
 %\end{figure}
 	\vspace{-10pt}
 \subsection*{Step 5: Analysis of the Counter-examples}
-The counter-examples are then shared with physicians for analysis. In \figref{CE} we demonstrate 3 counter-examples. In the counter-examples, the first signal shows the intrinsic heart signals over time with up arrows as atrial activations and down arrows as ventricular activations. The second signal shows the pacemaker outputs with up arrows as atrial pacing and down arrows as ventricular pacing.%We only show the activations of the atrial node and ventricle pacing. 
+The counter-examples are then shared with physicians for analysis. In \figref{CE} we highlight three counter-examples. In the first counter-example, the intrinsic heart signals over time with up arrows as atrial activations and down arrows as ventricular activations. The signal for the second counter-example shows the pacemaker outputs with up arrows as atrial pacing and down arrows as ventricular pacing.%We only show the activations of the atrial node and ventricle pacing. 
 
-$CE_{n}$ is returned by $H_n$ and none of its children models violate the requirement. By careful analysis we found that $CE_{n}$ features the combination of fast intrinsic atrial rate and prolonged A-V conduction delay, which is the combination of heart conditions $H_{st}$ and $H_{av}$. This scenario shows that the abstraction rules can introduce physiological heart conditions that were not explicitly modeled in the initial model set. The pacemaker improved the open-loop heart condition by pacing the ventricles $AVI$ after each atrial event, which is a correct operation of the pacemaker despite the requirement violation. %\hatodo{is it TAVI or AVI like in the previous seciton?}
+Counter-example $CE_{n}$ is returned by $H_n$ and none of its children models violate the requirement. By careful analysis we found that $CE_{n}$ features the combination of fast intrinsic atrial rate and prolonged A-V conduction delay, which is the combination of heart conditions $H_{st}$ and $H_{av}$. This scenario shows that the abstraction rules can introduce physiological heart conditions that were not explicitly modeled in the initial model set. The pacemaker improved the open-loop heart condition by pacing the ventricles $AVI$ after each atrial event, which is a correct operation of the pacemaker despite the requirement violation. %\hatodo{is it TAVI or AVI like in the previous seciton?}
 
 %\hatodoin{Do you mean that $CE_{at}$ is not a bug? Does this mean that the requirement may be violated in ways that are not dangerous?}
-$CE_{pvc}$ has a very similar execution to $CE_{n}$. However, the activations of the atrial node are triggered by retrograde conduction from ventricular paces (marker \textsf{cond}). The atrial activations trigger another ventricular pace after $AVI$, which will trigger another retrograde conduction. In this case the heart rate is inappropriately high, which corresponds to a dangerous closed-loop behavior referred to as \emph{Endless Loop Tachycardia}.
+Counter-example $CE_{pvc}$ has a very similar execution to $CE_{n}$. However, the activations of the atrial node are triggered by retrograde conduction from ventricular paces (marker \textsf{cond}). The atrial activations trigger another ventricular pace after $AVI$, which will trigger another retrograde conduction. In this case, the heart rate is inappropriately high, which corresponds to a dangerous closed-loop behavior referred to as \emph{Endless Loop Tachycardia}.
 
-In $CE_{af}$ the atrial rate is very high, which is also a sub-optimal but not dangerous heart condition. 
+In counter-example $CE_{af}$, the atrial rate is very high, which is also a sub-optimal but not dangerous heart condition. 
 However, the ventricular rate can stay normal due to the blocking property of the AV node. 
 Despite the filters in the pacemaker, the pacemaker still paces the ventricle for every 3 atrial activations, which extends fast atrial rate to more dangerous fast ventricular rate. 
 %\hatodoin{Not very clear..do you mean that the intrinsoc centricular rate is fine because of AV filtering, but the PM is accelarating it?}

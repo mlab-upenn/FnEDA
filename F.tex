@@ -1,9 +1,10 @@
 \chapter{Closed-loop Model Simulation/Testing}
+Model checking is performed on abstract models of the system and/or its environment, which means that if the model checker returns a counter-example, it will be an abstract execution. An abstract execution may correspond to multiple concrete executions and the ambiguity has to be resolved. Closed-loop simulation/testing are performed on more refined model or the actual system thus can complement model checking in terms of resolving ambiguities. In this chapter we first demonstrate the tool we developed to translate a verified UPPAAL model to Stateflow charts. Then we demonstrate two examples that cannot be explicitly modeled using abstract semantics.
+
 \begin{itemize}
 	\item What are the limitations of model checking?
     \item How can simulation complement that?
 \end{itemize}
-Model checking is performed on abstract models of the system and/or its environment, which means that if the model checker returns a counter-example, it will be an abstract execution. An abstract execution may correspond to multiple concrete executions and the ambiguity has to be resolved. Closed-loop simulation/testing are performed on more refined model or the actual system thus can complement model checking in terms of resolving ambiguities. In this chapter we first demonstrate the tool we developed to translate a verified UPPAAL model to Stateflow charts. Then we demonstrate two examples that cannot be explicitly modeled using abstract semantics.
 \section{UPP2SF Automated Translation}
 Consider an UPPAAL model with automata $P_1,...,P_n$. The UPP2SF translation procedure would produce a two-level Stateflow chart as in \figref{chart}, with parallel states $P_1,...,P_n$ (referred to as the \textit{parent} states) derived from the automata, parallel states $Gc\_{x_1},..., Gc\_{x_m}$ (referred to as \textit{clock states}) that model all global clocks $x_1,...,x_m$ from the UPPAAL model, and the state $Eng$ that is used as the chart's control execution engine.
 In addition, the chart has predefined global data variables (and constants) with appropriate variable ranges and initial values obtained from the UPPAAL model. 
@@ -62,22 +63,22 @@ Lead displacement affects many patients and can result in inappropriate or ineff
 One common case for lead dislodge is shown in \figref{race_cond}, where the atrial lead has fallen into the right ventricle outflow tract. In this case the atrial lead senses from the ventricle rather than atrium and atrial pacing will initiate a ventricular event. \figref{dislodge} shows the simulated EGMs in this case. The figure reveals several facts: 1) No P wave is sensed or tracked (Marker 1). 2) Atrial Pace initiates an abnormal, wide QRS which is then sensed by the ventricle lead (Marker 2). 3) Intermittent appearance of VP on QRS 110 ms after the AP. The ventricular lead can receive signal from: 1) pacing signal sent from the atrial lead, 2) the intrinsic A-V conduction path. The two path are shown in \figref{race_cond} and form a timing race condition. When the signal from the atrial lead arrives the ventricular lead first, it will trigger VS. If the intrinsic signal arrives the ventricular lead during the VSP sensing window (defined in previous section), it will trigger VSP. Although the pacing is 'safe' because the pacing is early enough to avoid the vulnerable refractory period, the damage caused by pacing on depolarized tissue is currently a matter of much investigation.     
 
 
-\chapter{Certification}
-\begin{itemize}
-          	\item What is the current practice for medical device certification? What are the limitations?
-          	\item Can model-based closed-loop verification provide more safety guarantee to complement current practice? By how much?
-          \end{itemize}
-          
-\section{Current Practice}
-%In United States, medical devices have to be approved by FDA to be released into the market. 
-According to their potential risks the devices are categorized into 3 classes, Class I, Class II and Class III, corresponding to low-risk, medium-risk and high-risk devices \cite{class}. Life-sustaining devices like implantable pacemakers are classified as Class III and in general are subject to the most strict regulations.
-
-There are two processes that a medical device can enter the market in U.S.: the Premarket Notification, also known as 510(k) \cite{510k}, and the Pre-Market Approval (PMA) \cite{PMA}. In a 510(k) submission the device manufacturers are only required to provide evidence that the device is \emph{substantial equivalent} to a \emph{predicate device}, which has been approved for the market. Therefore, the 510(k) submission does not directly require clinical evidence for the safety and effectiveness of the device, thus is suitable for mostly low-risk devices like Class I and Class II devices.  The Pre-Market Approval (PMA) submission is a more stringent regulatory process in which direct clinical evidence is required to prove the safety and effectiveness of the device. However, not all Class III devices are subject to PMA submission. If a Class III device clears the 510(k) process and FDA has not requested PMA for that device, the device is still cleared for market release. A study shows that for Class III devices which PMA has been requested, the levels of evidence varies. Only 40\% of the PMA submissions are supported by controlled clinical trials, which provide the most rigorous clinical evidence \cite{cert_prob}. The lack of quality evidence is usually due to the high cost of the controlled clinical trials.
-\section{Evidence from Model-based Design}
-%\cite{pancreas}
-Model-based verification provides a low-cost solution to provide reasonable evidence for the safety and effectiveness of the devices. The open questions are:
-
-\begin{itemize}
-	\item How valid are the models?
-	\item How much confidence can they provide?
-\end{itemize}
+%%\chapter{Certification}
+%%\begin{itemize}
+%%          	\item What is the current practice for medical device certification? What are the limitations?
+%%          	\item Can model-based closed-loop verification provide more safety guarantee to complement current practice? By how much?
+%%          \end{itemize}
+%%          
+%%\section{Current Practice}
+%%%In United States, medical devices have to be approved by FDA to be released into the market. 
+%%According to their potential risks the devices are categorized into 3 classes, Class I, Class II and Class III, corresponding to low-risk, medium-risk and high-risk devices \cite{class}. Life-sustaining devices like implantable pacemakers are classified as Class III and in general are subject to the most strict regulations.
+%%
+%%There are two processes that a medical device can enter the market in U.S.: the Premarket Notification, also known as 510(k) \cite{510k}, and the Pre-Market Approval (PMA) \cite{PMA}. In a 510(k) submission the device manufacturers are only required to provide evidence that the device is \emph{substantial equivalent} to a \emph{predicate device}, which has been approved for the market. Therefore, the 510(k) submission does not directly require clinical evidence for the safety and effectiveness of the device, thus is suitable for mostly low-risk devices like Class I and Class II devices.  The Pre-Market Approval (PMA) submission is a more stringent regulatory process in which direct clinical evidence is required to prove the safety and effectiveness of the device. However, not all Class III devices are subject to PMA submission. If a Class III device clears the 510(k) process and FDA has not requested PMA for that device, the device is still cleared for market release. A study shows that for Class III devices which PMA has been requested, the levels of evidence varies. Only 40\% of the PMA submissions are supported by controlled clinical trials, which provide the most rigorous clinical evidence \cite{cert_prob}. The lack of quality evidence is usually due to the high cost of the controlled clinical trials.
+%%\section{Evidence from Model-based Design}
+%%%\cite{pancreas}
+%%Model-based verification provides a low-cost solution to provide reasonable evidence for the safety and effectiveness of the devices. The open questions are:
+%%
+%%\begin{itemize}
+%%	\item How valid are the models?
+%%	\item How much confidence can they provide?
+%%\end{itemize}
