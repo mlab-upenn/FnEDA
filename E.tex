@@ -1,10 +1,15 @@
 \chapter{A Dual Chamber Pacemaker Specification}
 
-As part of the model-based design, it is very important to have a formal model of the device software. In our study, we focus on the implantable pacemaker since it is relatively simple among implantable cardiac devices as its functionality is based only on timing and does not consider signal morphology. This serves as a good base case to demonstrate the proposed methodology.  In this chapter we demonstrate the basic specification of a dual chamber pacemaker, as well as a mode-switch function on top of the basic functions. The specifications are based on the algorithm description in \cite{compass}.
+As part of the model-based design, it is important to have a functional and formal model of the device software for testing and formal verification respectively. In our study, we focus on the implantable  pacemaker since it is one of the simpler implantable cardiac devices as its functionality is based only on timing and does not consider signal morphology. This serves as a good base case to demonstrate the proposed methodology.  In this chapter we describe the basic specification and formal implementation of a dual chamber pacemaker, as well as a more advanced function on mode switching. The specifications are based on the algorithm descriptions in \cite{compass} and the functional description released as part of the Pacemaker Challenge (\cite{challenge}). 
+We aim to answer the following questions here:
 \begin{itemize}
-	\item What are the basic functions?
-   \item What happens if new functionality are applied to the basic model?
+	\vspace{-5pt}
+	\item How are the pacemaker's timers specified to maintain the appropriate heart rhythm?
+	\vspace{-5pt}
+   	\item What happens if new functionality are applied to the basic model?
 \end{itemize}
+
+The artificial pacemaker is designed for patients with bradycardia (i.e. slow heart rate). Two leads, one in the right atrium and one in the right ventricle, are inserted into the heart and fixed onto the inner wall of the heart. These two leads monitors the local activation of the atria and the ventricles, and generate corresponding sensed events (AS, VS) to its software. The software determines the heart condition by measuring time difference between events and delivers pacing events (AP, VP) to the analog circuit when necessary. The analog circuit then delivers pacing signals to the heart to maintain heart rate and A-V synchrony. In order to deal with different heart condition, pacemakers are able to operate in different modes. The modes are labeled using a three character system (e.g. $xyz$). The first position describes the pacing locations, the second location describes the sensing locations, and the third position describes how the pacemaker software responds to sensing. Here we introduce the widely used DDD mode pacemaker which is a dual chamber mode with sensing and pacing in both atrium and ventricle. 
 
 \begin{figure}[!t]
 \center
@@ -17,8 +22,7 @@ As part of the model-based design, it is very important to have a formal model o
 
 \end{figure} 
 \section{Basic Specifications of a DDD Pacemaker}
-
-The DDD pacemaker has 5 basic timing cycles triggered by external and internal events, as shown in \figref{PMtimers}. We decomposed our pacemaker model into 5 components which correspond to the 5 timers. $P=LRI\| AVI\| URI\| PVARP\| VRP$. These components synchronize with each other using broadcast channels and shared variables (as shown in \figref{PMdesign}). 
+The DDD pacemaker has five basic timing cycles triggered by external and internal events, as shown in \figref{PMtimers}. We decomposed our pacemaker model into five components which correspond to the five timers. $P=LRI\| AVI\| URI\| PVARP\| VRP$. These components synchronize with each other using broadcast channels and shared variables (as shown in \figref{PMdesign}). 
 
 \subsection{Lower Rate Interval (LRI)}
 %\vspace{-5pt}
@@ -37,7 +41,7 @@ Ventricular events, especially Ventricular Pace (VP) are sometimes so strong tha
 %\vspace{-10pt}
 \subsection{Ventricular Refractory Period (VRP)}
 %\vspace{-5pt}
-Correspondingly, the VRP follows each ventricular event \textsf{(VP, VS)} to filter noise and early events in the ventricular channel which could otherwise cause undesired pacemaker behavior. \figref{PMdesign}(e) shows the UPPAAL design of VRP component.
+The VRP follows each ventricular event \textsf{(VP, VS)} to filter noise and early events in the ventricular channel which could otherwise cause undesired pacemaker behavior. \figref{PMdesign}(e) shows the UPPAAL design of VRP component.
 
 \begin{figure}[!t]
 \center
@@ -48,33 +52,36 @@ Correspondingly, the VRP follows each ventricular event \textsf{(VP, VS)} to fil
 \label{fig:PMdesign}
 %\vspace{-10pt}
 \end{figure} 
-\section{Atrial Tachycardia Response (Mode Switch)}
-SVT is an arrhythmia which features an abnormally fast atrial rate. %\figref{SVT} is a series of simulation results for closed-loop interaction between a heart model with SVT and the pacemaker model. The atrial and ventricular channels show electrogram inputs to the pacemaker and the pacemaker channel shows the corresponding events received and generated by the pacemaker software, \cite{vhm_embc11}.
-Typically, in a heart without pacemaker, the AV node, which has a long refractory period, can filter most of the fast atrial activations during SVT thus the ventricular rate remains relatively normal. \figref{SVT_none} demonstrates a pacemaker event trace during SVT, with a ODO mode pacemaker which just sensing in both channels. In this particular case, every 3 atrial events (AS) correspond to 1 ventricular event (VS) during SVT. 
-As an arrhythmia, SVT is still considered as a safe heart condition since the ventricles operate under normal rate can and still maintain adequate cardiac output. 
 
-However, in the closed loop case with the pacemaker, the AVI component of a dual chamber pacemaker is equivalent to a virtual pathway in addition to the intrinsic conduction pathway between the atria and the ventricles. The pacemaker tries to maintain 1:1 A-V conduction and thus increases the ventricular rate inappropriately to match the atrial rate. \figref{SVT_DDD} shows the pacemaker trace of the same SVT case with DDD pacemaker. Although half of the fast atrial events are filtered by the PVARP period ([AR]s), the DDD pacemaker still drives the closed-loop system into 2:1 A-V conduction with faster ventricular rate. From Chapter 5 we know that maintaining A-V delay is less important than maintaining appropriate ventricular rate. The DDD pacemaker violates a higher priority requirement in order to satisfy a lower priority requirement, which is inappropriate.
+\section{Mode Switch Operation: Atrial Tachycardia Response}
+Supraventricular Tachycardia (SVT) is an arrhythmia with an abnormally fast atrial rate. %\figref{SVT} is a series of simulation results for closed-loop interaction between a heart model with SVT and the pacemaker model. The atrial and ventricular channels show electrogram inputs to the pacemaker and the pacemaker channel shows the corresponding events received and generated by the pacemaker software, \cite{vhm_embc11}.
+Typically, in a heart without pacemaker, the AV node, which has a long refractory period, can filter most of the fast atrial activations during SVT thus the ventricular rate remains relatively normal. \figref{SVT_none} demonstrates a pacemaker event trace during SVT, with a ODO mode pacemaker which just sensing in both channels. 
+As there is no pacing in ODO mode, the heart is in open-loop with the pacemaker. In this particular case, every 3 atrial events (AS) correspond to 1 ventricular event (VS) during SVT. 
+As an arrhythmia, SVT is still considered as a safe heart condition since the ventricles operate under normal rate can and maintain adequate cardiac output. 
+
+However, in the closed loop case with the DDD pacemaker, the AVI component of a dual chamber pacemaker is equivalent to a virtual pathway in parallel to the intrinsic conduction pathway between the atria and the ventricles. The pacemaker tries to maintain 1:1 A-V conduction and thus increases the ventricular rate inappropriately to match the atrial rate. \figref{SVT_DDD} shows the pacemaker trace of the same SVT case with DDD pacemaker. Although half of the fast atrial events are filtered by the PVARP period ([AR]s), the DDD pacemaker still drives the closed-loop system into 2:1 A-V conduction with faster ventricular rate. Maintaining A-V delay is less important than maintaining an appropriate ventricular rate. The DDD pacemaker violates a higher priority requirement in order to satisfy a lower priority requirement, which is inappropriate.
 \begin{figure*}[!t]
 \centering
 		\subfigure [\small]{			
-		\includegraphics[width=0.4  \textwidth]{figs/SVT_none.pdf}
+		\includegraphics[width=0.5  \textwidth]{figs/SVT_none.pdf}
 		\label{fig:SVT_none}
 		} 
 %	\hspace{.1in}%
+\vspace{-10pt}
 		
 		\subfigure [\small] 
 		{
-		\includegraphics[width=0.4\textwidth]{figs/SVT_DDD.pdf}
+		\includegraphics[width=0.5\textwidth]{figs/SVT_DDD.pdf}
 		\label{fig:SVT_DDD}
 		} 
-%\vspace{-10pt}
-\caption{\small (a) Node automaton. Dotted transition is only valid for pacemaker tissue like SA node; (b) Path automaton; (c) Model of the electrical conduction system of the heart using a network of node \& path automata~\cite{vhm_ecrts10}.}
+\vspace{-10pt}
+\caption{\small Benign open loop case: SVT with ODO pacemaker (b) Dangerous closed-loop-case SVT with DDD pacemaker}
 %\vspace{-15pt}
 \end{figure*} 
 
-Pacemaker manufacturers have designed algorithm to detect and terminate this behaviors. Intuitively, the mode-switch algorithm first detects SVT. After confirmed detection, it switches the pacemaker from a dual-chamber mode to a single-chamber mode. During the single-chamber mode, the A-V synchrony function of the pacemaker is deactivated thus the ventricular rate is decoupled from the fast atrial rate. After the algorithm determines the end of SVT, it will switch the pacemaker back to the dual chamber mode. 
+Pacemaker manufacturers have designed algorithms to detect and terminate this behaviors. Intuitively, the mode-switch algorithm first detects SVT. After confirmed detection, it switches the pacemaker from a dual-chamber mode to a single-chamber mode. During the single-chamber mode, the A-V synchrony function of the pacemaker is deactivated thus the ventricular rate is decoupled from the fast atrial rate. After the algorithm determines the end of SVT, it will switch the pacemaker back to the dual chamber mode. 
 
-The mode-switch algorithm specification we use is similar to the one described in the Boston Scientific pacemakers manual \cite{compass}. The algorithm first measures the interval between atrial events outside the blanking period (AS, AR). The interval is considered as \emph{fast} if it is above a threshold (\emph{Trigger Rate}) and \emph{slow} otherwise. In our UPPAAL model we model it as $INT$ (see \figref{dur_count} (1)). A counter $CNT$ increments for \emph{fast} events and decrements for \emph{slow} events (see \figref{dur_count} (2)). After the counter value reaches the \emph{Entry Count}, the algorithm will start a \emph{Duration} ($DUR$) which is a time interval used to confirm the detection of SVT (see \figref{dur_count} (3)). In the \emph{Duration}, the counter keeps counting. If the counter value is still positive after the \emph{Duration}, the pacemaker will switch to the VDI mode (\emph{Fallback mode}). In the VDI mode, the pacemaker only senses and paces the ventricle. At any time if the counter reaches zero, the \emph{Duration} will terminate and the pacemaker is switched back to DDD mode.
+The mode-switch algorithm (also known as atrial tachycardia response) specification we use is similar to the one described in the Boston Scientific pacemakers' manual (\cite{compass}). The algorithm first measures the interval between atrial events outside the blanking period (AS, AR). The interval is considered as \emph{fast} if it is above a threshold (\emph{Trigger Rate}) and \emph{slow} otherwise. In our UPPAAL model we model it as $INT$ (see \figref{dur_count} (1)). A counter $CNT$ increments for \emph{fast} events and decrements for \emph{slow} events (see \figref{dur_count} (2)). After the counter value reaches the \emph{Entry Count}, the algorithm will start a \emph{Duration} ($DUR$) which is a time interval used to confirm the detection of SVT (see \figref{dur_count} (3)). In the \emph{Duration}, the counter keeps counting. If the counter value is still positive after the \emph{Duration}, the pacemaker will switch to the VDI mode (\emph{Fallback mode}). In the VDI mode, the pacemaker only senses and paces the ventricle. At any time if the counter reaches zero, the \emph{Duration} will terminate and the pacemaker is switched back to DDD mode.
 % to show some interesting findings. The basic idea of this simplified model is explained in detail. \\
 %\mySubSubSection{UPPAAL model for mode-switch algorithm}
 In our UPPAAL model of the mode-switch algorithm, we use nominal parameter values from the clinical setting. We define \emph{trigger rate} at 170bpm (350ms), \emph{entry count} at 8, \emph{duration} for 8 ventricular events and \emph{fallback mode} as VDI. 
@@ -95,7 +102,7 @@ In each component two copies for both modes are modeled, and switch between each
 				%\vspace{-15pt}
 		\includegraphics[width=0.9\textwidth]{figs/duration.pdf}
 		\vspace{-10pt}
-		\caption{\small (a) Component \textsf{INT} An atrial event (\textsf{AS,AR}) arrive before \textsf{thresh} after the previous atrial event is regarded as \textsf{fast} event. Atrial event arrive after \textsf{thresh} and \textsf{AP} are regarded as \textsf{slow} event; (b) Component \textsf{CNT} After 8 \textsf{fast} event the algorithm will start a duration by sending \textsf{du\_beg} and will switch to \textsf{VDI} mode when the duration ends (\textsf{du\_end}); (c) Component \textsf{DUR} The duration length is 8 ventricular events (\textsf{VS,VP})}
+		\caption{\small (1) Component \textsf{INT}: An atrial event (\textsf{AS,AR}) arrives before \textsf{thresh} after the previous atrial event is regarded as a \textsf{fast} event. Atrial event arrives after \textsf{thresh} and \textsf{AP} are regarded as \textsf{slow} event; (2) Component \textsf{CNT}: After 8 \textsf{fast} event the algorithm will start a duration by sending \textsf{du\_beg} and will switch to \textsf{VDI} mode when the duration ends (\textsf{du\_end}); (3) Component \textsf{DUR} :The duration length is 8 ventricular events (\textsf{VS,VP})}
 		  %\vspace{-15pt}
 		\label{fig:dur_count}
 \end{figure*} 
