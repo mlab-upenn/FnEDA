@@ -33,6 +33,7 @@
 \usepackage{amsthm}
 \usepackage{amsfonts}
 
+
 \title{High-confidence Medical Device Software Development}
 \author{
 Rahul Mangharam \\
@@ -63,6 +64,9 @@ zhihaoj@seas.upenn.edu}
 \mainmatter
 
 \begin{abstract}
+The design and implementation of software for medical devices is challenging due to their closed-loop interaction with the patient, who is a stochastic physical environment. The safety-critical nature and the lack of existing industry standards for verification, make this an ideal domain for exploring applications of formal modeling and closed-loop analysis. The biggest challenge is to balance the complexity and fidelity of the environment model, while preserving the safety and efficacy properties. In this effort, we use a dual chamber implantable pacemaker as a case study for modeling and verification of control algorithms for medical devices in UPPAAL. We begin with detailed timed automata model of the pacemaker, based on the specifications and algorithm descriptions from Boston Scientific. 
+
+For closed-loop evaluation, a real-time Virtual Heart Model has been developed to model the electrophysiological operation of the functioning and malfunctioning (i.e., during arrhythmia) heart. By extracting the timing properties of the heart and pacemaker device, we present a methodology to construct a timed-automata model for functional and formal testing and verification of the closed-loop system. The VHM's capability of generating clinically-relevant response has been validated for a variety of common arrhythmias. Based on a set of requirements, we describe a closed-loop testing environment that allows for interactive and physiologically relevant model-based test generation for basic pacemaker device operations such as maintaining the heart rate, atrial-ventricle synchrony and complex conditions such as pacemaker-mediated tachycardia. This system is a step toward a testing and verification approach for medical cyber-physical systems with the patient-in-the-loop.
 
 \end{abstract}
 
