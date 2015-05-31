@@ -1,26 +1,50 @@
-\chapter{Closed-loop Model Simulation/Testing}
-Model checking is performed on abstract models of the system and/or its environment, which means that if the model checker returns a counter-example, it will be an abstract execution. An abstract execution may correspond to multiple concrete executions and the ambiguity has to be resolved. Closed-loop simulation/testing are performed on more refined model or the actual system thus can complement model checking in terms of resolving ambiguities. In this chapter we first demonstrate the tool we developed to translate a verified UPPAAL model to Stateflow charts. Then we demonstrate two examples that cannot be explicitly modeled using abstract semantics.
+\chapter{Closed-loop Model Simulation and Testing}
+Model checking is performed on abstract models of the system with or without its environment, which means that if the model checker returns a counter-example, it will be an abstract execution. An abstract execution may correspond to multiple concrete executions and the ambiguity has to be resolved. Closed-loop simulation/testing are performed on more refined model or the actual system thus can complement model checking in terms of resolving ambiguities. We aim to answer the following questions here:
 
 \begin{itemize}
-	\item What are the limitations of model checking?
-    \item How can simulation complement that?
+	\vspace{-5pt}
+	\item How are abstract models translated to deterministic models for simulation-based testing?
+	\vspace{-5pt}
+	\item What system level issues are best tested at the platform level?
 \end{itemize}
-\section{UPP2SF Automated Translation}
-Consider an UPPAAL model with automata $P_1,...,P_n$. The UPP2SF translation procedure would produce a two-level Stateflow chart as in \figref{chart}, with parallel states $P_1,...,P_n$ (referred to as the \textit{parent} states) derived from the automata, parallel states $Gc\_{x_1},..., Gc\_{x_m}$ (referred to as \textit{clock states}) that model all global clocks $x_1,...,x_m$ from the UPPAAL model, and the state $Eng$ that is used as the chart's control execution engine.
+
+In this chapter, we first describe an approach to automatically translate formal models that are verified in UPPAAL to Stateflow charts for simulation-based testing, and then code generated to run on an embedded platform. Following this, we demonstrate two examples that cannot be explicitly modeled using abstract semantics and must be tested .
+
+\section{UPPAAL to Stateflow Automated Model Translation}
+Consider an UPPAAL model with automata $P_1,...,P_n$. We have developed a tool, UPP2SF (\cite{TECS}), to translate UPPAAL models Stateflow (see \figref{method}). In this case, UPP2SF produces to a two-level Stateflow chart as in \figref{chart}, with parallel states $P_1,...,P_n$ (referred to as the \textit{parent} states) derived from the automata, parallel states $Gc\_{x_1},..., Gc\_{x_m}$ (referred to as \textit{clock states}) that model all global clocks $x_1,...,x_m$ from the UPPAAL model, and the state $Eng$ that is used as the chart's control execution engine.
 In addition, the chart has predefined global data variables (and constants) with appropriate variable ranges and initial values obtained from the UPPAAL model. 
-Since all automata in UPPAAL are simultaneously active, the obtained Stateflow chart is a collection of parallel states with unique execution orders. Also, in every UPPAAL automaton exactly one location is active at a time. Thus, each of the parent states is a collection of exclusive states, extracted from locations in the UPPAAL automaton.
-\begin{figure} [!t]
-\center
-\includegraphics[width=0.6\textwidth]{figs/chart_GlobalClocks_rev1.png} 
-\caption{Structure of Stateflow charts derived by UPP2SF. Parent states $P_1,...,P_n$ are derived from automata, while the \textit{clock} states $Gc\_{x_1},..., Gc\_{x_m}$ model all global clocks $x_1,...,x_m$ from the UPPAAL model. The state $Eng$ is used to control execution of the chart.}
-\label{fig:chart}
-\end{figure}
+Since all automata in UPPAAL are simultaneously active, the obtained Stateflow chart is a collection of parallel states with unique execution orders. Also, in every UPPAAL automaton exactly one location is active at a time. Thus, each of the parent states is a collection of exclusive states, extracted from locations in the UPPAAL automaton. In \cite{TECS}, we have shown that for a large class of UPPAAL models, UPP2SF preserves behavior of the initial UPPAAL model. We have also shown how the translation tool provides a way to estimate WCET during modeling and verification stage in UPPAAL, and facilitates development of modular code from UPPAAL timed-automata based models. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[!t]
+\centering
+		\subfigure 
+		{			
+		\includegraphics[width=0.42\textwidth]{figs/method_new1.png}		
+		\label{fig:method}
+		}
+		\hspace{.2in} 
+		\subfigure 
+		{	
+			\includegraphics[width=0.42\textwidth]{figs/chart_GlobalClocks_rev1.png}
+			\label{fig:chart}
+		}
+\caption{(a)~MDD-based framework: From UPPAAL to Stateflow to generated code -- covering model verification, simulation-based testing and platform testing.~(b) Structure of Stateflow charts derived by UPP2SF. Parent states $P_1,...,P_n$ are derived from automata, while the \textit{clock} states $Gc\_{x_1},..., Gc\_{x_m}$ model all global clocks $x_1,...,x_m$ from the UPPAAL model. The state $Eng$ is used to control execution of the chart.}
+\label{fig:upp2sftool}
+\end{figure*} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%\begin{figure} [!t]
+%%\center
+%%\includegraphics[width=0.48\textwidth]{figs/chart_GlobalClocks_rev1.png} 
+%%\caption{}
+%%\label{fig:chart}
+%%\end{figure}
 
 The UPPAAL model of the DDD pacemaker model in \figref{PMdesign} is translated into Stateflow chart presented in \figref{PM_sf} using the UPP2SF tool.
 \begin{figure*} [!t]
 \center
 \includegraphics[width=1.00\textwidth]{figs/PM_SF_buffer_newC1.png} 
-\caption{Pacemaker Stateflow chart extracted using UPP2SF from the UPPAAL model in~\figref{PMuppaal}; the heart and buffer models are highlighted.} 
+\caption{Pacemaker Stateflow chart extracted using UPP2SF from the UPPAAL model in~\figref{PMdesign}; the heart and buffer models are highlighted.} 
 \label{fig:PM_sf}
 \end{figure*}
 
@@ -35,20 +59,27 @@ The code was generated for the general embedded real-time target and as a result
 \end{figure*}
 
 
-The pacemaker code generated by the Simulink RTWEC was executed on nanoRK~\cite{nanork}, a fixed-priority preemptive RTOS that runs on a variety of resource constrained platforms. We tested the implementation on the TI MSP-EXP430F5438 Experimenter Board interfaced with a signal generator that provides inputs for the pacemaker code (\figref{setup}). More details regarding UPP2SF translation can be found in \cite{TECS}.
+The pacemaker code generated by the Simulink Real-Time Workshop's Embedded Coder was executed on nanoRK (\cite{nanork}), a fixed-priority preemptive RTOS that runs on a variety of resource constrained platforms. We tested the implementation on the TI MSP-EXP430F5438 Experimenter Board interfaced with a signal generator that provides inputs for the pacemaker code (\figref{setup}). More details regarding UPP2SF translation and platform testing can be found in \cite{TECS}.
 
-\begin{figure} [!t]
-\center
-\includegraphics[width=0.5\textwidth]{figs/HW_setup1.png}
-\caption{Hardware setup with MSP430F5438 experimenters board.}
-\label{fig:setup}
-\end{figure}
-
-\section{Crosstalk}
-Oversensing is a general term for inappropriate sensing caused by noise or far-field signals. It's very common among pacemaker malfunctions and it may result in failure to pace, competitive pacing and inappropriate therapy. Crosstalk is a special case for oversensing which occurs when the pacemaker stimulus in one chamber is sensed in the other chamber. It happens when two leads are close to each other or pacing signal in the other chamber is too strong. It is common that the ventricular lead is placed in the right ventricle outflow tract, which is close to the atrium. \figref{crosstalk}(a) shows simulated EGMs from a patient with bradycardia and complete heart block. During atrial pacing (AP), the pacing signal is sensed by the ventricular lead 53 ms after the AP. (Marker 1) It is treated as ventricular sense (VS) signal and thus inhibit the subsequent ventricular pacing (VP). This is indicated by no QRS-wave in the ECG channel. (Marker 2) For a patient with complete heart block this will cause dangerous ventricular asystole.  
-
-Increasing the sensing threshold of the ventricular channel can prevent false sensing. In \figref{crosstalk}(b), the small signals in ventricular EGM are ignored and ventricular pacing are successfully delivered. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[!t]
+\centering
+		\subfigure 
+		{			
+		\includegraphics[width=0.46\textwidth]{figs/HM_PM_newMon.png}
+		\label{fig:hm_pm}
+		}
+		\subfigure 
+		{	
+			\includegraphics[width=0.48\textwidth]{figs/HW_setup1.png}
+			\label{fig:PM_timer}
+		} 
+\caption{(a)~Structure of the pacemaker model in UPPAAL and Stateflow, including the interaction between the pacemaker and heart, and the monitors used for verification. (b) Hardware setup with MSP430F5438 experimenters board.}
+\label{fig:setup}
+\end{figure*} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure*}[b]
 \center
 \vspace{-10pt}
 		\includegraphics[width=\textwidth]{figs/crosstalk_all.pdf}
@@ -57,12 +88,67 @@ Increasing the sensing threshold of the ventricular channel can prevent false se
 \label{fig:crosstalk}
 \vspace{-15pt}
 \end{figure*}
+
+\section{Pacemaker Oversensing and Crosstalk}
+Oversensing is a general term for inappropriate sensing caused by noise or far-field signals. It's very common among pacemaker malfunctions and it may result in failure to pace (\cite{med2, leads}), competitive pacing and inappropriate therapy. Crosstalk is a special case for oversensing which occurs when the pacemaker stimulus in one chamber is sensed in the other chamber. It happens when two leads are close to each other or pacing signal in the other chamber is too strong. It is common that the ventricular lead is placed in the right ventricle outflow tract, which is close to the atrium (\cite{icd}). \figref{crosstalk}(a) shows simulated EGMs from a patient with bradycardia and complete heart block. During atrial pacing (AP), the pacing signal is sensed by the ventricular lead 53 ms after the AP. (Marker 1) It is treated as ventricular sense (VS) signal and thus inhibits the subsequent ventricular pacing (VP). This is indicated by no QRS-wave in the ECG channel. (Marker 2) For a patient with complete heart block this will cause dangerous ventricular asystole.  
+
+Increasing the sensing threshold of the ventricular channel can prevent false sensing. In \figref{crosstalk}(b), the small signals in ventricular EGM are ignored and ventricular pacing are successfully delivered. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[t]
+\centering
+\vspace{-10pt}
+		\subfigure [\small]{
+		\includegraphics[width=0.16\textwidth]{figs/ECG.pdf}
+		\label{fig:ecg}
+		} 
+		\subfigure [\small]{
+		\includegraphics[width=0.36\textwidth]{figs/dislodge_norm.pdf}
+		\label{fig:dislodge_norm}
+		} 
+		\subfigure [\small] 
+		{
+		\includegraphics[width=0.36\textwidth]{figs/dislodge_new.pdf}
+		\label{fig:dislodge}
+		} 
+\vspace{-5pt}
+\caption{\small (a) Top: Lead II ECG signal, Bottom: VHM simulated ECG signal (b) Pacemaker function before lead dislodge. (b) Pacemaker function after lead dislodge}
+\vspace{-15pt}
+\end{figure*} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \section{Lead Displacement}
 Lead displacement affects many patients and can result in inappropriate or ineffective therapy. \figref{dislodge_norm} shows the simulation result for the pacemaker function when the leads are in their designated location. From the figure we can observe: 1) Each P-wave is initialized by an Atrial Pace signal. 2) Each QRS complex is initiated by a ventricular pacing signal. 3) The interval between AP and VP is 150 ms, which matches the programed AVI period.
 
-One common case for lead dislodge is shown in \figref{race_cond}, where the atrial lead has fallen into the right ventricle outflow tract. In this case the atrial lead senses from the ventricle rather than atrium and atrial pacing will initiate a ventricular event. \figref{dislodge} shows the simulated EGMs in this case. The figure reveals several facts: 1) No P wave is sensed or tracked (Marker 1). 2) Atrial Pace initiates an abnormal, wide QRS which is then sensed by the ventricle lead (Marker 2). 3) Intermittent appearance of VP on QRS 110 ms after the AP. The ventricular lead can receive signal from: 1) pacing signal sent from the atrial lead, 2) the intrinsic A-V conduction path. The two path are shown in \figref{race_cond} and form a timing race condition. When the signal from the atrial lead arrives the ventricular lead first, it will trigger VS. If the intrinsic signal arrives the ventricular lead during the VSP sensing window (defined in previous section), it will trigger VSP. Although the pacing is 'safe' because the pacing is early enough to avoid the vulnerable refractory period, the damage caused by pacing on depolarized tissue is currently a matter of much investigation.     
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \begin{figure}
+\center
+\includegraphics[width=0.60\textwidth]{figs/race_cond.pdf}
+\caption{Dotted line shows the location where the atrial lead should be}
+%\vspace{-15pt}
+\label{fig:race_cond}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+One common case for lead dislodge is shown in \figref{race_cond}, where the atrial lead has fallen into the right ventricle outflow tract. In this case the atrial lead senses from the ventricle rather than atrium and atrial pacing will initiate a ventricular event. \figref{dislodge} shows the simulated EGMs in this case. The figure reveals several facts: 1) No P wave is sensed or tracked (Marker 1). 2) Atrial Pace initiates an abnormal, wide QRS which is then sensed by the ventricle lead (Marker 2). 3) Intermittent appearance of VP on QRS 110 ms after the AP. The ventricular lead can receive signal from: 1) pacing signal sent from the atrial lead, 2) the intrinsic A-V conduction path. The two path are shown in \figref{race_cond} and form a timing race condition. When the signal from the atrial lead arrives the ventricular lead first, it will trigger VS. If the intrinsic signal arrives the ventricular lead during the VSP sensing window (defined in previous section), it will trigger VSP. Although the pacing is 'safe' because the pacing is early enough to avoid the vulnerable refractory period, the damage caused by pacing on depolarized tissue is currently a matter of much investigation. 
 
+Oversensing, crosstalk and lead displacement are three examples where model-based verification and simulation-based testing have limited influence in detecting and correcting the problem. In such cases, the code generated for the pacemaker must be evaluated with the heart-on-a-chip platform for replaying error cases from patient hearts.
+
+\section{Conclusion}
+As implantable medical devices grow in sophistication with significant capabilities implemented in software, firmware bugs account for an increasing fraction of device recalls. Since the FDA  does not test, verify or certify the software in such devices, there is an urgent need for a systematic methodology to guarantee the safety of the device software. Furthermore, this safety must account for the closed-loop interaction with the organs of interest. In this effort, we have presented a first step in the direction of a holistic approach for model-based testing and physical patient--device interactive validation. We achieve this through the design of an integrated functional and formal model of the heart and pacemaker device using timed automata. Using this closed-loop system, we conducted formal verification and translate the models to Stateflow for simulation-based testing and then automatically generate code from the verified models. We investigated basic operations, complex algorithms such as response to Pacemaker Mediated Tachycardia and platform-based testing of physical issues such as crosstalk and lead displacement. 
+
+To validate the environment model, we described an Abstraction Tree approach to select the heart model most appropriate for the specific requirement. This approach separated the evaluation phases where domain knowledge was necessary and where it was not, which simplified the verification of the medical device across a range of heart conditions. The model-based design toolchain from verified models to verified code is conducted within the clinically-relevant context and captures the complexities of interaction with physiological components. 
+
+This effort describes early steps toward cyber-physical model based testing, validation and verification of medical cyber-physical systems. This is a challenging domain as patient modeling is both complex, highly variable and non-deterministic and the safety properties must include over-approximated models for verification, abstract models for simulation and be realizable in physical form for testing. We aim to extend the current efforts to evaluate more complex devices such as implantable cardioverter defibrillators (ICDs) which are rate-adaptive and operate with varying levels of hysteresis. 
+
+Eventually we aim to conduct model-based clinical trials with automated approaches to program and tune patient-specific electrophysiological heart models using data acquired from ablation procedures. By applying parametric and sensitivity analysis to a small sampling of real patient heart models, across a select set of cardiac conditions, to derive a physiologically relevant population of patient models. This allows us to explore a wider range of heart behaviors and expose more corner cases to isolate software safety issues prior to an actual clinical trial. Using certified heart models, a model-based clinical trial provides additional confidence in the closed-loop safety and efficacy of medical devices prior to expensive clinical-trials which are prone to failure. 
+
+%\subsection{Acknowledgements}
+\begin{acknowledgements}
+The authors would like to thank Houssam Abbas, Rajeev Alur, George M. Chen, Allison Connolly, Insup Lee, Pieter Mosterman, Miroslav Pajic and Oleg Sokolsky  for fruitful discussions during the preparation of this manuscript. This research was supported in part by NSF CNS-0720518, NSF CNS-1035715, NSF MRI-0923518, NSF and NSF CAREER-1253842 grants. This work was also supported by STARnet - a Semiconductor Research Corporation program sponsored by MARCO and DARPA.
+\end{acknowledgements}
 %%\chapter{Certification}
 %%\begin{itemize}
 %%          	\item What is the current practice for medical device certification? What are the limitations?
