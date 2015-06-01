@@ -13,11 +13,7 @@ Medical devices such as the implantable cardiac pacemaker and defibrillator are 
 
 Models, especially environment models which span a large spectrum of complexity, should be designed in accordance with their respective applications. For understanding the underlying physiological principals, heart models with over 100,000 ordinary differential equations or 4 million finite elements have been developed (\cite{cell2bed}). While these models capture in high fidelity the physiological phenomena, they do not operate in real-time or provide the appropriate interfaces for device interaction. During model-based development of medical devices, the environment model should have a \emph{formal interface} for closed-loop model checking with a model of the medical device. It must also have a \emph{functional interface} for closed-loop testing of the actual medical device. Each application of the environment model has a different focus and has distinct model requirements which influence the model complexity and model identifiability.
 
-<<<<<<< HEAD
-\textbf{Model complexity} is generally measured in terms of the size of state space and computation complexity of state transitions, which affect the computation cost (memory and time) for closed-loop verification. Model complexity is largely influenced by the type of interactions with the device (e.g. analog signals, sensing, actuation) and the complexity of the environment conditions specified by the physiological requirements. 
-=======
 \textbf{Model complexity} is generally measured in terms of the size of state space and computation complexity of state transitions, which affect the computation cost (memory and time) for closed-loop verification. Model complexity is largely influenced by the type of interactions with the device (e.g. analog signals, sensing, actuation) and the environment conditions specified but the physiological requirements. 
->>>>>>> origin/master
 
 \textbf{Model Identifiability} is a metric for the feasibility of identifying model parameters from data. There are two methods for model construction: non-parametric modeling in which no prior knowledge is assumed and the model construction is purely data-driven, and parametric modeling in which prior knowledge of the physiological conditions is taken into account. For example, to model the electrophysiological activity of the heart, the appropriate data is generally scarce as it must capture the electrical potential across several hundred points within the heart along with annotation of the patient's physiological context. However, there is abundant literature describing the phenomena of individual arrhythmias which provide useful knowledge of the environment, it is more intuitive to begin with parametric modeling approaches.
 
@@ -180,9 +176,22 @@ In EP testing and during pacemaker implantation, the local electrical activities
 \label{fig:egm_s}
 %\vspace{-15pt}
 \end{figure}
-\subsection{Heart On a Chip Platform}
-The heart models are also implemented on hardware platform (\figref{HOC}). With an analog interface the heart model can interact with a commercial pacemaker in real time. 
+\subsection{Heart-on-a-Chip Platform}
+Platform testing remains the primary means to verify and validate device software. Currently testing is done by feeding recorded open-loop heart signals to the device and evaluating the device output. However, the change in the state of the heart condition, in response to device output, is not taken into account. Thus, device malfunctions involving state changes due to multiple closed-loop interactions will not be captured during open loop testing. 
+
+Consequently, the heart models are also implemented on hardware platform (\figref{modeling_heart}) for closed-loop testing. The platform includes a heart model on an FPGA which is able to represent common heart conditions such as bradycardia, tachycardia, heart block, etc (for mode details refer to \cite{VHM_proc}). The parameters of the heart model can be changed at run-time by either switching among pre-defined parameter sets, or sending values directly to the model through a user interface in Matlab. A monitoring system observes logical interactions between heart model and the pacemaker and checks them against safety invariants at run-time. 
+
+As shown in (\figref{HOC}), with an analog interface the heart model can interact with a commercial pacemaker in real time. Our analog interface uses an optical isolation circuit to separate the pacemaker circuit and the heart implementation. Signals generated form the heart are attenuated to the appropriate level to interact wit the Boston Scientific pacemaker and analog pacing signals are converted to pacing events received by the heart model. 
 \begin{figure}[!t]
+\center
+%\vspace{-15pt}
+		\includegraphics[width=0.9\textwidth]{figs/modeling_heart.pdf}
+%\vspace{-10pt}
+\caption{The heart model was developed in Matlab/Simulink and code was automatically generated to operate on an FPGA platform for platform-level testing.}
+\label{fig:modeling_heart}
+%\vspace{-15pt}
+\end{figure}
+\begin{figure}[!b]
 \center
 %\vspace{-15pt}
 		\includegraphics[width=0.8\textwidth]{figs/PVS.pdf}
