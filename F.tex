@@ -8,7 +8,7 @@ Model checking is performed on abstract models of the system with or without its
 	\item What system level issues are best tested at the platform level?
 \end{itemize}
 
-In this chapter, we first describe an approach to automatically translate formal models that are verified in UPPAAL to Stateflow charts for simulation-based testing, and then code generated to run on an embedded platform. Following this, we demonstrate two examples that cannot be explicitly modeled using abstract semantics and must be tested .
+In this chapter, we first describe an approach to automatically translate formal models that are verified in UPPAAL to Stateflow charts for simulation-based testing, and then code generated to run on an embedded platform. Following this, we demonstrate two examples that cannot be explicitly modeled using abstract semantics and must be tested.
 
 \section{UPPAAL to Stateflow Automated Model Translation}
 Consider an UPPAAL model with automata $P_1,...,P_n$. We have developed a tool, UPP2SF (\cite{TECS}), to translate UPPAAL models Stateflow (see \figref{method}). In this case, UPP2SF produces to a two-level Stateflow chart as in \figref{chart}, with parallel states $P_1,...,P_n$ (referred to as the \textit{parent} states) derived from the automata, parallel states $Gc\_{x_1},..., Gc\_{x_m}$ (referred to as \textit{clock states}) that model all global clocks $x_1,...,x_m$ from the UPPAAL model, and the state $Eng$ that is used as the chart's control execution engine.
