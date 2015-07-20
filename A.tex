@@ -42,13 +42,25 @@ FDA such as ``Safety alert - Pacemaker may revert to VVI mode at 70 beats/min if
 Conformance to the safety standards provides strong confidence on a safe development process. The belief is that a well-planned, systematic engineering process produces more reliable devices, especially if software is a component of the device (\cite{med-book}). However, there is no guarantee that safe process always yield safe devices. Recently there is growing interest on enforcing safety and efficacy evidence for the device itself. \cite{Wassyng} Due to the large variety of medical devices, there does not exist general safety and efficacy requirements that can be written into standard. As the result, evidence for product safety and efficacy varies in quality and organization. Assurance cases \cite{} have been proposed to help constructing safety arguments and organizing safety evidences. Assurance cases are currently "Recommanded" by FDA during regulation submission. (\cite{})
 
 \subsection{Requirements vs. Specifications}
-By definition (\cite{}), the requirements of a system specify \textbf{what} the system should achieve and the specifications of a system specify \textbf{how} the system is designed to satisfy the requriements. For example,
-Requirements
-However, the terminology requirements and specifications are confusing in practice and even used interchangeably. \cite{reqVSspec}
-\subsection{Closed-loop vs. Open-loop Evaluation}
-\subsection{Verification vs. Validation vs. Testing}
-\subsection{Domain Expertise}
+By definition (\cite{}), the requirements of a system specify \textbf{what} the system should achieve and the specifications of a system specify \textbf{how} the system is designed to satisfy the requriements. The two documents represent two stages of the development process. For example,
 
+However, the terminology requirements and specifications are confusing in practice and even used interchangeably. \cite{reqVSspec} 
+
+Conformance to specifications does not imply conformance to requirements. Since requirements are the ultimate criteria, confusion between specifications and requirements can cause safety and/or efficacy concerns.
+
+Seperation of environment variables and system variables.
+\subsection{Closed-loop vs. Open-loop Evaluation}
+Specifications specify input-output relationship. Conformance to specification does not need interpretation of the execution trace. Thus it can be verified using open-loop evaluation.
+
+Closed-loop evaluation does two things. 1) Enforce environmental constraints so that the inputs to the device are relevant. 2) Provide interpretation of execution traces 
+
+\subsection{Verification vs. Validation vs. Testing}
+
+Validation:"confirmation by examination and provision of objective evidence that software specifications conform to user needs and intended uses, and that the particular requirements implemented through software can be consistently fulfilled"\cite{ISO8402,fda2}
+\subsection{Domain Expertise}
+Domain expertise 
+\subsection{Patient-specific Therapy}
+Most devices are designed to treat large class of patient conditions
 %However, the medical domain presents its own unique set of challenges:\\
 %\textbf{1. Closed-loop context:} Current evaluation of devices is open-loop and is unable to ensure the device never drives the patient into an unsafe state. Medical device testing and validation must thus be within the closed-loop context of the patient physiology. The context of the patient is a function of both the environment and the input from the device controller and must be captured by the device evaluation process.\\ 
 %\textbf{2. Patient models:} There is a scarcity of patient models and clinically-relevant simulators for device design (\cite{pat-model}). High-fidelity models of interaction between the patient and device are needed to evaluate the safety and efficacy of device operation. Furthermore, these models must integrate the functional and formal aspects so that testing and verification are evaluated for the same patient states.\\
