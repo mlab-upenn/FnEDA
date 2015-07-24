@@ -7,7 +7,9 @@ According to the definition of US FDA \cite{fda}, a medical device is "an instru
 	\item intended for use in the diagnosis of disease or other conditions, or in the cure, mitigation, treatment, or prevention of disease, in man or other animals, or
 	\item intended to affect the structure or any function of the body of man or other animals, and which does not achieve any of its primary intended purposes through chemical action within or on the body of man or other animals and which is not dependent upon being metabolized for the achievement of any of its primary intended purposes."
 \end{itemize}
-In general, regulation agencies classify medical devices according to their risk factors. In US, medical devices are categorized by FDA into 3 classes, Class I, Class II and Class III, corresponding to low-risk, medium-risk and high-risk devices \cite{class}. Life-sustaining devices like implantable pacemakers are classified as Class III and in general are subject to the strictest regulations. With similar philosophy, the EU directives classifies medical devices into 5 categories. (\cite{EU_classify}) The Global Medical Device Nomenclature (GMDN) also categorize medical devices according to their applications and functions. (\figref{Cur})
+
+Failures or malfunctions of the medical devices can cause serious injury or death of the patient. Therefore the safety
+In general, medical devices according to their risk factors. In US, medical devices are categorized by FDA into 3 classes, Class I, Class II and Class III, corresponding to low-risk, medium-risk and high-risk devices \cite{class}. Life-sustaining devices like implantable pacemakers are classified as Class III and in general are subject to the strictest regulations. With similar philosophy, the EU directives classifies medical devices into 5 categories. (\cite{EU_classify}) The medical devices are also categorized according to their applications and functions by the Global Medical Device Nomenclature (GMDN). \figref{Cur} shows several medical devices and their classification in both EU directives and GMDN.
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=0.8\textwidth]{figs/devices.png}
@@ -15,6 +17,7 @@ In general, regulation agencies classify medical devices according to their risk
 		\label{fig:Cur}
 \end{figure}
 
+<<<<<<< HEAD
 Among all the medical devices, there are devices with both diagnostic and therapeutic functions. These devices diagnose physiological condition of the patient and deliver therapy accordingly, which forms a closed-loop system with the patient. Their ability to (semi-) autonomously affect the physiological state of the patient makes the medical devices safety-critical, that these devices are usually classified into the highest risk category. and sufficient evidence for their safety and efficacy should be provided before the devices can be implanted in the patients.
 \begin{figure}[t]
 		\centering
@@ -30,6 +33,11 @@ For each medical device, there are 4 stakeholders: the regulator, the device man
 		\caption{\small Figure of current medical devices}
 		\label{fig:Cur}
 \end{figure}
+=======
+Among different devices, there are devices with both diagnostic and therapeutic interact with the human body in closed-loop
+
+
+>>>>>>> origin/master
 \section{The Big Problem: Safety Concern Due to Increased Software Complexity}
 Implantable medical devices such as cardiac pacemakers and defibrillators are designed to improve physiological conditions with very little human intervention. 
  Medical devices increasingly rely on software, and device function and their clinical performance can be affected by seemingly minor changes to software. Software embedded in a medical device, unlike electrical and mechanical components, does not fail due to corrosion, fatigue or have statistical failures of subcomponents. Software failures are uniquely sourced in the design and development of the system. Unlike other industries such as consumer electronics where product life cycles are measured in months, software engineering for medical devices often spans a decade and must prioritize safety and efficacy over time to market. 
@@ -48,7 +56,8 @@ Implantable medical devices such as cardiac pacemakers and defibrillators are de
   Over the course of the past four decades, cardiac rhythm management devices such as pacemakers and implantable cardioverter defibrillators (ICD) have grown in complexity and now have more than 80,000 to 100,000 lines of code (\cite{pauljones}). According to the US Food and Drug Administration, in 1996, 10\% of all medical device recalls were caused by software-related issues. This rose to 21\% of recalls by 2006 and then to 24\% in 2011 (\cite{medstats}). Most of these recalls are categorized as \emph{Class I}, meaning there is a ``reasonable probability that use of these products will cause serious adverse health consequences or death.'' (\cite{medstats2,pacemakerrecalls,killedbycode}). 
 	
 \section{Regulation Efforts to Ensure Medical Device Safety}
-The United States Food and Drug Administration (FDA) is the primary regulatory authority responsible for assuring the safety, efficacy and security of patients using medical devices. The history of the FDA is a reactionary one, where each stage of evolution was in response to a major healthcare tragedy. 
+The United States Food and Drug Administration (FDA) is the primary regulatory authority responsible for assuring the safety, efficacy and security of patients using medical devices. 
+%The history of the FDA is a reactionary one, where each stage of evolution was in response to a major healthcare tragedy. 
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=0.9\textwidth]{figs/risk.jpg}
@@ -91,7 +100,7 @@ Indirect cause)
 \end{figure}
 \subsection{Pre-market Submission Process}
 
-There are two processes through which a medical device can enter the market in U.S.: the Premarket Notification, also known as 510(k) \cite{510k}, and the Pre-Market Approval (PMA) \cite{PMA}. In a 510(k) submission the device manufacturers are only required to provide evidence that the device is \emph{substantial equivalent} to a \emph{predicate device}, which has been approved for the market. Therefore, the 510(k) submission does not directly require clinical evidence for the safety and effectiveness of the device, thus it is suitable for mostly low-risk devices like Class I and Class II devices.  The Pre-Market Approval (PMA) submission is a more stringent regulatory process in which direct clinical evidence is required to prove the safety and effectiveness of the device. However, not all Class III devices are subject to PMA submission. If a Class III device clears the 510(k) process and FDA has not requested PMA for that device, the device is still cleared for market release. A study shows that for Class III devices which PMA has been requested, the levels of evidence varies. Only 40\% of the PMA submissions are supported by controlled clinical trials, which provide the most rigorous clinical evidence \cite{cert_prob}. The lack of quality evidence is usually due to the high cost of the controlled clinical trials.
+%There are two processes through which a medical device can enter the market in U.S.: the Premarket Notification, also known as 510(k) \cite{510k}, and the Pre-Market Approval (PMA) \cite{PMA}. In a 510(k) submission the device manufacturers are only required to provide evidence that the device is \emph{substantial equivalent} to a \emph{predicate device}, which has been approved for the market. Therefore, the 510(k) submission does not directly require clinical evidence for the safety and effectiveness of the device, thus it is suitable for mostly low-risk devices like Class I and Class II devices.  The Pre-Market Approval (PMA) submission is a more stringent regulatory process in which direct clinical evidence is required to prove the safety and effectiveness of the device. However, not all Class III devices are subject to PMA submission. If a Class III device clears the 510(k) process and FDA has not requested PMA for that device, the device is still cleared for market release. A study shows that for Class III devices which PMA has been requested, the levels of evidence varies. Only 40\% of the PMA submissions are supported by controlled clinical trials, which provide the most rigorous clinical evidence \cite{cert_prob}. The lack of quality evidence is usually due to the high cost of the controlled clinical trials.
 
 \subsection{Safety and Efficacy Evidence}
 In safety-critical industries such as automotive electronics, avionics and nuclear systems, standards are enforced for safe software development, evaluation, manufacturing and post-market changes (\cite{autosar,avsi}). This awareness is only beginning to enter the medical device industry (\cite{formal_fda}). 
@@ -125,6 +134,14 @@ Validation:"confirmation by examination and provision of objective evidence that
 Domain expertise 
 \subsection{Patient-specific Therapy}
 Most devices are designed to treat large class of patient conditions
+\subsection{Multiple Stakeholders}
+For each medical device, there are 4 stakeholders: the regulator, the device manufacturer, the medical professional and the patient. All parties have the incentive to ensure the safety and efficacy of the device. With current regulation framework, the evidence for safety 
+\begin{figure}[t]
+		\centering
+		\includegraphics[width=0.8\textwidth]{figs/stakeholders.pdf}
+		\caption{\small Figure of current medical devices}
+		\label{fig:Cur}
+\end{figure}
 %However, the medical domain presents its own unique set of challenges:\\
 %\textbf{1. Closed-loop context:} Current evaluation of devices is open-loop and is unable to ensure the device never drives the patient into an unsafe state. Medical device testing and validation must thus be within the closed-loop context of the patient physiology. The context of the patient is a function of both the environment and the input from the device controller and must be captured by the device evaluation process.\\ 
 %\textbf{2. Patient models:} There is a scarcity of patient models and clinically-relevant simulators for device design (\cite{pat-model}). High-fidelity models of interaction between the patient and device are needed to evaluate the safety and efficacy of device operation. Furthermore, these models must integrate the functional and formal aspects so that testing and verification are evaluated for the same patient states.\\
