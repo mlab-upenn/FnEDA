@@ -1,16 +1,24 @@
 \chapter{Introduction}
 %\section{Grand Challenges For Medical Device Development}
-\section{Integration of Engineering in Life Science}
-There are various classifications of medical devices. FDA classify medical devices into Class I, II, III according to their
-
+\section{The Medical Device Industry}
+According to the definition of US FDA \cite{fda}, a medical device is "an instrument, apparatus, implement, machine, contrivance, implant, in vitro reagent, or other similar or related article, including a component part, or accessory which is:
+\begin{itemize}
+	\item recognized in the official National Formulary, or the United States Pharmacopoeia, or any supplement to them
+	\item intended for use in the diagnosis of disease or other conditions, or in the cure, mitigation, treatment, or prevention of disease, in man or other animals, or
+	\item intended to affect the structure or any function of the body of man or other animals, and which does not achieve any of its primary intended purposes through chemical action within or on the body of man or other animals and which is not dependent upon being metabolized for the achievement of any of its primary intended purposes."
+\end{itemize}
+In general, regulation agencies classify medical devices according to their risk factors. In US, medical devices are categorized by FDA into 3 classes, Class I, Class II and Class III, corresponding to low-risk, medium-risk and high-risk devices \cite{class}. Life-sustaining devices like implantable pacemakers are classified as Class III and in general are subject to the strictest regulations. With similar philosophy, the EU directives classifies medical devices into 5 categories. (\cite{EU_classify}) The Global Medical Device Nomenclature (GMDN) also categorize medical devices according to their applications and functions. (\figref{Cur})
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=0.8\textwidth]{figs/devices.png}
-		\caption{\small Figure of current medical devices}
+		\caption{\small Figure of current medical devices (\cite{GMDN})}
 		\label{fig:Cur}
 \end{figure}
-We can see that devices may have multiple functions. The ones with both diagnosis and therapy interact with the human body in closed-loop
 
+Among different devices, there are devices with both diagnostic and therapeutic interact with the human body in closed-loop
+
+\section{Stakeholders}
+For each medical device, there are 4 stakeholders: the regulator, the device manufacturer, the medical professional and the patient. All parties have the incentive to ensure the safety and efficacy of the device. With current regulation framework, the evidence for safety 
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=0.8\textwidth]{figs/stakeholders.pdf}
@@ -42,6 +50,33 @@ The United States Food and Drug Administration (FDA) is the primary regulatory a
 		\caption{\small Figure of current medical devices}
 		\label{fig:Cur}
 \end{figure}
+
+manufacturers know their devices better than the regulator
+
+The variety of medical devices requires a variety of
+approaches – one size does not fit all
+
+safety classification determines requirements needs to be satisfied.
+
+60324processes and activities needed to perform to ensure software safety
+
+software components are assigned classifications
+
+IEC60601 Medical Electrical Equipment - General requirements for basic safety and essential performance. a product safety standard
+
+80002-1  it is intended to highlight and explain approaches to assuring that software safety is adequately addressed
+Clause structure follows ISO 14971 – for each risk management activity of ISO 14971 additional guidance is provided for software
+
+Top down
+– identifies hazards and how they might occur, moving
+down the sequence of events that becomes the
+hazardous scenario until arriving at an initiating cause
+(Annex B Direct cause)
+• Bottom up
+– identifying a possible failure and then identify and
+evaluate the consequences of this failure (Annex C
+Indirect cause)
+
 %Through the course of the 1980s, software began to play an increasing role in medical devices. Software, as it turns out, is one of those technologies not anticipated by prior regulation, and was waiting for its disaster to prompt regulatory action. It wasn't until the 1980s when a number of cancer patients received massive X-ray overdoses during radiation therapy with the Therac-25 linear accelerator. This lead to a number of investigations, perhaps the most thorough of which was that of \cite{therac}, which was rich with identified ways software could go wrong. Inadequate testing, dangerous code reuse, configuration management issues, inadequate manufacturer response, and failure to get to the root cause of the problem were among the leaders of the problems identified. The Therac-25 was an eye-opener for the FDA and legislators, and resulted in the Safe Medical Device Act of 1990. This finally required closer medical device tracking, post-market surveillance and recommendations on development, testing and validation of medical device software. \todo{Are these useful?}
 \begin{figure}[t]
 		\centering
@@ -50,7 +85,6 @@ The United States Food and Drug Administration (FDA) is the primary regulatory a
 		\label{fig:Cur}
 \end{figure}
 \subsection{Pre-market Submission Process}
-According to their potential risks the devices are categorized into 3 classes, Class I, Class II and Class III, corresponding to low-risk, medium-risk and high-risk devices \cite{class}. Life-sustaining devices like implantable pacemakers are classified as Class III and in general are subject to the strictest regulations.
 
 There are two processes through which a medical device can enter the market in U.S.: the Premarket Notification, also known as 510(k) \cite{510k}, and the Pre-Market Approval (PMA) \cite{PMA}. In a 510(k) submission the device manufacturers are only required to provide evidence that the device is \emph{substantial equivalent} to a \emph{predicate device}, which has been approved for the market. Therefore, the 510(k) submission does not directly require clinical evidence for the safety and effectiveness of the device, thus it is suitable for mostly low-risk devices like Class I and Class II devices.  The Pre-Market Approval (PMA) submission is a more stringent regulatory process in which direct clinical evidence is required to prove the safety and effectiveness of the device. However, not all Class III devices are subject to PMA submission. If a Class III device clears the 510(k) process and FDA has not requested PMA for that device, the device is still cleared for market release. A study shows that for Class III devices which PMA has been requested, the levels of evidence varies. Only 40\% of the PMA submissions are supported by controlled clinical trials, which provide the most rigorous clinical evidence \cite{cert_prob}. The lack of quality evidence is usually due to the high cost of the controlled clinical trials.
 
