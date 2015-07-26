@@ -7,9 +7,7 @@ According to the definition of US FDA \cite{fda}, a medical device is "an instru
 	\item intended for use in the diagnosis of disease or other conditions, or in the cure, mitigation, treatment, or prevention of disease, in man or other animals, or
 	\item intended to affect the structure or any function of the body of man or other animals, and which does not achieve any of its primary intended purposes through chemical action within or on the body of man or other animals and which is not dependent upon being metabolized for the achievement of any of its primary intended purposes."
 \end{itemize}
-
-Failures or malfunctions of the medical devices can cause serious injury or death of the patient. Therefore the safety
-In general, medical devices according to their risk factors. In US, medical devices are categorized by FDA into 3 classes, Class I, Class II and Class III, corresponding to low-risk, medium-risk and high-risk devices \cite{class}. With similar philosophy, the EU directives classifies medical devices into 5 categories. (\cite{EU_classify}) The medical devices are also categorized according to their applications and functions by the Organisation for Economic Co-operation and Development (OECD)\cite{OECD}. \figref{Cur} shows several medical devices and their classification in both EU directives and GMDN.
+In general, medical devices according to their risk factors for regulation purpose. In US, medical devices are categorized by FDA into 3 classes, Class I, Class II and Class III, corresponding to low-risk, medium-risk and high-risk devices \cite{class}. With similar philosophy, the EU licensing process for medical devices classifies medical devices into 5 categories based on non-invasive vs. invasive, length of stay in body, contact with vessels or CNS, active vs. non-active and implantable devices. (\cite{EU_classify}) Devices with higher category are subject to more stringint regulations. The medical devices are also categorized according to their applications and functions by the Organisation for Economic Co-operation and Development (OECD)\cite{OECD}. \figref{Cur} shows example medical devices in two different classifications by \cite{classify}.
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=0.8\textwidth]{figs/devices.png}
@@ -17,8 +15,14 @@ In general, medical devices according to their risk factors. In US, medical devi
 		\label{fig:Cur}
 \end{figure}
 
+Among all the medical devices, there are devices with both diagnostic and therapeutic functions, i.e. implantable cardiac devices, deep brain stimulation devices(\cite{Brain_sti}). These devices diagnose physiological condition of the patient and deliver therapy accordingly, which forms a closed-loop system with the patient. Their ability to (semi-) autonomously affect the physiological state of the patient makes the medical devices safety-critical, that these devices are usually classified into the highest risk category. We denote these devices as \textbf{Physiological Closed-loop Medical Devices}. 
 
-Among all the medical devices, there are devices with both diagnostic and therapeutic functions. These devices diagnose physiological condition of the patient and deliver therapy accordingly, which forms a closed-loop system with the patient. Their ability to (semi-) autonomously affect the physiological state of the patient makes the medical devices safety-critical, that these devices are usually classified into the highest risk category. and sufficient evidence for their safety and efficacy should be provided before the devices can be implanted in the patients.
+\section{Challenges of Developing Physiological Closed-loop Medical Devices}
+\subsection{Interacting With Complex Physiology}
+All medical devices interacts with their environment in a closed-loop mannner. For example, an infusion pump takes operator's input and delivers fluid into the patient's body
+\subsection{Limited Diagnostic and Theraputic Functions}
+\subsection{Heavy Reliance on Software Control}
+The diagnositic and theraputic functions of the devices are mostly controlled by their software components. 
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=0.8\textwidth]{figs/placeholder.png}
@@ -28,8 +32,8 @@ Among all the medical devices, there are devices with both diagnostic and therap
 
 
 \section{The Big Problem: Safety Concern Due to Increased Software Complexity}
-Implantable medical devices such as cardiac pacemakers and defibrillators are designed to improve physiological conditions with very little human intervention. 
- Medical devices increasingly rely on software, and device function and their clinical performance can be affected by seemingly minor changes to software. Software embedded in a medical device, unlike electrical and mechanical components, does not fail due to corrosion, fatigue or have statistical failures of subcomponents. Software failures are uniquely sourced in the design and development of the system. Unlike other industries such as consumer electronics where product life cycles are measured in months, software engineering for medical devices often spans a decade and must prioritize safety and efficacy over time to market. 
+
+ %Medical devices increasingly rely on software, and device function and their clinical performance can be affected by seemingly minor changes to software. Software embedded in a medical device, unlike electrical and mechanical components, does not fail due to corrosion, fatigue or have statistical failures of subcomponents. Software failures are uniquely sourced in the design and development of the system. Unlike other industries such as consumer electronics where product life cycles are measured in months, software engineering for medical devices often spans a decade and must prioritize safety and efficacy over time to market. 
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=0.8\textwidth]{figs/recalls.jpg}
