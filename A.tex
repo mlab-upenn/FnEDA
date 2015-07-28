@@ -23,15 +23,17 @@ In general, medical devices according to their risk factors for regulation purpo
 \section{Closing the Loop With the Patients}
 Most medical devices operate with the patient in certain closed-loop manner. For diagnose-only devices, i.e. the X-ray machine, the physician operates the device to obtain patient data, perform diagnosis and deliver proper therapy to the patient (\figref{closed-loop}.(a)). For therapy-only devices, i.e. the infusion pumps, the physician operates the device to perform therapy on the patient according to previous diagnosis (\figref{closed-loop}.(b)). We denote these devices as \textbf{Open-loop Medical Devices} as there is no direct closed-loop interaction between the device and the patient. For open-loop devices, the safety of the patients is mostly guaranteed by the professionally-trained physicians in the loop. Device safety focus on providing accurate information to the physicians and faithfully operate as instructed by the physicians.
 
-Among all the medical devices, there are devices with both diagnostic and therapeutic functions, i.e. implantable cardiac devices to treat cardiac arrhythmia, deep brain stimulation devices (\cite{Brain_sti}) to treat Parkinson's disease and artificial pancreas to treat Type 1 diabetes\footnote{The artificial pancreas is till under development by \cite{}}. These devices diagnose physiological conditions of the patient using sensory data, and deliver therapy accordingly (\figref{closed-loop}.(c)). These devices usually operate (semi-) autonomously with very little human intervention, thus malfunctions or inappropriate therapies from these devices cannot be corrected timely, which can cause serious adverse effects on patients' health. Therefore these devices are usually classified into the highest risk category and undergo the most stringent regulation. We denote them as \textbf{Closed-loop Medical Devices}. There are multiple challenges to develop safe and effective closed-loop medical devices:
+Among all the medical devices, there are devices with both diagnostic and therapeutic functions, i.e. implantable cardiac devices to treat cardiac arrhythmia, deep brain stimulation devices (\cite{Brain_sti}) to treat Parkinson's disease and artificial pancreas to treat Type 1 diabetes\footnote{The artificial pancreas is till under development by \cite{}}. These devices diagnose physiological conditions of the patient using sensory data, and deliver therapy accordingly (\figref{closed-loop}.(c)). These devices usually operate (semi-) autonomously with very little human intervention, thus malfunctions or inappropriate therapies from these devices cannot be corrected timely, which can cause serious adverse effects on patients' health. Therefore these devices are usually classified into the highest risk category and undergo the most stringent regulation. We denote them as \textbf{Closed-loop Medical Devices}. 
+
+There are multiple challenges to develop safe and effective closed-loop medical devices:
 
 \textbf{Closed-loop Interactions With Complex Physiology}\\
 When using open-loop medical devices, the diagnosis and therapy decisions are made by medical professionals, who has abundant knowledge of human physiology. Therefore they are able to identify adverse health conditions and adjust the therapy accordingly. On the other hand, closed-loop medical devices have to make both the diagnosis and therapy decisions on their own. It is impossible to encode all the knowledge of human physiology into the device. Therefore when conditions happen and are not programmed into the device, the device may deliver inappropriate therapy which can cause adverse effect on patient's health. 
 
-With the development of new technology, new therapies to certain disease may arrise and adopted by closed-loop devices. Certain closed-loop interactions between the device and the human physiology may not be well-understood, even to the medical professionals. Combinations of well-understood behaviors may also be the source for inappropriate therapies. In chapter \ref{ELT} we will demonstrate an example in which well-understood behaviors trigger unidentified inappropriate therapy by implantable pacemakers.
+With the development of new technology, new therapies to certain disease may arise and adopted by closed-loop devices. Certain closed-loop interactions between the device and the human physiology may not be well-understood, even to the medical professionals. Combinations of well-understood behaviors may also be the source for inappropriate therapies. In chapter \ref{ELT} we will demonstrate an example in which well-understood behaviors trigger unidentified inappropriate therapy by implantable pacemakers.
 
 \textbf{Limited Diagnostic and Therapeutic Functions}\\
-One fundamental rationale behind closed-loop medical devices is to enable the patients to live their normal lives without the dependance of cumbersome medical devices and/or the supervision of physicians. In fact, a large number of closed-loop medical devices are implantable devices. As a result, the sensing and therapy capabilities of the devices are limited, in order to increase portability and reduce invasiveness. Limited sensing capabilities may cause inaccurate diagnosis and therefore inappropriate therapy, as multiple conditions can map to the same sensor inputs. Due to limited therapy capabilities, there exists sub-optimal physiological conditions that are untreatable. The device may even trigger the conditions into less optimal conditions. In chapter \ref{mode_switch} we will demonstrate an example in which an untreatable condition is deterited into worse condition due to device interactions.
+One fundamental rationale behind closed-loop medical devices is to enable the patients to live their normal lives without the dependance of cumbersome medical devices and/or the supervision of physicians. In fact, a large number of closed-loop medical devices are implantable devices. As a result, the sensing and therapy capabilities of the devices are limited, in order to increase portability and reduce invasiveness. Limited sensing capabilities may cause inaccurate diagnosis and therefore inappropriate therapy, as multiple conditions can map to the same sensor inputs. Due to limited therapy capabilities, there exists sub-optimal physiological conditions that are untreatable. The device may even trigger the conditions into less optimal conditions. In chapter \ref{mode_switch} we will demonstrate an example in which an untreatable condition is deteriorated into worse condition due to device interactions.
 
 \textbf{Heavy Reliance on Software Control}\\
 Due to the complexity of the diagnostic and therapeutic functions of the closed-loop devices, these functions are mostly controlled by their software components. 
@@ -40,7 +42,7 @@ Software embedded in a medical device, unlike electrical and mechanical componen
 		\centering
 		\includegraphics[width=0.8\textwidth]{figs/recalls.jpg}
 		\caption{\small Figure of current medical devices}
-		\label{fig:Cur}
+		\label{fig:recalls}
 \end{figure}
 \begin{figure}[t]
 		\centering
@@ -54,9 +56,9 @@ According to the US Food and Drug Administration, in 1996, 10\% of all medical d
 \section{Regulation Efforts to Ensure Medical Device Safety}
 The United States Food and Drug Administration (FDA) is the primary regulatory authority responsible for assuring the safety, efficacy and security of patients using medical devices. Based on the rationale that 1) manufacturers know their devices better than the regulator, and 2) the variety of medical devices requires a variety of approaches, the responsibility to demonstrate the safety and efficacy of the medical devices is solely on the device manufacturer. Manufacturers are required to complete pre-market submission before the devices can be released to the market. Safety classification of the devices determines the requirements needs to be satisfied. A set of general guidelines are recommended by the FDA (\cite{fda1, fda2, fda3}) which list the activities that need to be performed to ensure device safety. 
 
-In safety-critical industries such as automotive electronics, avionics and nuclear systems, international standards are enforced for system development, evaluation, manufacturing and post-market changes (\cite{autosar,avsi}). This awareness is only beginning to enter the medical device industry as compliance with international stardards are "recommended" in the guidelines (\cite{formal_fda}). \figref{standards} demonstrates the fundamental standards to ensure medical device safety and their relationships. The basic rationale behind these standards is that: if all the risks/hazards of the device are identified and reasonably mitigated, and the device is developed with rigorous process, the device is reasonably safe. 
-There are emphasis on the safety of the software components. 
+In safety-critical industries such as automotive electronics, avionics and nuclear systems, international standards are enforced for system development, evaluation, manufacturing and post-market changes (\cite{autosar,avsi}). This awareness is only beginning to enter the medical device industry as compliance with international standards are "recommended" in the guidelines (\cite{formal_fda}). The basic rationale behind these standards is that: if all the risks/hazards of the device are identified and reasonably mitigated, and the device is developed with rigorous process, the device is reasonably safe. 
 
+\figref{standards} demonstrates the fundamental standards to ensure medical device safety and their relationships. The IEC 60601 Medical Electrical Equipment - General requirements for basic safety and essential performance is a product safety standard that all electronic medical devices must comply to. There are emphasis on the safety of the software components. IEC 60324 specifies the processes and activities needed to perform to ensure software safety. As the centerpiece for product safety, ISO 14971 is specified for the application of risk management to medical devices. In addition, for each risk management activity of ISO 14971, ISO 80002-1 provides additional guidelines for the software component. ISO 800002-1 highlights and explains approaches to assuring that software safety is adequately addressed.
 %The history of the FDA is a reactionary one, where each stage of evolution was in response to a major healthcare tragedy. 
 \begin{figure}[t]
 		\centering
@@ -71,24 +73,14 @@ There are emphasis on the safety of the software components.
 		\centering
 		\includegraphics[width=0.9\textwidth]{figs/risk.jpg}
 		\caption{\small Figure of current medical devices}
-		\label{fig:Cur}
+		\label{fig:risks}
 \end{figure}
 
-
-
-
-60324processes and activities needed to perform to ensure software safety
-
-IEC60601 Medical Electrical Equipment - General requirements for basic safety and essential performance. a product safety standard
-
-80002-1  it is intended to highlight and explain approaches to assuring that software safety is adequately addressed
-Clause structure follows ISO 14971 – for each risk management activity of ISO 14971 additional guidance is provided for software
 
 Top down
 – identifies hazards and how they might occur, moving
 down the sequence of events that becomes the
 hazardous scenario until arriving at an initiating cause
-(Annex B Direct cause)
 • Bottom up
 – identifying a possible failure and then identify and
 evaluate the consequences of this failure (Annex C
@@ -105,7 +97,7 @@ Indirect cause)
 %\todo[inline]{List of software standards}
 
 %The FDA currently does not request or review the medical device software during pre-market submission. This is currently satisfied by the documentation of code inspections, static analysis, module-level testing and integration testing and their purpose is to establish ``reasonable assurance of safety and effectiveness''. These tests however fail to check for the correctness of the software and are largely open-loop tests that do not consider the context of the patient. Software is reviewed by the FDA only in the incident of a device recall. Software-related recalls are often issued in the form of \emph{Safety Alerts} by the %%%%%Food and Drug Administration (FDA) 
-FDA such as ``Safety alert - Pacemaker may revert to VVI mode at 70 beats/min if programmed to one of several specific ventricular pulse widths" (\cite{medstats}).
+%FDA such as ``Safety alert - Pacemaker may revert to VVI mode at 70 beats/min if programmed to one of several specific ventricular pulse widths" (\cite{medstats}).
 
 
 %\section{Challenges to Develop Safe Medical Device Software}
@@ -119,7 +111,7 @@ However, the terminology requirements and specifications are confusing in practi
 
 Conformance to specifications does not imply conformance to requirements. Since requirements are the ultimate criteria, confusion between specifications and requirements can cause safety and/or efficacy concerns.
 
-Seperation of environment variables and system variables.
+Separation of environment variables and system variables.
 \subsection{Closed-loop vs. Open-loop Evaluation}
 Specifications specify input-output relationship. Conformance to specification does not need interpretation of the execution trace. Thus it can be verified using open-loop evaluation.
 
