@@ -26,12 +26,16 @@ Most medical devices operate with the patient in certain closed-loop manner. For
 Among all the medical devices, there are devices with both diagnostic and therapeutic functions, i.e. implantable cardiac devices to treat cardiac arrhythmia, deep brain stimulation devices (\cite{Brain_sti}) to treat Parkinson's disease and artificial pancreas to treat Type 1 diabetes\footnote{The artificial pancreas is till under development by \cite{}}. These devices diagnose physiological conditions of the patient using sensory data, and deliver therapy accordingly (\figref{closed-loop}.(c)). These devices usually operate (semi-) autonomously with very little human intervention, thus malfunctions or inappropriate therapies from these devices cannot be corrected timely, which can cause serious adverse effects on patients' health. Therefore these devices are usually classified into the highest risk category and undergo the most stringent regulation. We denote them as \textbf{Closed-loop Medical Devices}. There are multiple challenges to develop safe and effective closed-loop medical devices:
 
 \textbf{Closed-loop Interactions With Complex Physiology}\\
-Human physiology Unlike open-loop medical devices, closed-loop medical devices obtain patient physiological data from sensors
+When using open-loop medical devices, the diagnosis and therapy decisions are made by medical professionals, who has abundant knowledge of human physiology. Therefore they are able to identify adverse health conditions and adjust the therapy accordingly. On the other hand, closed-loop medical devices have to make both the diagnosis and therapy decisions on their own. It is impossible to encode all the knowledge of human physiology into the device. Therefore when conditions happen and are not programmed into the device, the device may deliver inappropriate therapy which can cause adverse effect on patient's health. 
+
+With the development of new technology, new therapies to certain disease may arrise and adopted by closed-loop devices. Certain closed-loop interactions between the device and the human physiology may not be well-understood, even to the medical professionals. Combinations of well-understood behaviors may also be the source for inappropriate therapies. In chapter \ref{ELT} we will demonstrate an example in which well-understood behaviors trigger unidentified inappropriate therapy by implantable pacemakers.
+
 \textbf{Limited Diagnostic and Therapeutic Functions}\\
-One fundamental rationale behind closed-loop medical devices is to enable the patients to live their normal lives without the dependance of cumbersome medical devices and the supervision of a physician. In fact, a large number of closed-loop medical devices are implantable devices. As a result, the sensing and therapy capabilities of the devices are very limited, in order to increase portability and reduce invasiveness.  
+One fundamental rationale behind closed-loop medical devices is to enable the patients to live their normal lives without the dependance of cumbersome medical devices and/or the supervision of physicians. In fact, a large number of closed-loop medical devices are implantable devices. As a result, the sensing and therapy capabilities of the devices are limited, in order to increase portability and reduce invasiveness. Limited sensing capabilities may cause inaccurate diagnosis and therefore inappropriate therapy, as multiple conditions can map to the same sensor inputs. Due to limited therapy capabilities, there exists sub-optimal physiological conditions that are untreatable. The device may even trigger the conditions into less optimal conditions. In chapter \ref{mode_switch} we will demonstrate an example in which an untreatable condition is deterited into worse condition due to device interactions.
+
 \textbf{Heavy Reliance on Software Control}\\
-The diagnostic and therapeutic functions of the devices are mostly controlled by their software components. 
-Medical devices increasingly rely on software, and device function and their clinical performance can be affected by seemingly minor changes to software. Software embedded in a medical device, unlike electrical and mechanical components, does not fail due to corrosion, fatigue or have statistical failures of subcomponents. Software failures are uniquely sourced in the design and development of the system. Unlike other industries such as consumer electronics where product life cycles are measured in months, software engineering for medical devices often spans a decade and must prioritize safety and efficacy over time to market. 
+Due to the complexity of the diagnostic and therapeutic functions of the closed-loop devices, these functions are mostly controlled by their software components. 
+Software embedded in a medical device, unlike electrical and mechanical components, does not fail due to corrosion, fatigue or have statistical failures of subcomponents. Software failures are uniquely sourced in the design and development of the system. %Unlike other industries such as consumer electronics where product life cycles are measured in months, software engineering for medical devices often spans a decade and must prioritize safety and efficacy over time to market. 
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=0.8\textwidth]{figs/recalls.jpg}
@@ -42,13 +46,27 @@ Medical devices increasingly rely on software, and device function and their cli
 		\centering
 		\includegraphics[width=0.8\textwidth]{figs/soft_recalls.jpg}
 		\caption{\small Figure of current medical devices}
-		\label{fig:Cur}
+		\label{fig:soft_recalls}
 \end{figure}
-  Over the course of the past four decades, cardiac rhythm management devices such as pacemakers and implantable cardioverter defibrillators (ICD) have grown in complexity and now have more than 80,000 to 100,000 lines of code (\cite{pauljones}). According to the US Food and Drug Administration, in 1996, 10\% of all medical device recalls were caused by software-related issues. This rose to 21\% of recalls by 2006 and then to 24\% in 2011 (\cite{medstats}). Most of these recalls are categorized as \emph{Class I}, meaning there is a ``reasonable probability that use of these products will cause serious adverse health consequences or death.'' (\cite{medstats2,pacemakerrecalls,killedbycode}). 
+%  Over the course of the past four decades, cardiac rhythm management devices such as pacemakers and implantable cardioverter defibrillators (ICD) have grown in complexity and now have more than 80,000 to 100,000 lines of code (\cite{pauljones}). 
+According to the US Food and Drug Administration, in 1996, 10\% of all medical device recalls were caused by software-related issues (\cite{medstats}). This percentage rose to an average of 15\% of recalls from 2008 to 2012 (\figref{soft_recalls}). %Most of these recalls are categorized as \emph{Class I}, meaning there is a ``reasonable probability that use of these products will cause serious adverse health consequences or death.'' (\cite{medstats2,pacemakerrecalls,killedbycode}). 
 	
 \section{Regulation Efforts to Ensure Medical Device Safety}
-The United States Food and Drug Administration (FDA) is the primary regulatory authority responsible for assuring the safety, efficacy and security of patients using medical devices. 
+The United States Food and Drug Administration (FDA) is the primary regulatory authority responsible for assuring the safety, efficacy and security of patients using medical devices. Based on the rationale that 1) manufacturers know their devices better than the regulator, and 2) the variety of medical devices requires a variety of approaches, the responsibility to demonstrate the safety and efficacy of the medical devices is solely on the device manufacturer. Manufacturers are required to complete pre-market submission before the devices can be released to the market. Safety classification of the devices determines the requirements needs to be satisfied. A set of general guidelines are recommended by the FDA (\cite{fda1, fda2, fda3}) which list the activities that need to be performed to ensure device safety. 
+
+In safety-critical industries such as automotive electronics, avionics and nuclear systems, international standards are enforced for system development, evaluation, manufacturing and post-market changes (\cite{autosar,avsi}). This awareness is only beginning to enter the medical device industry as compliance with international stardards are "recommended" in the guidelines (\cite{formal_fda}). \figref{standards} demonstrates the fundamental standards to ensure medical device safety and their relationships. The basic rationale behind these standards is that: if all the risks/hazards of the device are identified and reasonably mitigated, and the device is developed with rigorous process, the device is reasonably safe. 
+There are emphasis on the safety of the software components. 
+
 %The history of the FDA is a reactionary one, where each stage of evolution was in response to a major healthcare tragedy. 
+\begin{figure}[t]
+		\centering
+		\includegraphics[width=0.8\textwidth]{figs/standards.jpg}
+		\caption{\small Figure of current medical devices}
+		\label{fig:standards}
+\end{figure}
+
+
+
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=0.9\textwidth]{figs/risk.jpg}
@@ -56,16 +74,10 @@ The United States Food and Drug Administration (FDA) is the primary regulatory a
 		\label{fig:Cur}
 \end{figure}
 
-manufacturers know their devices better than the regulator
 
-The variety of medical devices requires a variety of
-approaches – one size does not fit all
 
-safety classification determines requirements needs to be satisfied.
 
 60324processes and activities needed to perform to ensure software safety
-
-software components are assigned classifications
 
 IEC60601 Medical Electrical Equipment - General requirements for basic safety and essential performance. a product safety standard
 
@@ -83,28 +95,23 @@ evaluate the consequences of this failure (Annex C
 Indirect cause)
 
 %Through the course of the 1980s, software began to play an increasing role in medical devices. Software, as it turns out, is one of those technologies not anticipated by prior regulation, and was waiting for its disaster to prompt regulatory action. It wasn't until the 1980s when a number of cancer patients received massive X-ray overdoses during radiation therapy with the Therac-25 linear accelerator. This lead to a number of investigations, perhaps the most thorough of which was that of \cite{therac}, which was rich with identified ways software could go wrong. Inadequate testing, dangerous code reuse, configuration management issues, inadequate manufacturer response, and failure to get to the root cause of the problem were among the leaders of the problems identified. The Therac-25 was an eye-opener for the FDA and legislators, and resulted in the Safe Medical Device Act of 1990. This finally required closer medical device tracking, post-market surveillance and recommendations on development, testing and validation of medical device software. \todo{Are these useful?}
-\begin{figure}[t]
-		\centering
-		\includegraphics[width=0.8\textwidth]{figs/standards.jpg}
-		\caption{\small Figure of current medical devices}
-		\label{fig:Cur}
-\end{figure}
-\subsection{Pre-market Submission Process}
+
+%\subsection{Pre-market Submission Process}
 
 %There are two processes through which a medical device can enter the market in U.S.: the Premarket Notification, also known as 510(k) \cite{510k}, and the Pre-Market Approval (PMA) \cite{PMA}. In a 510(k) submission the device manufacturers are only required to provide evidence that the device is \emph{substantial equivalent} to a \emph{predicate device}, which has been approved for the market. Therefore, the 510(k) submission does not directly require clinical evidence for the safety and effectiveness of the device, thus it is suitable for mostly low-risk devices like Class I and Class II devices.  The Pre-Market Approval (PMA) submission is a more stringent regulatory process in which direct clinical evidence is required to prove the safety and effectiveness of the device. However, not all Class III devices are subject to PMA submission. If a Class III device clears the 510(k) process and FDA has not requested PMA for that device, the device is still cleared for market release. A study shows that for Class III devices which PMA has been requested, the levels of evidence varies. Only 40\% of the PMA submissions are supported by controlled clinical trials, which provide the most rigorous clinical evidence \cite{cert_prob}. The lack of quality evidence is usually due to the high cost of the controlled clinical trials.
 
-\subsection{Safety and Efficacy Evidence}
-In safety-critical industries such as automotive electronics, avionics and nuclear systems, standards are enforced for safe software development, evaluation, manufacturing and post-market changes (\cite{autosar,avsi}). This awareness is only beginning to enter the medical device industry (\cite{formal_fda}). 
-\todo[inline]{List of software standards}
+%\subsection{Safety and Efficacy Evidence}
 
-The FDA currently does not request or review the medical device software during pre-market submission. While no specific requirements or software verification standards are issued, a set of general guidelines for software evaluation are recommended (\cite{fda1, fda2, fda3}). The responsibility to test, validate and verify the device software to demonstrate its safety and efficacy is solely on the manufacturer. This is currently satisfied by the documentation of code inspections, static analysis, module-level testing and integration testing and their purpose is to establish ``reasonable assurance of safety and effectiveness''. These tests however fail to check for the correctness of the software and are largely open-loop tests that do not consider the context of the patient. Software is reviewed by the FDA only in the incident of a device recall. Software-related recalls are often issued in the form of \emph{Safety Alerts} by the %%%%%Food and Drug Administration (FDA) 
+%\todo[inline]{List of software standards}
+
+%The FDA currently does not request or review the medical device software during pre-market submission. This is currently satisfied by the documentation of code inspections, static analysis, module-level testing and integration testing and their purpose is to establish ``reasonable assurance of safety and effectiveness''. These tests however fail to check for the correctness of the software and are largely open-loop tests that do not consider the context of the patient. Software is reviewed by the FDA only in the incident of a device recall. Software-related recalls are often issued in the form of \emph{Safety Alerts} by the %%%%%Food and Drug Administration (FDA) 
 FDA such as ``Safety alert - Pacemaker may revert to VVI mode at 70 beats/min if programmed to one of several specific ventricular pulse widths" (\cite{medstats}).
 
 
 %\section{Challenges to Develop Safe Medical Device Software}
 %\subsection{Safe Development Process vs. Safe Product}
 %Conformance to the safety standards provides strong confidence on a safe development process. The belief is that a well-planned, systematic engineering process produces more reliable devices, especially if software is a component of the device (\cite{med-book}). However, there is no guarantee that safe process always yield safe devices. Recently there is growing interest on enforcing safety and efficacy evidence for the device itself. \cite{Wassyng} Due to the large variety of medical devices, there does not exist general safety and efficacy requirements that can be written into standard. As the result, evidence for product safety and efficacy varies in quality and organization. Assurance cases \cite{} have been proposed to help constructing safety arguments and organizing safety evidences. Assurance cases are currently "Recommanded" by FDA during regulation submission. (\cite{})
-
+\section{Terminologies}
 \subsection{Requirements vs. Specifications}
 By definition (\cite{fda3}), the requirements of a system specify \textbf{what} the system should achieve and the specifications of a system specify \textbf{how} the system is designed to satisfy the requriements. The two documents represent two stages of the development process. For example,
 
