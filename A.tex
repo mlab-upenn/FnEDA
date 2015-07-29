@@ -6,25 +6,27 @@ According to the definition of US FDA \cite{fda}, a medical device is "an instru
 	\item intended for use in the diagnosis of disease or other conditions, or in the cure, mitigation, treatment, or prevention of disease, in man or other animals, or
 	\item intended to affect the structure or any function of the body of man or other animals, and which does not achieve any of its primary intended purposes through chemical action within or on the body of man or other animals and which is not dependent upon being metabolized for the achievement of any of its primary intended purposes."
 \end{itemize}
-In general, medical devices according to their risk factors for regulation purpose. In US, medical devices are categorized by FDA into 3 classes, Class I, Class II and Class III, corresponding to low-risk, medium-risk and high-risk devices \cite{class}. With similar philosophy, the EU licensing process for medical devices classifies medical devices into 5 categories based on non-invasive vs. invasive, length of stay in body, contact with vessels or CNS, active vs. non-active and implantable devices. (\cite{EU_classify}) Devices with higher category are subject to more stringint regulations. The medical devices are also categorized according to their applications and functions by the Organization for Economic Co-operation and Development (OECD)\cite{OECD}. \figref{Cur} shows example medical devices in two different classifications by \cite{classify}.
+In general, medical devices according to their risk factors for regulation purpose. In US, medical devices are categorized by FDA into 3 classes, Class I, Class II and Class III, corresponding to low-risk, medium-risk and high-risk devices \cite{class}. 
+%With similar philosophy, the EU licensing process for medical devices classifies medical devices into 5 categories based on non-invasive vs. invasive, length of stay in body, contact with vessels or CNS, active vs. non-active and implantable devices. (\cite{EU_classify}) 
+Devices with higher category are subject to more stringent regulations. The medical devices can also be categorized according to their applications and functions. \figref{Cur} shows example medical devices in two different classifications.
 \begin{figure}[t]
 		\centering
-		\includegraphics[width=0.8\textwidth]{figs/devices.png}
-		\caption{\small Figure of current medical devices (Remade from the presentation by \cite{classify})}
+		\includegraphics[width=\textwidth]{figs/devices_new.pdf}
+		\caption{\small Figure of current medical devices}
 		\label{fig:Cur}
 \end{figure}
-\begin{figure}[t]
-		\centering
-		\includegraphics[width=0.8\textwidth]{figs/closed-loop.pdf}
-		\caption{\small Closing the Loop With the Patient}
-		\label{fig:closed-loop}
-\end{figure}
+
 
 \section{Closing the Loop With the Patients}
 Most medical devices operate with the patient in certain closed-loop manner. For diagnose-only devices, i.e. the X-ray machine, the physician operates the device to obtain patient data, perform diagnosis and deliver proper therapy to the patient (\figref{closed-loop}.(a)). For therapy-only devices, i.e. the infusion pumps, the physician operates the device to perform therapy on the patient according to previous diagnosis (\figref{closed-loop}.(b)). We denote these devices as \textbf{Open-loop Medical Devices} as there is no direct closed-loop interaction between the device and the patient. For open-loop devices, the safety of the patients is mostly guaranteed by the professionally-trained physicians in the loop. Device safety focus on providing accurate information to the physicians and faithfully operate as instructed by the physicians.
 
 Among all the medical devices, there are devices with both diagnostic and therapeutic functions, i.e. implantable cardiac devices to treat cardiac arrhythmia, deep brain stimulation devices (\cite{Brain_sti}) to treat Parkinson's disease and artificial pancreas to treat Type 1 diabetes\footnote{The artificial pancreas is till under development by \cite{}}. These devices diagnose physiological conditions of the patient using sensory data, and deliver therapy accordingly (\figref{closed-loop}.(c)). These devices usually operate (semi-) autonomously with very little human intervention, thus malfunctions or inappropriate therapies from these devices cannot be corrected timely, which can cause serious adverse effects on patients' health. Therefore these devices are usually classified into the highest risk category and undergo the most stringent regulation. We denote them as \textbf{Closed-loop Medical Devices}. 
-
+\begin{figure}[t]
+		\centering
+		\includegraphics[width=\textwidth]{figs/closed-loop.pdf}
+		\caption{\small Closing the Loop With the Patient}
+		\label{fig:closed-loop}
+\end{figure}
 There are multiple challenges to develop safe and effective closed-loop medical devices:
 
 \textbf{Closed-loop Interactions With Complex Physiology}\\
@@ -54,9 +56,9 @@ Software embedded in a medical device, unlike electrical and mechanical componen
 According to the US Food and Drug Administration, in 1996, 10\% of all medical device recalls were caused by software-related issues (\cite{medstats}). This percentage rose to an average of 15\% of recalls from 2008 to 2012 (\figref{soft_recalls}). %Most of these recalls are categorized as \emph{Class I}, meaning there is a ``reasonable probability that use of these products will cause serious adverse health consequences or death.'' (\cite{medstats2,pacemakerrecalls,killedbycode}). 
 	
 \section{Regulation Efforts to Ensure Medical Device Safety}
-The United States Food and Drug Administration (FDA) is the primary regulatory authority responsible for assuring the safety, efficacy and security of patients using medical devices. Based on the rationale that 1) manufacturers know their devices better than the regulator, and 2) the variety of medical devices requires a variety of approaches, the responsibility to demonstrate the safety and efficacy of the medical devices is solely on the device manufacturer. Manufacturers are required to complete pre-market submission before the devices can be released to the market. Safety classification of the devices determines the requirements needs to be satisfied. A set of general guidelines are recommended by the FDA (\cite{fda1, fda2, fda3}) which list the activities that need to be performed to ensure device safety. 
+The United States Food and Drug Administration (FDA) is the primary regulatory authority responsible for assuring the safety, efficacy and security of patients using medical devices. Based on the rationale that 1) manufacturers know their devices better than the regulator, and 2) the variety of medical devices requires a variety of approaches, the device manufacturers are responsibility to demonstrate the safety and efficacy of the medical devices. Manufacturers are required to complete pre-market submission before the devices can be released to the market. The level of requirements for the submission is determined by the safety classification of the devices. A set of general guidelines are recommended by the FDA (\cite{fda1, fda2, fda3}) which list the activities that need to be performed to ensure device safety. 
 
-In safety-critical industries such as automotive electronics, avionics and nuclear systems, international standards are enforced for system development, evaluation, manufacturing and post-market changes (\cite{autosar,avsi}). This awareness is only beginning to enter the medical device industry as compliance with international standards are "recommended" in the guidelines (\cite{formal_fda}). The basic rationale behind these standards is that: if all the risks/hazards of the device are identified and reasonably mitigated, and the device is developed with rigorous process, the device is reasonably safe. 
+In safety-critical industries such as automotive electronics, avionics and nuclear systems, international standards are enforced for system development, evaluation, manufacturing and post-market changes (\cite{autosar,avsi}). This awareness is only beginning to enter the medical device industry as compliance with international standards are "recommended" in the aforementioned guidelines (\cite{formal_fda}). The basic rationale behind these standards is that: if all the risks/hazards of the device are identified and reasonably mitigated, and the device is developed with rigorous process, the device is reasonably safe. 
 
 \figref{standards} demonstrates the fundamental standards to ensure medical device safety and their relationships. The IEC 60601 Medical Electrical Equipment - General requirements for basic safety and essential performance is a product safety standard that all electronic medical devices must comply to. There are emphasis on the safety of the software components. IEC 60324 specifies the processes and activities needed to perform to ensure software safety. As the centerpiece for product safety, ISO 14971 is specified for the application of risk management to medical devices. In addition, for each risk management activity of ISO 14971, ISO 80002-1 provides additional guidelines for the software component. ISO 800002-1 highlights and explains approaches to assuring that software safety is adequately addressed.
 %The history of the FDA is a reactionary one, where each stage of evolution was in response to a major healthcare tragedy. 
@@ -67,7 +69,7 @@ In safety-critical industries such as automotive electronics, avionics and nucle
 		\label{fig:standards}
 \end{figure}
 
-
+The centerpiece of
 
 \begin{figure}[t]
 		\centering
