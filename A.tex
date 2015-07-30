@@ -1,6 +1,6 @@
 \chapter{Introduction}
 %\section{Grand Challenges For Medical Device Development}
-According to the definition of US FDA \cite{fda}, a medical device is "an instrument, apparatus, implement, machine, contrivance, implant, in vitro reagent, or other similar or related article, including a component part, or accessory which is:
+US FDA \cite{fda} defines medical device "an instrument, apparatus, implement, machine, contrivance, implant, in vitro reagent, or other similar or related article, including a component part, or accessory which is:
 \begin{itemize}
 	\item recognized in the official National Formulary, or the United States Pharmacopoeia, or any supplement to them
 	\item intended for use in the diagnosis of disease or other conditions, or in the cure, mitigation, treatment, or prevention of disease, in man or other animals, or
@@ -30,7 +30,7 @@ Among all the medical devices, there are devices with both diagnostic and therap
 There are multiple challenges to develop safe and effective closed-loop medical devices:
 
 \textbf{Closed-loop Interactions With Complex Physiology}\\
-When using open-loop medical devices, the diagnosis and therapy decisions are made by medical professionals, who has abundant knowledge of human physiology. Therefore they are able to identify adverse health conditions and adjust the therapy accordingly. On the other hand, closed-loop medical devices have to make both the diagnosis and therapy decisions on their own. It is impossible to encode all the knowledge of human physiology into the device. Therefore when conditions happen and are not programmed into the device, the device may deliver inappropriate therapy which can cause adverse effect on patient's health. 
+When using open-loop medical devices, the diagnosis and therapy decisions are made by medical professionals, who has abundant knowledge of human physiology. Therefore they are able to identify adverse health conditions and adjust the therapy accordingly. On the other hand, closed-loop medical devices have to make both the diagnosis and therapy decisions on their own. The domain expertise required to make those decisions has to be programmed into the device. It is impossible to encode all the knowledge of human physiology into the device. Therefore when conditions happen and are not programmed into the device, the device may deliver inappropriate therapy which can cause adverse effect on patient's health. 
 
 With the development of new technology, new therapies to certain disease may arise and adopted by closed-loop devices. Certain closed-loop interactions between the device and the human physiology may not be well-understood, even to the medical professionals. Combinations of well-understood behaviors may also be the source for inappropriate therapies. In chapter \ref{ELT} we will demonstrate an example in which well-understood behaviors trigger unidentified inappropriate therapy by implantable pacemakers.
 
@@ -53,40 +53,31 @@ Software embedded in a medical device, unlike electrical and mechanical componen
 		\label{fig:soft_recalls}
 \end{figure}
 %  Over the course of the past four decades, cardiac rhythm management devices such as pacemakers and implantable cardioverter defibrillators (ICD) have grown in complexity and now have more than 80,000 to 100,000 lines of code (\cite{pauljones}). 
-According to the US Food and Drug Administration, in 1996, 10\% of all medical device recalls were caused by software-related issues (\cite{medstats}). This percentage rose to an average of 15\% of recalls from 2008 to 2012 (\figref{soft_recalls}). %Most of these recalls are categorized as \emph{Class I}, meaning there is a ``reasonable probability that use of these products will cause serious adverse health consequences or death.'' (\cite{medstats2,pacemakerrecalls,killedbycode}). 
+According to the US Food and Drug Administration, in 1996, 10\% of all medical device recalls were caused by software-related issues (\cite{medstats}). This percentage rose to an average of 15\% of recalls from 2008 to 2012 (\figref{soft_recalls}). Malfunctions of closed-loop medical devices usually have severe consequences, which will be categorized as \emph{Class I}, meaning there is a ``reasonable probability that use of these products will cause serious adverse health consequences or death.'' (\cite{medstats2,pacemakerrecalls,killedbycode}). 
 	
 \section{Regulation Efforts to Ensure Medical Device Safety}
 The United States Food and Drug Administration (FDA) is the primary regulatory authority responsible for assuring the safety, efficacy and security of patients using medical devices. Based on the rationale that 1) manufacturers know their devices better than the regulator, and 2) the variety of medical devices requires a variety of approaches, the device manufacturers are responsibility to demonstrate the safety and efficacy of the medical devices. Manufacturers are required to complete pre-market submission before the devices can be released to the market. The level of requirements for the submission is determined by the safety classification of the devices. A set of general guidelines are recommended by the FDA (\cite{fda1, fda2, fda3}) which list the activities that need to be performed to ensure device safety. 
 
 In safety-critical industries such as automotive electronics, avionics and nuclear systems, international standards are enforced for system development, evaluation, manufacturing and post-market changes (\cite{autosar,avsi}). This awareness is only beginning to enter the medical device industry as compliance with international standards are "recommended" in the aforementioned guidelines (\cite{formal_fda}). The basic rationale behind these standards is that: if all the risks/hazards of the device are identified and reasonably mitigated, and the device is developed with rigorous process, the device is reasonably safe. 
 
-\figref{standards} demonstrates the fundamental standards to ensure medical device safety and their relationships. The IEC 60601 Medical Electrical Equipment - General requirements for basic safety and essential performance is a product safety standard that all electronic medical devices must comply to. There are emphasis on the safety of the software components. IEC 60324 specifies the processes and activities needed to perform to ensure software safety. As the centerpiece for product safety, ISO 14971 is specified for the application of risk management to medical devices. In addition, for each risk management activity of ISO 14971, ISO 80002-1 provides additional guidelines for the software component. ISO 800002-1 highlights and explains approaches to assuring that software safety is adequately addressed.
+\figref{standards} demonstrates the fundamental standards to ensure medical device safety and their relationships. The IEC 60601 Medical Electrical Equipment - General requirements for basic safety and essential performance is a product safety standard that all electronic medical devices must comply to. There are emphasis on the safety of the software components. IEC 60324 specifies the processes and activities needed to perform during the software development life cycle to ensure software safety. 
+Risk management is a core activity throughout the software development life cycle. ISO 14971 is specified for the application of risk management to medical devices. In addition, for each risk management activity of ISO 14971, ISO 80002-1 provides additional guidelines for the software component, which highlights and explains approaches to assuring that software safety is adequately addressed.
 %The history of the FDA is a reactionary one, where each stage of evolution was in response to a major healthcare tragedy. 
 \begin{figure}[t]
 		\centering
-		\includegraphics[width=0.8\textwidth]{figs/standards.jpg}
+		\includegraphics[width=\textwidth]{figs/standards.jpg}
 		\caption{\small Figure of current medical devices}
 		\label{fig:standards}
 \end{figure}
 
-The centerpiece of
-
+Risk management includes risk analysis, risk evaluation and risk control. Fault Tree Analysis (FTA) is a common tool in risk analysis in which hazards of the system are first identified and the possible causes of the hazards are analyzed until the initial faults are reached. \figref{risks}.(a) demonstrate an example fault tree for automobile. The problem for fault tree analysis is that all possible causes are analyzed manually. In closed-loop medical devices, there may exist closed-loop interactions between the device and the patient that can cause certain hazard, but are unknown due to the limited physiological knowledge. \figref{risks}.(b) demonstrate a fault tree for implantable pacemaker
 \begin{figure}[t]
 		\centering
-		\includegraphics[width=0.9\textwidth]{figs/risk.jpg}
+		\includegraphics[width=\textwidth]{figs/fta_new.pdf}
 		\caption{\small Figure of current medical devices}
 		\label{fig:risks}
 \end{figure}
 
-
-Top down
-– identifies hazards and how they might occur, moving
-down the sequence of events that becomes the
-hazardous scenario until arriving at an initiating cause
-• Bottom up
-– identifying a possible failure and then identify and
-evaluate the consequences of this failure (Annex C
-Indirect cause)
 
 %Through the course of the 1980s, software began to play an increasing role in medical devices. Software, as it turns out, is one of those technologies not anticipated by prior regulation, and was waiting for its disaster to prompt regulatory action. It wasn't until the 1980s when a number of cancer patients received massive X-ray overdoses during radiation therapy with the Therac-25 linear accelerator. This lead to a number of investigations, perhaps the most thorough of which was that of \cite{therac}, which was rich with identified ways software could go wrong. Inadequate testing, dangerous code reuse, configuration management issues, inadequate manufacturer response, and failure to get to the root cause of the problem were among the leaders of the problems identified. The Therac-25 was an eye-opener for the FDA and legislators, and resulted in the Safe Medical Device Act of 1990. This finally required closer medical device tracking, post-market surveillance and recommendations on development, testing and validation of medical device software. \todo{Are these useful?}
 
@@ -106,34 +97,45 @@ Indirect cause)
 %\subsection{Safe Development Process vs. Safe Product}
 %Conformance to the safety standards provides strong confidence on a safe development process. The belief is that a well-planned, systematic engineering process produces more reliable devices, especially if software is a component of the device (\cite{med-book}). However, there is no guarantee that safe process always yield safe devices. Recently there is growing interest on enforcing safety and efficacy evidence for the device itself. \cite{Wassyng} Due to the large variety of medical devices, there does not exist general safety and efficacy requirements that can be written into standard. As the result, evidence for product safety and efficacy varies in quality and organization. Assurance cases \cite{} have been proposed to help constructing safety arguments and organizing safety evidences. Assurance cases are currently "Recommanded" by FDA during regulation submission. (\cite{})
 \section{Terminologies}
+There are misconceptions of different terminologies. In this paper we use terminologies from General Principles of Software Validation\cite{fda2}
 \subsection{Requirements vs. Specifications}
-By definition (\cite{fda3}), the requirements of a system specify \textbf{what} the system should achieve and the specifications of a system specify \textbf{how} the system is designed to satisfy the requriements. The two documents represent two stages of the development process. For example,
+By definition (\cite{fda3}), the requirements of a system specify \textbf{what} the system should achieve and the specifications of a system specify \textbf{how} the system is designed to satisfy the requirements. The two documents represent two stages of the development process. For example, an requirement 
 
 However, the terminology requirements and specifications are confusing in practice and even used interchangeably. \cite{reqVSspec} 
 
 Conformance to specifications does not imply conformance to requirements. Since requirements are the ultimate criteria, confusion between specifications and requirements can cause safety and/or efficacy concerns.
 
 Separation of environment variables and system variables.
+
+
+\subsection{Verification vs. Validation vs. Testing}
+\cite{fda2}
+Validation:"confirmation by examination and provision of objective evidence that:
+\begin{enumerate}
+	\item software specifications conform to user needs and intended uses, and that
+	\item the particular requirements implemented through software can be consistently fulfilled
+\end{enumerate}
+
+Software verification provides objective evidence that the design outputs of a particular phase of the software development life cycle meet all of the specified requirements for that phase. 
+\begin{figure}[t]
+		\centering
+		\includegraphics[width=\textwidth]{figs/validation.pdf}
+		\caption{\cite{Vogel}}
+		\label{fig:validation}
+\end{figure}
 \subsection{Closed-loop vs. Open-loop Evaluation}
 Specifications specify input-output relationship. Conformance to specification does not need interpretation of the execution trace. Thus it can be verified using open-loop evaluation.
 
 Closed-loop evaluation does two things. 1) Enforce environmental constraints so that the inputs to the device are relevant. 2) Provide interpretation of execution traces 
 
-\subsection{Verification vs. Validation vs. Testing}
-
-Validation:"confirmation by examination and provision of objective evidence that software specifications conform to user needs and intended uses, and that the particular requirements implemented through software can be consistently fulfilled"\cite{ISO8402,fda2}
-\subsection{Domain Expertise}
-Domain expertise 
-\subsection{Patient-specific Therapy}
-Most devices are designed to treat large class of patient conditions
-\subsection{Multiple Stakeholders}
-For each medical device, there are 4 stakeholders: the regulator, the device manufacturer, the medical professional and the patient. All parties have the incentive to ensure the safety and efficacy of the device. With current regulation framework, the evidence for safety 
-\begin{figure}[t]
-		\centering
-		\includegraphics[width=0.8\textwidth]{figs/stakeholders.pdf}
-		\caption{\small Figure of current medical devices}
-		\label{fig:Cur}
-\end{figure}
+%\subsection{Multiple Stakeholders}
+%For each medical device, there are 4 stakeholders: the regulator, the device manufacturer, the medical professional and the patient. All parties have the incentive to ensure the safety and efficacy of the device. With current regulation framework, the evidence for safety 
+%\begin{figure}[t]
+		%\centering
+		%\includegraphics[width=0.8\textwidth]{figs/stakeholders.pdf}
+		%\caption{\small Figure of current medical devices}
+		%\label{fig:Cur}
+%\end{figure}
 %However, the medical domain presents its own unique set of challenges:\\
 %\textbf{1. Closed-loop context:} Current evaluation of devices is open-loop and is unable to ensure the device never drives the patient into an unsafe state. Medical device testing and validation must thus be within the closed-loop context of the patient physiology. The context of the patient is a function of both the environment and the input from the device controller and must be captured by the device evaluation process.\\ 
 %\textbf{2. Patient models:} There is a scarcity of patient models and clinically-relevant simulators for device design (\cite{pat-model}). High-fidelity models of interaction between the patient and device are needed to evaluate the safety and efficacy of device operation. Furthermore, these models must integrate the functional and formal aspects so that testing and verification are evaluated for the same patient states.\\
@@ -142,12 +144,7 @@ For each medical device, there are 4 stakeholders: the regulator, the device man
 %\section{The FDA and Medical Device Software}
 %Before we delve into the current state of medical device software, it is useful to understand the evolution of the regulatory environment. 
 
-\begin{figure}[b]
-		\centering
-		\includegraphics[width=0.9\textwidth]{figs/closedloop.pdf}
-		\caption{\small (a) The current practice of open loop testing of the pacemaker. (b) The desired closed-loop verification of a model of the pacemaker and model of the heart and testing of the real pacemaker with a heart-on-a-chip platform}
-		\label{fig:closedloop}
-\end{figure}
+
 
 
 %\section{Current Testing, Validation and Verification Approaches}
@@ -166,7 +163,7 @@ For each medical device, there are 4 stakeholders: the regulator, the device man
 %As the testing environment (i.e., patient condition) is not entirely under the control of the tester, the problem changes significantly as a degree of nondeterminism is introduced in the process. Implantable medical devices are a primary example of Medical Cyber-Physical Systems where the safety and efficacy of the device and device software must be evaluated within a closed-loop context of the patient. The key challenge is in the generation of physiologically relevant tests such that the device does not provide inappropriate therapy, and does not adversely affect the safety of the patient. In addition, test generation must be interactive and adaptive such that the previous test stimulus affects the current state of the patient. The test generator must consider the current state when generating the next input in a way that advances the purpose of the test. The problem becomes one of the controller synthesis problems and cannot be addressed by an off-the-shelf model checker~\cite{rushby}.  
    %
 %Formal methods have traditionally been used for verification of time-critical and safety-critical embedded systems \cite{form-meth}. Until recently, these methods have not been used for medical device certification. \cite{med-form3} presented the use of Extended Finite State Machines for model checking of a resuscitation device. Formal techniques have also been applied to improve medical device protocols (\cite{med-form2}) and safety (\cite{med-form1}), but the authors either used a simplified patient model or did not model the patient at all. 
-\section{Methodology for Closed-loop Medical Device Safety}
+\section{Improve Medical Device Safety with Model-based design}
 
 \subsection{Model-based Software Development}
 Our proposed model-driven design (MDD) for Medical CPS begins with developing integrated functional and formal heart models that interact with real and modeled pacemakers for closed-loop verification and testing (\cite{VHM_proc}). As shown from the top of \figref{modeling_overview}, the heart-pacemaker closed-loop systems is first modeled abstractly to facilitate verification of the basic pacemaker design with maximum coverage (\cite{STTT13}). In our case, we use timed automata and the UPPAAL model checker at this design stage. Next, the models are translated to more detailed models that take into account the complex dynamics of the heart and interaction with more detailed pacemaker model (\cite{vhm_ecrts10, vhm_embc11,vhm_iccps11}). We use Stateflow and Simulink at this design stage. These models are validated by physicians for their clinical relevance. The automatic model translation procedure, from UPPAAL to Stateflow, ensures that abstract models used for verification over-approximate the more detailed models used downstream (\cite{RTAS12}). Once the detailed models pass simulation-based testing with closed-loop dynamics, they are automatically generated into code and are subject to platform-level integration testing (\cite{vhm_website}). This MDD approach ensures the closed-loop safety properties are retained through the design toolchain and facilitates the development of verified software from verified models.
