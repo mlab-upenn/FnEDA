@@ -37,7 +37,7 @@ With the development of new technology, new therapies to certain disease may ari
 \textbf{Limited Diagnostic and Therapeutic Functions}\\
 One fundamental rationale behind closed-loop medical devices is to enable the patients to live their normal lives without the dependance of cumbersome medical devices and/or the supervision of physicians. In fact, a large number of closed-loop medical devices are implantable devices. As a result, the sensing and therapy capabilities of the devices are limited, in order to increase portability and reduce invasiveness. Limited sensing capabilities may cause inaccurate diagnosis and therefore inappropriate therapy, as multiple conditions can map to the same sensor inputs. Due to limited therapy capabilities, there exists sub-optimal physiological conditions that are untreatable. The device may even trigger the conditions into less optimal conditions. In chapter \ref{mode_switch} we will demonstrate an example in which an untreatable condition is deteriorated into worse condition due to device interactions.
 
-\textbf{Heavy Reliance on Software Control}\\
+\textbf{Heavy Reliance on Software Control}\\\todo{I think we should not just focus on software so I put all these stats here instead of in front}
 Due to the complexity of the diagnostic and therapeutic functions of the closed-loop devices, these functions are mostly controlled by their software components. 
 Software embedded in a medical device, unlike electrical and mechanical components, does not fail due to corrosion, fatigue or have statistical failures of subcomponents. Software failures are uniquely sourced in the design and development of the system. %Unlike other industries such as consumer electronics where product life cycles are measured in months, software engineering for medical devices often spans a decade and must prioritize safety and efficacy over time to market. 
 \begin{figure}[t]
@@ -70,7 +70,7 @@ Risk management is a core activity throughout the software development life cycl
 		\label{fig:standards}
 \end{figure}
 
-Risk management includes risk analysis, risk evaluation and risk control. Fault Tree Analysis (FTA) is a common tool in risk analysis in which hazards of the system are first identified and the possible causes of the hazards are analyzed until the initial faults are reached. \figref{risks}.(a) demonstrate an example fault tree for automobile. The problem for fault tree analysis is that all possible causes are analyzed manually. In closed-loop medical devices, there may exist closed-loop interactions between the device and the patient that can cause certain hazard, but are unknown due to the limited physiological knowledge. \figref{risks}.(b) demonstrate a fault tree for implantable pacemaker
+Risk management includes risk analysis, risk evaluation and risk control. Fault Tree Analysis (FTA) is a common tool in risk analysis in which hazards of the system are first identified and the possible causes of the hazards are analyzed until the initial faults are reached. \figref{risks}.(a) demonstrate an example fault tree for automobile. The problem for fault tree analysis is that all possible causes are analyzed manually. In closed-loop medical devices, there may exist closed-loop interactions between the device and the patient that can cause certain hazard, but are unknown due to the limited physiological knowledge. \figref{risks}.(b) demonstrate a fault tree for a hazard of implantable pacemaker. There are several causes for undesirable fast ventricular rate. The well-understood cause is the intrinsic ventricular tachycardia (solid line). However, with pacemaker implanted, new mechanisms to cause hazard are introduced into the closed-loop system, as illustrated by the two branches with dotted lines. These two branches were not identified during the initial fault tree analysis, and were only identified after the devices have been released into the market, causing unnecessary adverse effects to the patients \cite{ELT}. Risks identified at this stage are also more costly to fix, increasing the cost for device development. \todo{Related to closed-loop model-checking}
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=\textwidth]{figs/fta_new.pdf}
@@ -78,7 +78,15 @@ Risk management includes risk analysis, risk evaluation and risk control. Fault 
 		\label{fig:risks}
 \end{figure}
 
+After the fault tree has been constructed, probabilities for the initial faults are analyzed bottom up to calculate the probability of each hazard. The technique is called Failure Mode and Effects Analysis (FMEA). Then the risks are evaluated by assigning risk index to each hazard according to their occurrence and severity (\figref{risk_ana}). \todo{Related to requirement hierarchy}
+\begin{figure}[t]
+		\centering
+		\includegraphics[width=\textwidth]{figs/risk_analysis.pdf}
+		\caption{Risk analysis}
+		\label{fig:risk_ana}
+\end{figure}
 
+After the risks are evaluated, different activities are required to mitigate the risks according to the risk index. After efforts made to reduce the risks, the risks should be re-evaluated to calculate the residual risk and analyze the risk/benefit. This is part of the risk control process.\todo{related to both the requirement hierarchy and model checking}
 %Through the course of the 1980s, software began to play an increasing role in medical devices. Software, as it turns out, is one of those technologies not anticipated by prior regulation, and was waiting for its disaster to prompt regulatory action. It wasn't until the 1980s when a number of cancer patients received massive X-ray overdoses during radiation therapy with the Therac-25 linear accelerator. This lead to a number of investigations, perhaps the most thorough of which was that of \cite{therac}, which was rich with identified ways software could go wrong. Inadequate testing, dangerous code reuse, configuration management issues, inadequate manufacturer response, and failure to get to the root cause of the problem were among the leaders of the problems identified. The Therac-25 was an eye-opener for the FDA and legislators, and resulted in the Safe Medical Device Act of 1990. This finally required closer medical device tracking, post-market surveillance and recommendations on development, testing and validation of medical device software. \todo{Are these useful?}
 
 %\subsection{Pre-market Submission Process}
@@ -96,37 +104,7 @@ Risk management includes risk analysis, risk evaluation and risk control. Fault 
 %\section{Challenges to Develop Safe Medical Device Software}
 %\subsection{Safe Development Process vs. Safe Product}
 %Conformance to the safety standards provides strong confidence on a safe development process. The belief is that a well-planned, systematic engineering process produces more reliable devices, especially if software is a component of the device (\cite{med-book}). However, there is no guarantee that safe process always yield safe devices. Recently there is growing interest on enforcing safety and efficacy evidence for the device itself. \cite{Wassyng} Due to the large variety of medical devices, there does not exist general safety and efficacy requirements that can be written into standard. As the result, evidence for product safety and efficacy varies in quality and organization. Assurance cases \cite{} have been proposed to help constructing safety arguments and organizing safety evidences. Assurance cases are currently "Recommanded" by FDA during regulation submission. (\cite{})
-\section{Terminologies}
-There are misconceptions of different terminologies. In this paper we use terminologies from General Principles of Software Validation\cite{fda2}
-\subsection{Requirements vs. Specifications}
-By definition (\cite{fda3}), the requirements of a system specify \textbf{what} the system should achieve and the specifications of a system specify \textbf{how} the system is designed to satisfy the requirements. The two documents represent two stages of the development process. For example, an requirement 
 
-However, the terminology requirements and specifications are confusing in practice and even used interchangeably. \cite{reqVSspec} 
-
-Conformance to specifications does not imply conformance to requirements. Since requirements are the ultimate criteria, confusion between specifications and requirements can cause safety and/or efficacy concerns.
-
-Separation of environment variables and system variables.
-
-
-\subsection{Verification vs. Validation vs. Testing}
-\cite{fda2}
-Validation:"confirmation by examination and provision of objective evidence that:
-\begin{enumerate}
-	\item software specifications conform to user needs and intended uses, and that
-	\item the particular requirements implemented through software can be consistently fulfilled
-\end{enumerate}
-
-Software verification provides objective evidence that the design outputs of a particular phase of the software development life cycle meet all of the specified requirements for that phase. 
-\begin{figure}[t]
-		\centering
-		\includegraphics[width=\textwidth]{figs/validation.pdf}
-		\caption{\cite{Vogel}}
-		\label{fig:validation}
-\end{figure}
-\subsection{Closed-loop vs. Open-loop Evaluation}
-Specifications specify input-output relationship. Conformance to specification does not need interpretation of the execution trace. Thus it can be verified using open-loop evaluation.
-
-Closed-loop evaluation does two things. 1) Enforce environmental constraints so that the inputs to the device are relevant. 2) Provide interpretation of execution traces 
 
 %\subsection{Multiple Stakeholders}
 %For each medical device, there are 4 stakeholders: the regulator, the device manufacturer, the medical professional and the patient. All parties have the incentive to ensure the safety and efficacy of the device. With current regulation framework, the evidence for safety 
@@ -164,9 +142,10 @@ Closed-loop evaluation does two things. 1) Enforce environmental constraints so 
    %
 %Formal methods have traditionally been used for verification of time-critical and safety-critical embedded systems \cite{form-meth}. Until recently, these methods have not been used for medical device certification. \cite{med-form3} presented the use of Extended Finite State Machines for model checking of a resuscitation device. Formal techniques have also been applied to improve medical device protocols (\cite{med-form2}) and safety (\cite{med-form1}), but the authors either used a simplified patient model or did not model the patient at all. 
 \section{Improve Medical Device Safety with Model-based design}
-
-\subsection{Model-based Software Development}
-Our proposed model-driven design (MDD) for Medical CPS begins with developing integrated functional and formal heart models that interact with real and modeled pacemakers for closed-loop verification and testing (\cite{VHM_proc}). As shown from the top of \figref{modeling_overview}, the heart-pacemaker closed-loop systems is first modeled abstractly to facilitate verification of the basic pacemaker design with maximum coverage (\cite{STTT13}). In our case, we use timed automata and the UPPAAL model checker at this design stage. Next, the models are translated to more detailed models that take into account the complex dynamics of the heart and interaction with more detailed pacemaker model (\cite{vhm_ecrts10, vhm_embc11,vhm_iccps11}). We use Stateflow and Simulink at this design stage. These models are validated by physicians for their clinical relevance. The automatic model translation procedure, from UPPAAL to Stateflow, ensures that abstract models used for verification over-approximate the more detailed models used downstream (\cite{RTAS12}). Once the detailed models pass simulation-based testing with closed-loop dynamics, they are automatically generated into code and are subject to platform-level integration testing (\cite{vhm_website}). This MDD approach ensures the closed-loop safety properties are retained through the design toolchain and facilitates the development of verified software from verified models.
+Model-based design can potentially help during the risk management process and identify overlooked risks earlier in the development process. In this paper we use implantable pacemaker as example to demonstrate how model-based design can help improve the safety and efficacy of the implantable pacemaker.
+Our proposed model-driven design (MDD) for closed-loop medical devices begins with developing heart models that interact with real and modeled pacemakers for closed-loop verification and testing (\cite{VHM_proc}). 
+\todo{We may need to make another figure since this one does not show clearly how those activities fits in regulation}
+As shown from the top of \figref{modeling_overview}, the heart-pacemaker closed-loop systems is first modeled abstractly to facilitate verification of the basic pacemaker design with maximum coverage (\cite{STTT13}). In our case, we use timed automata and the UPPAAL model checker at this design stage. Next, the models are translated to more detailed models that take into account the complex dynamics of the heart and interaction with more detailed pacemaker model (\cite{vhm_ecrts10, vhm_embc11,vhm_iccps11}). We use Stateflow and Simulink at this design stage. These models are validated by physicians for their clinical relevance. The automatic model translation procedure, from UPPAAL to Stateflow, ensures that abstract models used for verification over-approximate the more detailed models used downstream (\cite{RTAS12}). Once the detailed models pass simulation-based testing with closed-loop dynamics, they are automatically generated into code and are subject to platform-level integration testing (\cite{vhm_website}). This MDD approach ensures the closed-loop safety properties are retained through the design toolchain and facilitates the development of verified software from verified models.
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=0.8\textwidth]{figs/modeling_overview.jpg}
@@ -177,5 +156,37 @@ Our proposed model-driven design (MDD) for Medical CPS begins with developing in
 \end{figure}
 \section{Contributions}
 The focus of this effort is three-fold: (a) We developed an integrated functional (i.e., clinically-relevant) and formal (i.e., timed automata based) Virtual Heart Model  (VHM) (see \figref{heartmodel}) and a pacemaker device model for interactive and clinically relevant test generation.  (b) We provide a set of general and patient condition-specific pacemaker software requirements to ensure the safety of the patient is met under all cases, and (c) We provide a means to test and verify the closed-loop system over a variety of basic operation tests where the heart rate must be maintained, the atrial-ventricle synchrony must be enforced and complex closed-loop tests, where the pacemaker must not initiate tachycardia or perform improperly during lead displacement. With this approach of model-based testing, an executable functional model of the pacemaker is created at an early stage in the development process. This model-based methodology is an early step in addressing the urgent need for pre-market evaluation of medical device design and certification.
+\section{Terminologies}
 
+\todo{Should this come before or after the contribution section?}
+There are misconceptions of different terminologies. In this paper we use terminologies from General Principles of Software Validation\cite{fda2}
+\subsection{Requirements vs. Specifications}
+By definition (\cite{fda3}), the requirements of a system specify \textbf{what} the system should achieve and the specifications of a system specify \textbf{how} the system is designed to satisfy the requirements. The two documents represent two stages of the development process. For example, an requirement 
+
+However, the terminology requirements and specifications are confusing in practice and even used interchangeably. \cite{reqVSspec} 
+
+Conformance to specifications does not imply conformance to requirements. Since requirements are the ultimate criteria, confusion between specifications and requirements can cause safety and/or efficacy concerns.
+
+Separation of environment variables and system variables.
+
+
+\subsection{Verification vs. Validation vs. Testing}
+\cite{fda2}
+Validation:"confirmation by examination and provision of objective evidence that:
+\begin{enumerate}
+	\item software specifications conform to user needs and intended uses, and that
+	\item the particular requirements implemented through software can be consistently fulfilled
+\end{enumerate}
+
+Software verification provides objective evidence that the design outputs of a particular phase of the software development life cycle meet all of the specified requirements for that phase. 
+\begin{figure}[t]
+		\centering
+		\includegraphics[width=\textwidth]{figs/validation.pdf}
+		\caption{\cite{Vogel}}
+		\label{fig:validation}
+\end{figure}
+\subsection{Closed-loop vs. Open-loop Evaluation}
+Specifications specify input-output relationship. Conformance to specification does not need interpretation of the execution trace. Thus it can be verified using open-loop evaluation.
+
+Closed-loop evaluation does two things. 1) Enforce environmental constraints so that the inputs to the device are relevant. 2) Provide interpretation of execution traces 
 %%Through each of the chapters to follow, we cover different aspects of modeling the physiological system and the device, validating the models, running model checking on the closed-loop system and testing the deterministic systems derived from the abstract models. With the goal of 
