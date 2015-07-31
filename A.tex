@@ -183,12 +183,12 @@ Software verification fulfills the second aspect of software validation by "prov
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=\textwidth]{figs/validation.pdf}
-		\caption{Validation activities during the software development life cycle\cite{Vogel}}
+		\caption{Validation activities during the software development life cycle (\cite{Vogel})}
 		\label{fig:validation}
 \end{figure}
 Testing is the techniques that can be used for validation and/or verification. \figref{validation} illustrates the relationship between validation, verification and testing, and different activities during the software development life cycle to ensure the safety and effectiveness of the software.
 \subsection{Closed-loop vs. Open-loop Evaluation}
-In open-loop evaluation, i.e. open-loop testing, input sequences are send to the system and system outputs are compared with expected outputs. In open-loop testing, the system outputs do not affect the inputs afterward. In closed-loop evaluation, the environment of the system is taken into account. System outputs affect the state of the environment and thus affect the input sequences. For closed-loop medical devices,
+In open-loop evaluation, i.e. open-loop testing, input sequences are send to the system and system outputs are compared with expected outputs. In open-loop testing, the system outputs do not affect the inputs afterward. In closed-loop evaluation, the environment of the system is taken into account. System outputs affect the state of the environment and thus affect the input sequences. For closed-loop medical devices, clinical trials are currently the most common closed-loop evaluation method. Enable closed-loop evaluation at model level requires models of the environment, which is human physiology for closed-loop medical devices.
 
-Closed-loop evaluation does two things. 1) Enforce environmental constraints so that the inputs to the device are relevant. 2) Provide interpretation of execution traces 
+Closed-loop evaluation does two things in model-based design 1) Enforce environmental constraints so that the test space is smaller and the test cases are physiological relevant. 2) Execution traces can be better interpreted as the physiological models encode domain knowledge. 
 %%Through each of the chapters to follow, we cover different aspects of modeling the physiological system and the device, validating the models, running model checking on the closed-loop system and testing the deterministic systems derived from the abstract models. With the goal of 
