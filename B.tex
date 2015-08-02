@@ -24,7 +24,11 @@ Models, especially environment models which span a large spectrum of complexity,
 In the following sections, we introduce the physiological contexts within which the implantable pacemaker operates, and proceed to construct heart models for closed-loop verification of the pacemaker. Note that for two different applications, i.e. formal verification of the device model in the loop and functional testing of the actual device in the loop, models are constructed differently as we address their respective requirements for environment models. 
 
 \section{Physiology Basis of the Heart}
-Before we get into the details of heart modeling, we use this small section
+Before we get into the details of heart modeling, we use this small section to introduce the physiology basis of the heart. Readers with knowledge of this subject can skip to the modeling sections.
+
+The heart is the "motor" for blood circulation within our body. The heart has two ventricles which pumps the blood out of the heart, and two atria which gather blood from the body and pump them into the ventricles. (\figref{models}) There are two circulations through the heart: the \emph{Pulmonary circulation} and the \emph{Stemic circulation}. In the pulmonary circulation, the right atrium collects oxygen-depleted blood from all over the body and pump them into the right ventricle. The right ventricle then pumps low-oxygen blood to the lungs. The blood gets oxygenized in the lungs and gathers into the left ventricle. In the stemic circulation, the oxygenized blood in the left atrium is pumped into the left ventricle. The left ventricle pumps the blood to the rest of the body and the heart itself. After the body extract the oxygen from the blood and dumped the CO2 the oxygen-depleted blood then flow back to the right atrium.
+
+The oxygen demand of the body changes during different activities. For example, the demand is higher while running and lower while sleeping. To satisfy these demands, the heart muscles in the atria and the ventricles have to contract in accordance to optimize the blood flow. The coordinated contractions of the heart muscles are governed by the electrical conduction system of the heart (\figref{models}). 
 \begin{figure}[!t]
 \centering
 		\includegraphics[width=1.1\textwidth]{figs/models.pdf}
@@ -34,6 +38,7 @@ Before we get into the details of heart modeling, we use this small section
 \label{fig:models}
 %\vspace{-15pt}
 \end{figure} 
+\section{Physiological Models of the Heart}
 For understanding the underlying physiological principals, heart models with over 100,000 ordinary differential equations or 4 million finite elements have been developed (\cite{cell2bed}). While these models capture in high fidelity the physiological phenomena, they do not operate in real-time or provide the appropriate interfaces for device interaction. 
 
 \section{Heart Models for Pacemaker Interaction}
