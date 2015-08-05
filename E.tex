@@ -125,13 +125,11 @@ Unfortunately, because of the extremely high cost of clinical trials (several mi
 Moreover, clinical trials are often conducted at the final design stage. Fixing bugs at this stage is very costly.
 
 Closed-loop model checking enables closed-loop evaluation of the physiological requirements at an earlier design stage, which requires formal model(s) of the physiological environment. In this chapter we will answer the following questions:
-\begin{itemize}
+\begin{itemize}	
+\vspace{-5pt}
+	\item How do model checking results fit into the regulation framework?
 	\vspace{-5pt}
-	\item How can we model environmental conditions of the heart to capture all physiological requirements?
-	\vspace{-5pt}
-	\item Can model checking find violations that testing cannot find?
-	\vspace{-5pt}
-	\item When and how to refine the environment model?
+	\item How do we find the appropriate abstraction level of the environment model for each physiological requirement?
         \vspace{-5pt}
         \item Exploring the whole state space sounds great. What are the limitations of model checking? 
 \end{itemize}
@@ -141,48 +139,56 @@ In closed-loop model checking, there is only one device model.
 However there can be a large number of environmental conditions which require different models to represent them. For instance, a heart with atrial flutter has an additional conduction pathway, causing fast atrial rate, that is not present in a healthy heart. The timing and structural differences of different heart conditions should be distinguished in corresponding heart models.
 %\todo[inline]{should we give an example of a heart condition?}
 A set of initial models of the environment can be constructed, but the set is inherently incomplete because of the large number of environment conditions and their combinations. 
-As a result, performing model checking using every model in the set cannot ensure full coverage of the environmental conditions. In the following sections, we will investigate how as we go from basic to more complex requirements, we require more sophisticated approaches to generate and navigate through a variety of environment models. We introduce the concept of an \emph{Abstraction Tree} to systematically encode requirements and choose the appropriate heart models for the requirement. By analyzing the concrete counter-examples we are able to distinguish if the problem is a bug within the device or due to the lack of expressivity in the environment model. 
+As a result, performing model checking using every model in the set cannot ensure full coverage of the environmental conditions. In the following sections, we will investigate how as we go from basic to more complex requirements, we require more sophisticated approaches to generate and navigate through a variety of environment models. We introduce the concept of an \emph{Abstraction Tree} to systematically encode requirements and choose the appropriate heart models for the requirement. By analyzing the concrete counter-examples we are able to distinguish if the problem is a bug within the device or due to the lack of expressiveness in the environment model. 
 
-\section{Testing vs Verification}
+%\section{Testing vs Verification}
+%
+%\newcommand{\ub}{\bar{u}}
+%\newcommand{\yb}{\bar{y}}
+%
+%\emph{\textbf{Testing}} is a method for checking that a system does indeed obey its specification. 
+%In testing, an algorithm will do the following:
+%\begin{itemize}
+	%\item Initialize the system to some initial state $x_0$ in $X_0$.
+	%E.g., for a pacemaker device, this would describe the initial values for the various refractory periods, among other things.
+	%\item Generate sequences of input strings $\bar{u}_k$ from some set $A$, in reaction to which the system will produce output strings $\bar{y}_k$,
+	%\item A \emph{monitor} logs the output strings and determines whether the pair $(\bar{u}_k,\bar{y}_k)$ satisfies the specification or not.	
+%\end{itemize}
+%
+%Because the set of valid initial states $X_0$ and the set of valid input strings $A$ may be infinite (or simply too large), the test bench must decide on how to intelligently choose a \emph{finite} number of $(x_0,\ub)$.
+%They must be chosen such that if the system does not produce wrong behavior with these pairs, then it is unlikely to produce errors under the \emph{full} valid set of pairs, namely, $X_0 \times A$.
+%This is the main challenge of testing: how to sample an infinite or large set of behaviors such that it is representative (in the above sense) of the full set of behaviors that $S$ is capable of?
+%Another important issue in testing is for how long to test the system: i.e. what should be the length of the $k^{th}$ string $\ub_k$? 
+%E.g., if $\ub_k$ has length 1000, the bug might manifest itself on $y_1\ldots y_{1001}$, but not $y_1\ldots y_{1000}$.
+%
+%Regardless of the testing algorithm, testing remains incomplete, in the sense that short of testing every possible behavior, bugs may lie hidden in the behavior that we did not witness.
+%
+%\emph{\textbf{Verification}} refers to formal verification.
+%It is applicable to finite state systems\footnote{Some infinite-state systems can be formally verified after an abstraction process which essentially produces an equivalent system that has finitely many states.}, 
+%and requires formal semantics for the system's operation. 
+%Roughly, this means we must have a mathematical unambiguous definition of how the system produces its output.
+%A verification algorithm, or \emph{model checker}, will explore the \emph{entire finite state-space} of the system in a systematic manner. 
+%Intuitively, if the entire state-space has been explored in all possible ways, and no incorrect behavior has been displayed, then the system is correct. 
+%Thus, verification is inherently \emph{complete}: if the model checker determines that the system is correct (under the conditions $A$ and $X_0$), then we can rest assured that is indeed the case.
+%Unlike testing, there is no question of whether we missed (didn't run) an initial condition that can display a bug.
+%There is also no question of test duration.
+%However in practice, some bound on the duration of the verification must be placed to avoid excessively long runs. 
+%If the model checker can't determine correctness in that time bound, then the verification is inconclusive.
+%
+%Verification is computationally expensive and usually more burdensome to setup, but comes with a guarantee on the answer. 
+%Testing is computationally cheaper and less burdensome to setup, but the guarantees it provides are significantly weaker.
+%Testing, on the other hand, may be the only option for some complex systems that are beyond the capacity of today's model checkers, or which do not possess formal semantics.
+%
+%In this chapter we cover formal verification of the closed-loop system and address testing in the following chapter.
+\section{Risk Analysis for Implantable Pacemaker}
 
-\newcommand{\ub}{\bar{u}}
-\newcommand{\yb}{\bar{y}}
-
-\emph{\textbf{Testing}} is a method for checking that a system does indeed obey its specification. 
-In testing, an algorithm will do the following:
-\begin{itemize}
-	\item Initialize the system to some initial state $x_0$ in $X_0$.
-	E.g., for a pacemaker device, this would describe the initial values for the various refractory periods, among other things.
-	\item Generate sequences of input strings $\bar{u}_k$ from some set $A$, in reaction to which the system will produce output strings $\bar{y}_k$,
-	\item A \emph{monitor} logs the output strings and determines whether the pair $(\bar{u}_k,\bar{y}_k)$ satisfies the specification or not.	
-\end{itemize}
-
-Because the set of valid initial states $X_0$ and the set of valid input strings $A$ may be infinite (or simply too large), the test bench must decide on how to intelligently choose a \emph{finite} number of $(x_0,\ub)$.
-They must be chosen such that if the system does not produce wrong behavior with these pairs, then it is unlikely to produce errors under the \emph{full} valid set of pairs, namely, $X_0 \times A$.
-This is the main challenge of testing: how to sample an infinite or large set of behaviors such that it is representative (in the above sense) of the full set of behaviors that $S$ is capable of?
-Another important issue in testing is for how long to test the system: i.e. what should be the length of the $k^{th}$ string $\ub_k$? 
-E.g., if $\ub_k$ has length 1000, the bug might manifest itself on $y_1\ldots y_{1001}$, but not $y_1\ldots y_{1000}$.
-
-Regardless of the testing algorithm, testing remains incomplete, in the sense that short of testing every possible behavior, bugs may lie hidden in the behavior that we did not witness.
-
-\emph{\textbf{Verification}} refers to formal verification.
-It is applicable to finite state systems\footnote{Some infinite-state systems can be formally verified after an abstraction process which essentially produces an equivalent system that has finitely many states.}, 
-and requires formal semantics for the system's operation. 
-Roughly, this means we must have a mathematical unambiguous definition of how the system produces its output.
-A verification algorithm, or \emph{model checker}, will explore the \emph{entire finite state-space} of the system in a systematic manner. 
-Intuitively, if the entire state-space has been explored in all possible ways, and no incorrect behavior has been displayed, then the system is correct. 
-Thus, verification is inherently \emph{complete}: if the model checker determines that the system is correct (under the conditions $A$ and $X_0$), then we can rest assured that is indeed the case.
-Unlike testing, there is no question of whether we missed (didn't run) an initial condition that can display a bug.
-There is also no question of test duration.
-However in practice, some bound on the duration of the verification must be placed to avoid excessively long runs. 
-If the model checker can't determine correctness in that time bound, then the verification is inconclusive.
-
-Verification is computationally expensive and usually more burdensome to setup, but comes with a guarantee on the answer. 
-Testing is computationally cheaper and less burdensome to setup, but the guarantees it provides are significantly weaker.
-Testing, on the other hand, may be the only option for some complex systems that are beyond the capacity of today's model checkers, or which do not possess formal semantics.
-
-In this chapter we cover formal verification of the closed-loop system and address testing in the following chapter.
-
+\begin{figure}[!t]
+		\centering
+		\includegraphics[width=0.9\textwidth]{figs/risk_requirements.pdf}
+		\caption{\small }
+		  %\vspace{-15pt}
+		\label{fig:risk_req}
+\end{figure}
 \section{Reachability of Unsafe Regions for Basic Pacemaker Function}
 The basic function of a pacemaker is to increase heart rate when necessary. As the result, we not only want to verify that the heart rate has been increased accordingly, but also ensure the pacemaker does not increase the heart rate too much. Since these requirements should hold for all possible heart conditions, the most abstract heart model $e$ is selected from Fig. 	\ref{fig:HM_abs} as the environment model. The following two requirements specify the unsafe regions  (too fast and too slow) within the closed-loop state space.
 

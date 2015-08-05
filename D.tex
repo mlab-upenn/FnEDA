@@ -49,8 +49,9 @@ We use pacemaker as example to demonstrate how to convert physiological descript
 	\vspace{-10pt}	
 	\label{fig:state}
 \end{figure}
+
 \noindent
-\\\textbf{2. Conditional Requirements:} Physiological requirements are in general conditional requirements. Specifying conditional requirements enables tighter constraints on the closed-loop system. \figref{conditional} shows a list of conditional requirements for normal sinus rhythm (NSR), supraventricular tachycardia (SVT), and bradycardia used during the pacemaker case study. 
+\textbf{2. Conditional Requirements:} Physiological requirements are in general conditional requirements. Specifying conditional requirements enables tighter constraints on the closed-loop system. \figref{conditional} shows a list of conditional requirements for normal sinus rhythm (NSR), supraventricular tachycardia (SVT), and bradycardia used during the pacemaker case study. 
 \begin{figure}
 	\center
 	\includegraphics[width=0.7\textwidth]{figs/conditional.pdf}
@@ -69,8 +70,9 @@ We use pacemaker as example to demonstrate how to convert physiological descript
 		%\vspace{-15pt}
 	\label{fig:properties}
 \end{figure}
+
 \noindent
-\\\textbf{3. Requirement Hierarchy}
+\textbf{3. Requirement Hierarchy}
 For a closed-loop system including a heart $H$ and a pacemaker $P$: $S=H || P$ and two requirements $\varphi_1$ and $\varphi_2$ such that $\mathbb{P}_{\varphi_1}<\mathbb{P}_{\varphi_2}$, the following statement should always hold:
 \vspace{-5pt}
 $$H\models\varphi_2\rightarrow H||P\models\varphi_2$$
