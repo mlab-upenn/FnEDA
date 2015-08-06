@@ -29,7 +29,7 @@ Before we get into the details of heart modeling, we use this small section to i
 The heart is the "motor" for blood circulation within our body. The heart has two ventricles which pumps the blood out of the heart, and two atria which gather blood from the body and pump them into the ventricles. (\figref{circulation}.(a)) There are two circulations through the heart: the \emph{Pulmonary circulation} and the \emph{Stemic circulation}. In the pulmonary circulation, the right atrium collects oxygen-depleted blood from all over the body and pump them into the right ventricle. The right ventricle then pumps low-oxygen blood to the lungs. The blood gets oxygenated in the lungs and gathers into the left ventricle. In the stemic circulation, the oxygenated blood in the left atrium is pumped into the left ventricle. The left ventricle pumps the blood to the rest of the body and the heart itself. After the body extract the oxygen from the blood and dumped the CO2 the oxygen-depleted blood then flow back to the right atrium.
 \begin{figure}[!t]
 \centering
-		\includegraphics[width=1.1\textwidth]{figs/circulation.pdf}
+		\includegraphics[width=0.9\textwidth]{figs/circulation.pdf}
 		
 %\vspace{-10pt}
 \caption{\small }
@@ -59,7 +59,7 @@ The implantable cardiac pacemakers are rhythm management devices designed to tre
 
 \begin{figure}[!t]
 \centering
-		\includegraphics[width=1.1\textwidth]{figs/models.pdf}
+		\includegraphics[width=0.9\textwidth]{figs/models.pdf}
 		
 %\vspace{-10pt}
 \caption{\small }
@@ -259,15 +259,7 @@ During closed-loop model checking, the whole closed-loop state space of the devi
 \textbf{Information Loss During Abstraction: }While over-approximation achieves simplicity and coverage, it also inevitably introduces invalid behaviors (e.g. not clinically feasible or relevant) into the model which can cause false-negatives and false-positives during model checking. To solve this problem, refined models of the heart should be available which can resolve spurious counterexamples and eliminate invalid executions when necessary to avoid false-positives.
 
 The most challenging aspect during closed-loop model checking is the abstraction and refinement of the environment model. In \cite{STTT13} we developed a series of heart model abstractions at various abstraction levels. The models are abstracted using abstraction rules derived from physiological knowledge, thus ensuring that each abstraction step covers more physiological conditions. The models in adjacent abstraction levels also satisfy \textsf{timed-simulation} relationship (\cite{simulation}) to ensure complete coverage in the more abstract model. In the remainder of this section, we briefly discuss this multi-scale modeling process and the domain knowledge used. The detailed abstraction and proof for simulation relationship can be found in \cite{STTT13}.
-\begin{figure}[!t]
-\center
-%\vspace{-10pt}
-\includegraphics[width=0.9\textwidth]{figs/Heart_abs.pdf}
-%\vspace{-10pt}
-\caption{(a) Electrical voltage change measured on the heart tissue and its adjacent tissue region (dotted) upon activation. The whole process is divided into timing periods with different behaviors. (b) The original tissue model which captures the refactory timing behaviors of the heart tissue. (c) The conduction property is separated to the path automaton and the heart can be modeled as conduction network. (d) Equivalent locations are merged. (e) The blocking property of the ERP location is replaced by a non-deterministic conduction in the path automaton. (f) Conduction between nodes are replaced by self-activations of the nodes. (\cite{STTT13})}
-\label{fig:HM_abs}
-%\vspace{-10pt}
-\end{figure} 
+
 \subsection{Timed Automata and Timed Simulation}
 Timed automata \cite{timed_automata} are an extension of a finite automaton with a finite set of real-valued clocks. It has been used for modeling and verifying systems which are triggered by events and have timing constraints between events.  UPPAAL is a standard tool for modeling and verification of real-time systems, based on networks of timed automata. The graphical and text-based interface makes modeling more intuitive. Requirements can be specified using Computational Tree Logic (CTL) \cite{Clarke} and violations can be visualized in the simulation environment.
 \subsubsection{Syntax of Timed Automata}
@@ -303,7 +295,15 @@ Certain properties are preserved for timed simulation relation. For $\varphi\in 
 It is known that timed simulation relation is also closed under composition \cite{simulation}. So when we have two heart models $H_1\preceq_t H_2$ we will have $H_1\| P\preceq_t H_2\| P$ where $P$ is the timed-automata model of the pacemaker. For $\varphi\in ATCTL$, we have $H_2\| P\models\varphi\Rightarrow H_1\| P\models\varphi$. With this property we can verify the pacemaker model with abstract heart model. In the rest of the section, we will describe how we develop our initial heart model from the physiological perspective and abstract the model step by step so that the complexity of the model is reduced for verification. Given two heart models $H_1$, $H_2$ and a timed simulation mapping \textsf{sim}=$\Omega_1\times\Omega_2$, there are no automated methods to check $H_1\preceq_t H_2$. In the Appendix, we show the manual proof for the timed simulation relation between two heart models $H_2$ and $H_3$. Other timed simulation relations can be proved similarly.
 \subsection{Abstraction 0: Initial Abstraction}
 For the initial heart model, we assume the heart tissue is modeled with all its spatial detail. For the temporal aspect, we model each tissue region as an automaton $N0$ shown in \figref{HM_abs}(b). The beat-to-beat dynamics of heart tissue, modeled by the deterministic model, is abstracted using non-determinism. For example, the ERP period and conduction delay of the tissue are non-deterministically chosen from ranges instead of deterministic functions. The whole heart can be modeled by composing tissue models with different parameters $H_0=N_0^1\|N_0^2\cdots N_0^n$. However, for a real heart, the number $n$ is very large and the connectivity and parameter values are difficult, and perhaps impossible, to determine, which makes verification with $H_0$ infeasible. 
-
+\begin{figure}[!t]
+\center
+%\vspace{-10pt}
+\includegraphics[width=0.9\textwidth]{figs/Heart_abs.pdf}
+%\vspace{-10pt}
+\caption{(a) Electrical voltage change measured on the heart tissue and its adjacent tissue region (dotted) upon activation. The whole process is divided into timing periods with different behaviors. (b) The original tissue model which captures the refactory timing behaviors of the heart tissue. (c) The conduction property is separated to the path automaton and the heart can be modeled as conduction network. (d) Equivalent locations are merged. (e) The blocking property of the ERP location is replaced by a non-deterministic conduction in the path automaton. (f) Conduction between nodes are replaced by self-activations of the nodes. (\cite{STTT13})}
+\label{fig:HM_abs}
+%\vspace{-10pt}
+\end{figure} 
 \subsection{Abstraction 1: Abstract Conduction Delays With Paths}
 At the first abstraction step, we separate the conduction delay (modeled by the \emph{cond} state in $N0$) from the new node automata $N1$ and model the conduction between two nodes using path automaton $P1$. Since the beat-to-beat dynamics are abstracted with non-determinism, the RRP state is merged with the Rest state in $N1$. The procedure gives us the intuition to abstract the heart as a conduction network as shown in \figref{HM_abs} (c). 
 
