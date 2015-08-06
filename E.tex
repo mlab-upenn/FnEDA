@@ -225,7 +225,7 @@ We require that a ventricle pace (VP) can only occur at least $TURI$ after a ven
 $\varphi_{URI}=$\textsf{A[] (PURI\_test.secV imply PURI\_test.t$\geq$TURI)} \\
 we have $H_4\| P\| PURI\_test\models \varphi_{URI}$.
 
-\section{Model Checking the Mode-Switch Algorithm}
+\section{Evaluate the Mitigation}
 As described in Chapter \ref{Mode_switch}, the mode switch algorithm has been designed to mitigate the hazard that the A-V synchrony function of DDD pacemaker extends fast
 atrial rate to the ventricle. It is important to ensure the effectiveness of the algorithm without inducing other top-level hazards. In this section we first show the existence of the hazard in a pacemaker without the mode-switch algorithm. If the algorithm if effective the hazard will not exist after introducing the algorithm.
 \subsection{Existence of Pacemaker Mediated Tachycardia during SVT}
@@ -386,3 +386,5 @@ Despite the filters in the pacemaker, the pacemaker still paces the ventricle fo
 This scenario is referred to as Atrial Tachycardia Response of a pacemaker. 
 
 From the analysis, pacemaker operations in $CE_{pvc}$ and $CE_{af}$ must be revised. However, the revision should not affect the behavior in $CE_{n}$. This example demonstrates that counter-examples from refined models provide more physiological context of the requirement violations, and distinguish the physiological conditions that can trigger the violations. The information is helpful for debugging and improving the algorithm. The physicians can also improve the physiological requirement so that these heart conditions can be then considered case by case.
+\section{Conclusion}
+
