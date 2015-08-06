@@ -113,35 +113,35 @@ In each component two copies for both modes are modeled, and switch between each
 
 \chapter{Closed-loop Model Checking}
 \label{ModelChecking}
-There are two categories of device bugs: 
-1) the device may fail to conform to its \emph{specifications}, that is, the prescription of how it should react to certain inputs.  
-2) the device may fail to improve the conditions of the patient as promised, even if it conforms to its specifications. 
-The desired physiological conditions that the closed-loop system should achieve are captured in the \emph{physiological requirements}; for example, for a pacemaker, the heart rate should always be maintained above a certain threshold. 
+%There are two categories of device bugs: 
+%1) the device may fail to conform to its \emph{specifications}, that is, the prescription of how it should react to certain inputs.  
+%2) the device may fail to improve the conditions of the patient as promised, even if it conforms to its specifications. 
+%The desired physiological conditions that the closed-loop system should achieve are captured in the \emph{physiological requirements}; for example, for a pacemaker, the heart rate should always be maintained above a certain threshold. 
+%
+%Bugs in the first category (non-conformance to specification) can be detected via systematic and extensive open-loop testing in which a set of input sequences is fed to the device, and its output is compared with the expected output.
+%Bugs in the second category (violation of physiological requirements), on the other hand, require the interaction within the \emph{closed-loop system}, which consists of the device and its environment.
+%For instance, the pacemaker and the heart as its environment. 
+%In the medical device industry, closed-loop verification of the physiological requirements is mostly performed in terms of clinical trials, in which the actual devices are implanted in human subjects over an extended duration.
+%Unfortunately, because of the extremely high cost of clinical trials (several million dollars and spanning several years,~\cite{trialcost}), the amount and variety of human subjects during the clinical trials are limited, which reduces the opportunity to find bugs. 
+%Moreover, clinical trials are often conducted at the final design stage. Fixing bugs at this stage is very costly.
 
-Bugs in the first category (non-conformance to specification) can be detected via systematic and extensive open-loop testing in which a set of input sequences is fed to the device, and its output is compared with the expected output.
-Bugs in the second category (violation of physiological requirements), on the other hand, require the interaction within the \emph{closed-loop system}, which consists of the device and its environment.
-For instance, the pacemaker and the heart as its environment. 
-In the medical device industry, closed-loop verification of the physiological requirements is mostly performed in terms of clinical trials, in which the actual devices are implanted in human subjects over an extended duration.
-Unfortunately, because of the extremely high cost of clinical trials (several million dollars and spanning several years,~\cite{trialcost}), the amount and variety of human subjects during the clinical trials are limited, which reduces the opportunity to find bugs. 
-Moreover, clinical trials are often conducted at the final design stage. Fixing bugs at this stage is very costly.
+Model checking is a technique that the state space (time-bounded or unbounded) of the model under investigation is explored by model checkers to identify executions or states that violate specified properties. Violations of the properties are returned by the model checkers as \emph{counter-examples}, which can be used by designers to revise the design. In the application of closed-loop model checking of closed-loop medical devices like implantable pacemaker, model checking can be used to identify known and unknown mechanisms for inducing hazards, by checking the closed-loop models against physiological hazards. Due to the large computational cost, there are usually restrictions on the formalism and/or the complexity of the models under investigation. Using abstract models of the actual system adds the responsibility of proving the conformance between the abstract model and the real system. Assumptions made during abstractions may also introduce false-positives and/or false-negatives into the model checking results. In Chapter 2 we introduced a set of heart models with different abstraction levels, that can be used to cover behaviors of physiological conditions using non-determinism. In Chapter 4 we modeled a dual chamber pacemaker algorithm using timed-automata without doing abstractions. In this chapter we use model checker UPPAAL to evaluate the pacemaker model against safety properties under different heart conditions captured by the heart models. Techniques to eliminate false-positives by refining the heart models are also discussed. We will try to answer the following questions:
 
-Closed-loop model checking enables closed-loop evaluation of the physiological requirements at an earlier design stage, which requires formal model(s) of the physiological environment. In this chapter we will answer the following questions:
+%            \item What are the effects of adding new features to the software? Can they disrupt the safety properties that the previous device hold?
+
+%In closed-loop model checking, there is only one device model. 
+%However there can be a large number of environmental conditions which require different models to represent them. For instance, a heart with atrial flutter has an additional conduction pathway, causing fast atrial rate, that is not present in a healthy heart. The timing and structural differences of different heart conditions should be distinguished in corresponding heart models.
+%%\todo[inline]{should we give an example of a heart condition?}
+%A set of initial models of the environment can be constructed, but the set is inherently incomplete because of the large number of environment conditions and their combinations. 
+%As a result, performing model checking using every model in the set cannot ensure full coverage of the environmental conditions. In the following sections, we will investigate how as we go from basic to more complex requirements, we require more sophisticated approaches to generate and navigate through a variety of environment models. We introduce the concept of an \emph{Abstraction Tree} to systematically encode requirements and choose the appropriate heart models for the requirement. By analyzing the concrete counter-examples we are able to distinguish if the problem is a bug within the device or due to the lack of expressiveness in the environment model. 
 \begin{itemize}	
 \vspace{-5pt}
 	\item How do model checking results fit into the regulation framework?
 	\vspace{-5pt}
 	\item How do we find the appropriate abstraction level of the environment model for each physiological requirement?
         \vspace{-5pt}
-        \item Exploring the whole state space sounds great. What are the limitations of model checking? 
+        \item How to interpret abstract counter-examples returned by model checker?
 \end{itemize}
-%            \item What are the effects of adding new features to the software? Can they disrupt the safety properties that the previous device hold?
-
-In closed-loop model checking, there is only one device model. 
-However there can be a large number of environmental conditions which require different models to represent them. For instance, a heart with atrial flutter has an additional conduction pathway, causing fast atrial rate, that is not present in a healthy heart. The timing and structural differences of different heart conditions should be distinguished in corresponding heart models.
-%\todo[inline]{should we give an example of a heart condition?}
-A set of initial models of the environment can be constructed, but the set is inherently incomplete because of the large number of environment conditions and their combinations. 
-As a result, performing model checking using every model in the set cannot ensure full coverage of the environmental conditions. In the following sections, we will investigate how as we go from basic to more complex requirements, we require more sophisticated approaches to generate and navigate through a variety of environment models. We introduce the concept of an \emph{Abstraction Tree} to systematically encode requirements and choose the appropriate heart models for the requirement. By analyzing the concrete counter-examples we are able to distinguish if the problem is a bug within the device or due to the lack of expressiveness in the environment model. 
-
 %\section{Testing vs Verification}
 %
 %\newcommand{\ub}{\bar{u}}
@@ -267,7 +267,7 @@ After implementing the mode-switch algorithm, we verified the model against the 
 \vspace{-20pt}
 \end{figure} 
 \section{Abstraction Tree for Environment Modeling}
-In the previous two sections, model abstractions and selections are performed manually, which require knowledge of both Electrophysiology and model checking. 
+In the previous two sections, abstractions and selections of the heart models are performed manually, which require knowledge of both Electrophysiology and model checking. 
 Counter-examples returned from abstract models can be difficult to interpret by domain experts.
 One abstract counter-example could be produced by multiple physiologically valid conditions, which causes ambiguity.
 Thus, a rigorous framework is necessary to balance the need to cover a wide range of environmental conditions and the need to provide counter-examples to the physicians within their physiological context. The framework must also allow non-domain experts to perform verification, and establish `hand-off' points where the results of verification can be handed back 
@@ -387,4 +387,5 @@ This scenario is referred to as Atrial Tachycardia Response of a pacemaker.
 
 From the analysis, pacemaker operations in $CE_{pvc}$ and $CE_{af}$ must be revised. However, the revision should not affect the behavior in $CE_{n}$. This example demonstrates that counter-examples from refined models provide more physiological context of the requirement violations, and distinguish the physiological conditions that can trigger the violations. The information is helpful for debugging and improving the algorithm. The physicians can also improve the physiological requirement so that these heart conditions can be then considered case by case.
 \section{Conclusion}
-
+Model checking is not widely use in industry due to scalability issues. However, with rigorous abstraction of the system and its environment, model checking can be used to identify 
+known and even unknown mechanisms to induce hazards. In this chapter we use a model of a dual chamber pacemaker as an example to demonstrate the use of model checking during risk analysis. During the process we identified the need to refine the heart models to eliminate false-positives introduced during the abstraction, and demonstrated the difficulty to do so manually. The abstraction tree approach is then proposed to reduce the effort needed for both the developers and the domain experts, which makes model checking a viable approach for providing safety and effectiveness evidence. 
