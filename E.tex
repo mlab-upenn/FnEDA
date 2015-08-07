@@ -347,7 +347,7 @@ thus these three heart models are output as the most abstract models that are ap
 \subsection*{Step 4: Return the most Concrete Counter-Examples}
 After the appropriate models for $Req1$ are selected, we have the initial set
 $HM=\{H_n'',H_{at}'''',H_{vt}'''\}$.
-Then we run Algorithm 2. By model checking on all 3 initial models in UPPAAL we have: 
+By model checking on all 3 initial models in UPPAAL we have: 
 $$H_n''||PM\not\models Req1;\; H_{at}''''||PM\not\models Req1;\; H_{vt}'''||PM\not\models Req1$$
 %$$[1,[]]=ModelChecking(H_n'',PM,Req1)$$
  %$$[0,CE_1]=ModelChecking(H_{at}'''',PM,Req1)$$
@@ -377,7 +377,7 @@ Counter-example $CE_{n}$ is returned by $H_n$ and none of its children models vi
 %\hatodo{is it TAVI or AVI like in the previous seciton?}
 
 %\hatodoin{Do you mean that $CE_{at}$ is not a bug? Does this mean that the requirement may be violated in ways that are not dangerous?}
-Counter-example $CE_{pvc}$ has a very similar execution to $CE_{n}$. However, the activations of the atrial node are triggered by retrograde conduction from ventricular paces (marker \textsf{cond}). The atrial activations trigger another ventricular pace after $AVI$, which will trigger another retrograde conduction. In this case, the heart rate is inappropriately high, which corresponds to a dangerous closed-loop behavior referred to as \emph{Endless Loop Tachycardia}.
+Counter-example $CE_{pvc}$ has a very similar execution to $CE_{n}$. However, the activations of the atrial node are triggered by retrograde conduction from ventricle to the atrium initialized by ventricular paces (marker \textsf{cond}). The atrial activations trigger another ventricular pace after $AVI$, which will trigger another retrograde conduction. In this case, the heart rate is inappropriately high, which corresponds to a dangerous closed-loop behavior referred to as \emph{Endless Loop Tachycardia}.
 
 In counter-example $CE_{af}$, the atrial rate is very high, which is also a sub-optimal but not dangerous heart condition. 
 However, the ventricular rate can stay normal due to the blocking property of the AV node. 
