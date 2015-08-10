@@ -60,3 +60,7 @@ main.pdf
 *.log
 
 *.gz(busy)
+*.aux
+*.bbl
+IEEE/IEEE/IEEE.pdf
+IEEE/IEEE.pdf
