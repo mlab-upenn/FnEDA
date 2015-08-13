@@ -32,7 +32,7 @@ The heart is the "motor" for blood circulation within our body. The heart has tw
 		\includegraphics[width=0.9\textwidth]{figs/circulation.pdf}
 		
 %\vspace{-10pt}
-\caption{\small }
+\caption{\small (a) The circulation system. (b) Electrical Conduction system of the heart}
 \label{fig:circulation}
 %\vspace{-15pt}
 \end{figure} 
@@ -62,7 +62,7 @@ The implantable cardiac pacemakers are rhythm management devices designed to tre
 		\includegraphics[width=0.9\textwidth]{figs/models.pdf}
 		
 %\vspace{-10pt}
-\caption{\small }
+\caption{\small Physiological models of the heart from different perspectives}
 \label{fig:models}
 %\vspace{-15pt}
 \end{figure} 
@@ -222,7 +222,7 @@ In EP testing and during pacemaker implantation, the local electrical activities
 \subsection{Heart-on-a-Chip Platform}
 Platform testing remains the primary means to verify and validate device software. Currently testing is done by feeding recorded open-loop heart signals to the device and evaluating the device output. However, the change in the state of the heart condition, in response to device output, is not taken into account. Thus, device malfunctions involving state changes due to multiple closed-loop interactions will not be captured during open-loop testing. 
 
-Consequently, the heart models are also implemented on hardware platform (\figref{modeling_heart}) for closed-loop testing. The platform includes a heart model on an FPGA  platform which is able to represent common heart conditions such as bradycardia, tachycardia, heart block, etc (for mode details refer to \cite{VHM_proc}). The parameters of the heart model can be changed at run-time by either switching among pre-defined parameter sets, or sending values directly to the model through a user interface in Matlab. A monitoring system observes logical interactions between heart model and the pacemaker and checks them against safety invariants at run-time. The rationale for using FPGA 
+Consequently, the heart models are also implemented on hardware platform (\figref{modeling_heart}) for closed-loop testing. Since each heart model is a network of node and path automata running concurrently, we implemented the heart model on FPGA, so that increasing in the number of nodes and paths would not affect real-time constraints. The second generation heart model implementation will be on a fast micro-controller platform. The fast clock ensures that executions of all nodes and paths can be finished within 1 msec. The Heart-on-a-Chip platform includes a heart model implementation which is able to represent common heart conditions such as bradycardia, tachycardia, heart block, etc (for mode details refer to \cite{VHM_proc}). The parameters of the heart model can be changed at run-time by either switching among pre-defined parameter sets, or sending values directly to the model through a user interface in Matlab. A monitoring system observes logical interactions between heart model and the pacemaker and checks them against safety invariants at run-time. 
 
 As shown in (\figref{HOC}), with an analog interface the heart model can interact with a commercial pacemaker in real time. Our analog interface uses an optical isolation circuit to separate the pacemaker circuit and the heart implementation. Signals generated form the heart are attenuated to the appropriate level to interact wit the Boston Scientific pacemaker and analog pacing signals are converted to pacing events received by the heart model. 
 \begin{figure}[!t]
