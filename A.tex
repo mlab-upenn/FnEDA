@@ -20,11 +20,11 @@ In general, medical devices are categorized according to their risk factors - Cl
 \section{Closing the Device-Patient Loop}
 Medical devices operate across a range of invasiveness and intervention with the patient in the loop. For diagnostic-only devices, e.g. an X-ray machine, the physician operates the device to obtain patient data, perform diagnosis and deliver proper therapy to the patient (\figref{closed-loop}.(a)). For therapy-only devices, e.g. a drug infusion pump, the physician configures the device infrequently based on prior diagnosis of the patient so the device executes the therapy on the patient (\figref{closed-loop}.(b)). We denote these devices as \textbf{Open-loop Medical Devices} as there is no direct feedback between the patient and the device. For open-loop devices, the device operates under the supervision of professionally-trained physicians. The device's safety is determined by how accurately it provides information to the physicians and its faithful operation as instructed by the physicians.
 
-There is a class of devices with both diagnostic and therapeutic functions, i.e. implantable cardiac devices to treat cardiac arrhythmia, deep brain stimulation devices (\cite{Brain_sti}) to treat Parkinson's disease and artificial pancreas to treat Type 1 diabetes\footnote{The artificial pancreas is still under development by \cite{}}. These devices capture and diagnose the patient's physiological conditions from sensory data, and deliver therapy in response (\figref{closed-loop}.(c)). These devices usually operate (semi-) autonomously with very little human intervention, thus malfunctions or inappropriate therapies from these devices cannot be corrected timely, which can cause serious adverse effects on patients' health. Therefore these devices are usually classified into the highest risk category and undergo the most stringent regulation. We denote them as \textbf{Closed-loop Medical Devices}. 
+There is a class of devices with both diagnostic and therapeutic functions, i.e. implantable cardiac devices to treat cardiac arrhythmia, deep brain stimulation devices (\cite{Brain_sti}) to treat Parkinson's disease and artificial pancreas to treat Type 1 diabetes. These devices capture and diagnose the patient's physiological conditions from sensory data, and deliver therapy in response (\figref{closed-loop}.(c)). These devices usually operate (semi-) autonomously with very little human intervention, thus malfunctions or inappropriate therapies from these devices cannot be corrected timely, which can cause serious adverse effects on patients' health. Therefore these devices are usually classified into the highest risk category and undergo the most stringent regulation. We denote them as \textbf{Closed-loop Medical Devices}. 
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=\textwidth]{figs/closed-loop.pdf}
-		\caption{\small Closing the Loop With the Patient}
+		\caption{\small Diagnostic-only and therapy-only devices do not interact with the patient in direct closed-loop. The physician is responsible for the diagnostic and/or therapeutic decisions. However in closed-loop medical devices, the devices interact with the patient in closed-loop and have to make therapeutic decisions based on their own diagnosis.}
 		\label{fig:closed-loop}
 \end{figure}
 There are multiple challenges to develop safe and effective closed-loop medical devices:
@@ -40,16 +40,16 @@ One fundamental rationale behind closed-loop medical devices is to enable the pa
 \subsection{Software-related Medical Device Recalls}
 Due to the complexity of the diagnostic and therapeutic functions of the closed-loop devices, these functions are mostly controlled by their software components. 
 Software embedded in a medical device, unlike electrical and mechanical components, does not fail due to corrosion, fatigue or have statistical failures of subcomponents. Software failures are uniquely sourced in the design and development of the system. %Unlike other industries such as consumer electronics where product life cycles are measured in months, software engineering for medical devices often spans a decade and must prioritize safety and efficacy over time to market. 
+%\begin{figure}[t]
+		%\centering
+		%\includegraphics[width=0.8\textwidth]{figs/recalls.jpg}
+		%\caption{\small Medical device recalls have risen over the past decade}
+		%\label{fig:recalls}
+%\end{figure}
 \begin{figure}[t]
 		\centering
-		\includegraphics[width=0.8\textwidth]{figs/recalls.jpg}
-		\caption{\small Medical device recalls have risen over the past decade}
-		\label{fig:recalls}
-\end{figure}
-\begin{figure}[t]
-		\centering
-		\includegraphics[width=0.8\textwidth]{figs/soft_recalls.jpg}
-		\caption{\small Medical device recalls due to software issues have risen from 10\% in the 1990s to \~15\% in the past decade}
+		\includegraphics[width=0.8\textwidth]{figs/recalls.pdf}
+		\caption{\small Medical device recalls due to software issues have risen from 10\% in the 1990s to \~15\% in the past decade (\cite{recall_rep})}
 		\label{fig:soft_recalls}
 \end{figure}
 %  Over the course of the past four decades, cardiac rhythm management devices such as pacemakers and implantable cardioverter defibrillators (ICD) have grown in complexity and now have more than 80,000 to 100,000 lines of code (\cite{pauljones}). 
@@ -62,7 +62,7 @@ In safety-critical industries such as automotive electronics, avionics and nucle
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=0.6\textwidth]{figs/stardards.pdf}
-		\caption{\small International standards for medical device safety}
+		\caption{\small International standards for medical device safety. These standards define the required activities during the development process.}
 		\label{fig:standards}
 \end{figure}
 
@@ -77,7 +77,7 @@ While the above standards and several others provide guidelines to ensuring soft
 \begin{figure}[t]
 		\centering
 		\includegraphics[width=\textwidth]{figs/fta_new.pdf}
-		\caption{\small Fault Tree Analys (FTA) Examples. (a) FTA for a hazard for a car; (b) FTA for a hazard in implantable pacemaker}
+		\caption{\small Fault Tree Analysis (FTA) Examples. (a) FTA for a hazard for a car; (b) FTA for a hazard in implantable pacemaker. The dashed line shows two mechanisms that were not identified during hazard analysis but discovered in post-market studies.}
 		\label{fig:risks}
 \end{figure}
 \subsection{Risk Management Challenges of Closed-loop Systems}
@@ -151,8 +151,14 @@ Regardless of how rigorous the risk management and the device development proces
 %Formal methods have traditionally been used for verification of time-critical and safety-critical embedded systems \cite{form-meth}. Until recently, these methods have not been used for medical device certification. \cite{med-form3} presented the use of Extended Finite State Machines for model checking of a resuscitation device. Formal techniques have also been applied to improve medical device protocols (\cite{med-form2}) and safety (\cite{med-form1}), but the authors either used a simplified patient model or did not model the patient at all. 
 \section{Model-based design to improve medical device safety}
 With the deluge of software-based closed-loop medical devices in the coming years, relying on clinical trials as the only closed-loop evaluation method to identify risks is not scalable. Model-based design and virtual integration have been proposed and applied in other industries like automotive and avionics (\cite{autosar, avsi}), and can potentially help during the development process and provide extra confidence to the device before conducting clinical trials. However, unlike man-made systems like automobiles and aircrafts, physiological systems are less understood with larger variations. The lack of faithful models of physiological environment of the closed-loop medical devices is one of the reason that model-based design is not well-adopted in the medical device industry. 
+\begin{figure}[t]
+		\centering
+		\includegraphics[width=\textwidth]{figs/MDIC.pdf}
+		\caption{\small Percentage of computer simulation is expected to increase as safety and effectiveness evidence of medical devices}
+		\label{fig:MDIC}
+\end{figure}
 
-As computational models of human physiology are developed, they enable the translation of verified models to verified code for medical devices. The FDA is starting to recognize in silico modeling and simulation as regulatory-grade evidence for device safety and efficacy. For example, \cite{pancreas_paul} developed glucose-insulin models that can be used to evaluate control algorithms for artificial pancreas devices which can sense blood glucose and deliver insulin. Simulation results with the models have been recognized by FDA to replace animal trials, in part, which significantly reduced cost (\cite{pancreas}).
+As computational models of human physiology are developed, they can be used to interact with closed-loop medical devices or their models. The FDA is starting to recognize in silico modeling and simulation as regulatory-grade evidence for device safety and efficacy. For example, \cite{pancreas_paul} developed glucose-insulin models that can be used to evaluate control algorithms for artificial pancreas devices which can sense blood glucose and deliver insulin. Simulation results with the models have been recognized by FDA to replace animal trials, in part, which significantly reduced cost (\cite{pancreas}). With the increasing interest and recognition from the regulators, computer simulations are expected to play bigger role as safety and effectiveness evidence in the development of future closed-loop medical devices (\figref{MDIC}).
 
 \section{Contributions}
 In this article, we use an implantable cardiac pacemaker as a working example to demonstrate how model-based design can help improve the safety and efficacy medical device software. We demonstrate the application of model-based design in several design activities during the development process, from the perspective of the manufacturer's design validation team. We assume availability of design artifacts including pacemaker design and physiological requirements. By demonstrating the process of developing verified models to generate verified code, the results of our model-based closed-loop evaluation should be able to support the device's safety and efficacy requirements during the regulation process.
