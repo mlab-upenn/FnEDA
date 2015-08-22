@@ -1,22 +1,22 @@
 \chapter{A Dual Chamber Pacemaker Specification}
 
-As part of the model-based design, it is important to have a functional and formal model of the device software for testing and formal verification respectively. In our study, we focus on the implantable  pacemaker since it is one of the simpler implantable cardiac devices as its functionality is based only on timing and does not consider signal morphology. This serves as a good base case to demonstrate the proposed methodology.  In this chapter we describe the basic specification and formal implementation of a dual chamber pacemaker, as well as a more advanced function on mode switching. The specifications are based on the algorithm descriptions in \cite{compass} and the functional description released as part of the Pacemaker Challenge (\cite{challenge}). 
+As part of the model-based design, it is important to have a functional and formal model of the device software for testing and formal verification respectively. In our study, we focus on the implantable  pacemaker since it is one of the simpler implantable cardiac devices as its functionality is based only on timing and does not consider signal morphology. This serves as a good base case to demonstrate the proposed methodology.  In this chapter, we describe the basic specification and formal implementation of a dual chamber pacemaker, as well as a more advanced function on mode switching. The specifications are based on the algorithm descriptions from Boston Scientific manuals (\cite{compass}) and the functional description released as part of the Pacemaker Challenge (\cite{challenge}). 
 We aim to answer the following questions here:
 \begin{itemize}
 	\vspace{-5pt}
 	\item How are the pacemaker's timers specified to maintain the appropriate heart rhythm?
 	\vspace{-5pt}
-   	\item What happens if new functionality are applied to the basic model?
+   	\item What happens if new functionality is added to the basic model?
 \end{itemize}
 
-The artificial pacemaker is designed for patients with bradycardia (i.e. slow heart rate). Two leads, one in the right atrium and one in the right ventricle, are inserted into the heart and fixed onto the inner wall of the heart. These two leads monitors the local activation of the atria and the ventricles, and generate corresponding sensed events (AS, VS) to its software. The software determines the heart condition by measuring time difference between events and delivers pacing events (AP, VP) to the analog circuit when necessary. The analog circuit then delivers pacing signals to the heart to maintain heart rate and A-V synchrony. In order to deal with different heart condition, pacemakers are able to operate in different modes. The modes are labeled using a three character system (e.g. $xyz$). The first position describes the pacing locations, the second location describes the sensing locations, and the third position describes how the pacemaker software responds to sensing. Here we introduce the widely used DDD mode pacemaker which is a dual chamber mode with sensing and pacing in both atrium and ventricle. 
+The artificial pacemaker is designed for patients with bradycardia (i.e. slow heart rate). Two leads, one in the right atrium and one in the right ventricle, are inserted into the heart and fixed onto the inner wall of the heart. These two leads monitors the local activation of the atria and the ventricles, and generate corresponding sensed events \textsf{(AS, VS)} to its software. The software determines the heart condition by measuring time difference between events and delivers pacing events \textsf{(AP, VP)} to the analog circuit when necessary. The analog circuit then delivers pacing signals to the heart to maintain heart rate and A-V synchrony. In order to deal with different heart condition, pacemakers are able to operate in different modes. The modes are labeled using a three character system (e.g. $xyz$). The first position describes the pacing locations, the second location describes the sensing locations, and the third position describes how the pacemaker software responds to sensing. Here we introduce the widely used DDD mode pacemaker which is a dual chamber mode with sensing and pacing in both atrium and ventricle. 
 
-\begin{figure}[!t]
+\begin{figure}[!b]
 \center
 %\vspace{-10pt}
-\includegraphics[width=0.7\textwidth]{figs/PM_timers.pdf}
+\includegraphics[width=0.85\textwidth]{figs/PM_timers.pdf}
 %\vspace{-10pt}
-\caption{Basic 5 timing cycles for a dual chamber pacemaker}
+\caption{Basic 5 timing cycles for a dual chamber pacemaker which include the Lower Rate Interval (LRI),  Atrio-Ventricular Interval (AVI), and Upper Rate Interval (URI). Also included are the blanking intervals, Post Ventricular Atrial Refractory Period (PVARP) and Ventricular Refractory Period (VRP), to inhabit action by the pacemaker.}
 \label{fig:PMtimers}
 %\vspace{-10pt}t
 
@@ -36,7 +36,7 @@ The function of the AVI component defines the longest interval between an atrial
 %\vspace{-10pt}
 \subsection{Post Ventricular Atrial Refractory Period (PVARP) and Post Ventricular Atrial Blanking (PVAB)}
 %\vspace{-5pt}
-Ventricular events, especially Ventricular Pace (VP) are sometimes so strong that the atrial lead can sense the activation as well. This signal may be falsely recognized as an atrial event and disrupt normal pacemaker function. This scenario is called crosstalk and was discussed in our previous work (~\cite{vhm_embc11}). In order to prevent this undesired behavior, and filter potential noises, there is a blanking period (PVAB) followed by a refractory period (PVARP) for the atrial events after each ventricular event \textsf{(VS, VP)}. Atrial events during PVAB are ignored and atrial events during PVARP trigger \textsf{AR!} events which can be used in some advanced diagnostic algorithms. The UPPAAL design of PVARP component is shown in \figref{PMdesign}(d).
+Ventricular events, especially Ventricular Pace \textsf{(VP)} are sometimes so strong that the atrial lead can sense the activation as well. This signal may be falsely recognized as an atrial event and disrupt normal pacemaker function. This scenario is called crosstalk and was discussed in our previous work (\cite{vhm_embc11}). In order to prevent this undesired behavior, and filter potential noises, there is a blanking period (PVAB) followed by a refractory period (PVARP) for the atrial events after each ventricular event \textsf{(VS, VP)}. Atrial events during PVAB are ignored and atrial events during PVARP trigger \textsf{AR!} events which can be used in some advanced diagnostic algorithms. The UPPAAL design of PVARP component is shown in \figref{PMdesign}(d).
 
 %\vspace{-10pt}
 \subsection{Ventricular Refractory Period (VRP)}
@@ -48,7 +48,7 @@ The VRP follows each ventricular event \textsf{(VP, VS)} to filter noise and ear
 %\vspace{-10pt}
 \includegraphics[width=0.9\textwidth]{figs/pacemaker.pdf}
 %\vspace{-10pt}
-\caption{Basic 5 timing cycles for a dual chamber pacemaker}
+\caption{Five basic timing cycles for a dual chamber pacemaker, which include the Lower Rate Interval (LRI), Atrio-Ventricular Interval (AVI), and Upper Rate Interval (URI). Also included are the blanking intervals, Post Ventricular Atrial Refractory Period (PVARP) and Ventricular Refractory Period (VRP), to inhabit action by the pacemaker.}
 \label{fig:PMdesign}
 %\vspace{-10pt}
 \end{figure} 
@@ -76,19 +76,11 @@ However, in the closed loop case with the DDD pacemaker, the AVI component of a 
 		\label{fig:SVT_DDD}
 		} 
 \vspace{-10pt}
-\caption{\small Benign open loop case: SVT with ODO pacemaker (b) Dangerous closed-loop-case SVT with DDD pacemaker}
+\caption{\small Benign open loop case: SVT without a pacemaker or with a pacemaker in sense-only mode (ODO) (b) Dangerous closed-loop-case SVT with DDD pacemaker which tries to match the fast atrial rate with a corresponding (and dangerous) fast ventricular rate.}
 %\vspace{-15pt}
 \end{figure*} 
 
 Pacemaker manufacturers have designed algorithms to detect and terminate these behaviors. Intuitively, the mode-switch algorithm first detects SVT. After confirmed detection, it switches the pacemaker from a dual-chamber mode to a single-chamber mode. During the single-chamber mode, the A-V synchrony function of the pacemaker is deactivated thus the ventricular rate is decoupled from the fast atrial rate. After the algorithm determines the end of SVT, it will switch the pacemaker back to the dual chamber mode. 
-
-The mode-switch algorithm (also known as atrial tachycardia response) specification we use is similar to the one described in the Boston Scientific pacemakers' manual (\cite{compass}). The algorithm first measures the interval between atrial events outside the blanking period (AS, AR). The interval is considered as \emph{fast} if it is above a threshold (\emph{Trigger Rate}) and \emph{slow} otherwise. In our UPPAAL model we model it as $INT$ (see \figref{dur_count} (1)). A counter $CNT$ increments for \emph{fast} events and decrements for \emph{slow} events (see \figref{dur_count} (2)). After the counter value reaches the \emph{Entry Count}, the algorithm will start a \emph{Duration} ($DUR$) ,which is a time interval used to confirm the detection of SVT (see \figref{dur_count} (3)). In the \emph{Duration}, the counter keeps counting. If the counter value is still positive after the \emph{Duration}, the pacemaker will switch to the VDI mode (\emph{Fallback mode}). In the VDI mode, the pacemaker only senses and paces the ventricle. At any time if the counter reaches zero, the \emph{Duration} will terminate and the pacemaker is switched back to DDD mode.
-% to show some interesting findings. The basic idea of this simplified model is explained in detail. \\
-%\mySubSubSection{UPPAAL model for mode-switch algorithm}
-In our UPPAAL model of the mode-switch algorithm, we use nominal parameter values from the clinical setting. We define \emph{trigger rate} at 170bpm (350ms), \emph{entry count} at 8, \emph{duration} for 8 ventricular events and \emph{fallback mode} as VDI. 
-
-In order to model both DDD and VDI modes and the switching between them, we made modifications to the AVI and LRI components.
-In each component two copies for both modes are modeled, and switch between each other when switching events (DDD, VDI) are received. During VDI mode, VP is delivered by the LRI component instead of the AVI component. The clock values are shared between both copies in order to preserve essential intervals even after switching. The modified AVI ($AVI'$) and LRI ($LRI'$)components are shown in \figref{avi_ms}. 
 \begin{figure*}
 		\centering
 		%\vspace{-19pt}
@@ -98,6 +90,14 @@ In each component two copies for both modes are modeled, and switch between each
 		%  \vspace{-20pt}
 		\label{fig:avi_ms}
 \end{figure*}
+The mode-switch algorithm (also known as atrial tachycardia response) specification we use is similar to the one described in the Boston Scientific pacemakers' manual (\cite{compass}). The algorithm first measures the interval between atrial events outside the blanking period (AS, AR). The interval is considered as \emph{fast} if it is above a threshold (\emph{Trigger Rate}) and \emph{slow} otherwise. In our UPPAAL model we model it as $INT$ (see \figref{dur_count} (1)). A counter $CNT$ increments for \emph{fast} events and decrements for \emph{slow} events (see \figref{dur_count} (2)). After the counter value reaches the \emph{Entry Count}, the algorithm will start a \emph{Duration} ($DUR$) ,which is a time interval used to confirm the detection of SVT (see \figref{dur_count} (3)). In the \emph{Duration}, the counter keeps counting. If the counter value is still positive after the \emph{Duration}, the pacemaker will switch to the VDI mode (\emph{Fallback mode}). In the VDI mode, the pacemaker only senses and paces the ventricle. At any time if the counter reaches zero, the \emph{Duration} will terminate and the pacemaker is switched back to DDD mode.
+% to show some interesting findings. The basic idea of this simplified model is explained in detail. \\
+%\mySubSubSection{UPPAAL model for mode-switch algorithm}
+In our UPPAAL model of the mode-switch algorithm, we use nominal parameter values from the clinical setting. We define \emph{trigger rate} at 170bpm (350ms), \emph{entry count} at 8, \emph{duration} for 8 ventricular events and \emph{fallback mode} as VDI. 
+
+In order to model both DDD and VDI modes and the switching between them, we made modifications to the AVI and LRI components.
+In each component two copies for both modes are modeled, and switch between each other when switching events (DDD, VDI) are received. During VDI mode, \textsf{VP} is delivered by the LRI component instead of the AVI component. The clock values are shared between both copies in order to preserve essential intervals even after switching. The modified AVI ($AVI'$) and LRI ($LRI'$)components are shown in \figref{avi_ms}. 
+
 \begin{figure*}
 		\centering
 				%\vspace{-15pt}
@@ -125,7 +125,9 @@ In each component two copies for both modes are modeled, and switch between each
 %Unfortunately, because of the extremely high cost of clinical trials (several million dollars and spanning several years,~\cite{trialcost}), the amount and variety of human subjects during the clinical trials are limited, which reduces the opportunity to find bugs. 
 %Moreover, clinical trials are often conducted at the final design stage. Fixing bugs at this stage is very costly.
 
-Model checking is a technique that the state space (time-bounded or unbounded) of the model under investigation is explored by model checkers to identify executions or states that violate specified properties. Violations of the properties are returned by the model checkers as \emph{counter-examples}, which can be used by designers to revise the design. In the application of closed-loop model checking of closed-loop medical devices like implantable pacemaker, model checking can be used to identify known and unknown mechanisms for inducing hazards, by checking the closed-loop models against physiological hazards. Due to the large computational cost, there are usually restrictions on the formalism and/or the complexity of the models under investigation. Using abstract models of the actual system adds the responsibility of proving the conformance between the abstract model and the real system. Assumptions made during abstractions may also introduce false-positives and/or false-negatives into the model checking results. In Chapter 2 we introduced a set of heart models with different abstraction levels, that can be used to cover behaviors of physiological conditions using non-determinism. In Chapter 4 we modeled a dual chamber pacemaker algorithm using timed-automata without doing abstractions. In this chapter we use model checker UPPAAL to evaluate the pacemaker model against safety properties under different heart conditions captured by the heart models. Techniques to eliminate false-positives by refining the heart models are also discussed. We will try to answer the following questions:
+Model checking is a technique in which the state space of the model under investigation is automatically and exhaustively explored to identify executions or states that violate specified properties. Violations of the properties are returned by the model checkers as \emph{counter-examples}, which can be used by designers to revise the design. In the application of verification of properties in medical devices like implantable pacemaker, model checking can be used to identify known and unknown mechanisms for inducing hazards. This is extended to checking the heart-pacemaker closed-loop models against physiological hazards (e.g. when the pacemaker provides inappropriate therapy which drives the heart to an unsafe state). 
+
+Due to the curse of dimensionality as models get more complex, and hence the large computational cost, there are usually restrictions on the formalism and the complexity of the models under investigation. Using abstract models of the actual system adds the responsibility of proving the conformance between the abstract model and the real system. Assumptions made during abstractions may also introduce false-positives and/or false-negatives into the model checking results. Back in Chapter 2, we introduced a set of heart models with different abstraction levels, that can be used to cover behaviors of physiological conditions using non-determinism. In Chapter 4, we then modeled a dual chamber pacemaker algorithm using timed-automata without doing abstractions. In this chapter, we use model checker UPPAAL to evaluate the pacemaker model against safety properties under different heart conditions captured by the heart models. Techniques to eliminate false-positives by refining the heart models are also discussed. We will try to answer the following questions:
 
 %            \item What are the effects of adding new features to the software? Can they disrupt the safety properties that the previous device hold?
 
@@ -140,7 +142,7 @@ Model checking is a technique that the state space (time-bounded or unbounded) o
 	\vspace{-5pt}
 	\item How do we find the appropriate abstraction level of the environment model for each physiological requirement?
         \vspace{-5pt}
-        \item How to interpret abstract counter-examples returned by model checker?
+        \item How do we interpret abstract counter-examples returned by model checker?
 \end{itemize}
 %\section{Testing vs Verification}
 %
@@ -182,18 +184,18 @@ Model checking is a technique that the state space (time-bounded or unbounded) o
 %
 %In this chapter we cover formal verification of the closed-loop system and address testing in the following chapter.
 \section{Risk Analysis for Implantable Pacemaker}
-Implantable pacemakers are designed to treat Bradycardia by increasing the heart rate with external pacing. Therefore the heart rate should not only be increased to the minimum physiological need, but also should not be increased beyond physiological need. \figref{risk_req} demonstrates two Fault Tree Analysis (FTA) for these two top level hazards. In the remaining chapter we first specify hazards as properties, and use model checking to evaluate whether these hazards have been mitigated by the pacemaker. Then for one of the mitigation algorithm, we examine the mitigation effectiveness and the residue hazard.
+Implantable pacemakers are designed to treat bradycardia by increasing the heart rate with external pacing. Therefore the heart rate should not only be increased to the minimum physiological need, but also should not be increased beyond physiological need. \figref{risk_req} demonstrates two Fault Tree Analysis (FTA) for these two top level hazards. In the remaining chapter we first specify hazards as properties, and use model checking to evaluate whether these hazards have been mitigated by the pacemaker. Then for one of the mitigation algorithm, we examine the mitigation effectiveness and the residue hazard.
 \begin{figure}[!t]
 		\centering
-		\includegraphics[width=0.9\textwidth]{figs/risk_requirements.pdf}
-		\caption{\small }
+		\includegraphics[width=0.8\textwidth]{figs/risk_requirements.pdf}
+		\caption{\small Sample Fault Tree Analysis of the physiological conditions leading to the lower rate limit and upper rate limits}
 		  %\vspace{-15pt}
 		\label{fig:risk_req}
 \end{figure}
 
 \section{Mitigating Top-level Hazards}
 The most essential function for the pacemaker is to treat bradycardia by maintaining the ventricular rate above a certain threshold. We define the region where the ventricular rate is slow, as \textsf{unsafe}. The monitor \textsf{PLRI\_test} is designed to measure intervals between ventricular events and is shown in \figref{safety1}. For property \\
-\textsf{$\varphi_{LRI}=$A[] (PLRI\_test.secV imply PLRI\_test.t$\leq$TLRI)}\\ we have $H_4\| P\| PLRI\_test\models\varphi_{LRI}$.
+\textsf{$\varphi_{LRI}=$A[] (PLRI\_test.secV imply PLRI\_test.t$\leq$TLRI)}\\ we have a closed-loop system  with heart model $H_d$ (described in at the end of Chapter 2):\\ $H_4\| P\| PLRI\_test\models\varphi_{LRI}$.
 
 \begin{figure*}[t]
 \centering
@@ -223,11 +225,12 @@ The pacemaker is not designed to treat tachycardia so it can only pace the heart
   
 We require that a ventricle pace (VP) can only occur at least $TURI$ after a ventricle event (VS, VP). The monitor \textsf{PURI\_test} is shown in \figref{uri_test}. For the property\\
 $\varphi_{URI}=$\textsf{A[] (PURI\_test.secV imply PURI\_test.t$\geq$TURI)} \\
-we have $H_4\| P\| PURI\_test\models \varphi_{URI}$.
+we have $H_d\| P\| PURI\_test\models \varphi_{URI}$.
 
 \section{Evaluate the Mitigation}
 As described in Chapter \ref{Mode_switch}, the mode switch algorithm has been designed to mitigate the hazard that the A-V synchrony function of DDD pacemaker extends fast
 atrial rate to the ventricle. It is important to ensure the effectiveness of the algorithm without inducing other top-level hazards. In this section we first show the existence of the hazard in a pacemaker without the mode-switch algorithm. If the algorithm if effective the hazard will not exist after introducing the algorithm.
+
 \subsection{Existence of Pacemaker Mediated Tachycardia during SVT}
 The monitor \textsf{Pv\_v} is designed to show existence of PMT during SVT. It goes to the error state if the ventricular rate drops below the Upper Rate Limit (\figref{vv}).  
 
@@ -238,7 +241,11 @@ which verifies the existence of PMT. The heart model $H_e$ in Fig. \ref{fig:HM_a
 
 % There are two separate AVI and LRI components for each mode and switches to the corresponding ones when synchronization signals are received. The clock values are kept so that essential intervals are kept. 
 \subsection{Verification against fundamental safety properties}
-For a pacemaker with the mode-switch algorithm: $P_2$=\textsf{LRI'$\|$AVI'$\|$URI$\|$PVARP$\|$VRP$\|$INT$\|$CNT$\|$DUR}, we verify the same fundamental safety properties on the pacemaker model with mode-switch algorithm. We have:
+For a pacemaker with the mode switch algorithm: 
+
+$P_2$=\textsf{LRI'$\|$AVI'$\|$URI$\|$PVARP$\|$VRP$\|$INT$\|$CNT$\|$DUR}, 
+
+we verify the same fundamental safety properties on the pacemaker model with mode-switch algorithm. We have:
 $$H_d\|P_2\|PURI\_test\models\varphi_{URI}$$
 $$H_d\|P_2\|PLRI\_test\not\models\varphi_{LRI}$$
 The Upper Rate Limit property still holds, but the Lower Rate Limit property is violated. The counterexample is proved to be valid after checking the trace of more refined heart models. By analyzing the trace we found that when the pacemaker is switching from VDI mode to DDD mode, the responsibility to deliver VP switched from LRI component to AVI component. Since the clock reference is different (Ventricular events in LRI component and Atrial events in AVI component), the clock value for delivering the next VP is not preserved. As a result, if an atrial event which triggered the mode-switch from VDI to DDD happens within [TLRI-TAVI, TLRI) after the last ventricular event, the next ventricular pacing will be delayed by at most TAVI time, which violates the Lower Rate Limit property (\figref{safety}). 
@@ -250,7 +257,7 @@ The Upper Rate Limit property still holds, but the Lower Rate Limit property is 
 %%		\label{fig:vv}
 %%\end{figure}
 \subsection{Verification of the Mode-Switch Algorithm}
-After implementing the mode-switch algorithm, we verified the model against the same existence property. We expect the violation of this property, since during VDI mode the ventricular rate of the heart model is less than the Upper Rate Limit and will not trigger ventricular pacing. However, this property is still satisfied, indicating the mode-switch algorithm failed to eliminate the PMT scenario. The evidence trace returned by UPPAAL shows that a subset of atrial events fall into the blanking period after a ventricular event (see \figref{liveness}). As a result, two fast events are reduced to one slow event and mode switch may never happen. This scenario does exist in all our refined heart models, we conclude that the trace is physiologically feasible. The mode-switch algorithm in our pacemaker model can not terminate all PMT behaviors as specified.
+After implementing the mode-switch algorithm, we verified the model against the same existence property. We expect the violation of this property, since during VDI mode the ventricular rate of the heart model is less than the Upper Rate Limit and will not trigger ventricular pacing. However, this property is still satisfied, indicating the mode-switch algorithm failed to eliminate the PMT scenario. The evidence trace returned by UPPAAL shows that a subset of atrial events fall into the blanking period after a ventricular event (see \figref{liveness}). As a result, two fast events are reduced to one slow event and mode switch may never happen. This scenario does exist in all our refined heart models, we conclude that the trace is physiologically feasible. The mode-switch algorithm in our pacemaker model can not terminate all PMT behaviors as specified as certain mild PMT events are admissible.
 \begin{figure}
 \centering
 %\vspace{-20pt}
@@ -263,23 +270,23 @@ After implementing the mode-switch algorithm, we verified the model against the 
 			\label{fig:liveness}
 		}
 		\vspace{-10pt}
-	\caption{(a) Safety Violation: VP is delayed due to the reset of timer during mode-switch, (b) Correctness Violation: The blocking period may block some atrial events, turning two \emph{Fast} events to one \emph{Slow} event \cite{TACAS12}}
+	\caption{(a) Safety Violation: VP is delayed due to the reset of timer during mode-switch, (b) Correctness Violation: The blocking period may block some atrial events, turning two \emph{Fast} events to one \emph{Slow} event (\cite{TACAS12}})
 \vspace{-20pt}
 \end{figure} 
 \section{Abstraction Tree for Environment Modeling}
-In the previous two sections, abstractions and selections of the heart models are performed manually, which require knowledge of both Electrophysiology and model checking. 
+In the previous two sections, abstractions and selections of the heart models are performed manually, which require knowledge of both electrophysiology and model checking. 
 Counter-examples returned from abstract models can be difficult to interpret by domain experts.
 One abstract counter-example could be produced by multiple physiologically valid conditions, which causes ambiguity.
 Thus, a rigorous framework is necessary to balance the need to cover a wide range of environmental conditions and the need to provide counter-examples to the physicians within their physiological context. The framework must also allow non-domain experts to perform verification, and establish `hand-off' points where the results of verification can be handed back 
 to the experts for interpretation.
 
-In this section, we use a set of domain-specific abstraction rules developed based on physiological knowledge to ensure the physiological relevance of the behaviors introduced into the abstract models.
+In this section, we use a set of domain-specific abstraction rules based on physiological knowledge to ensure the physiological relevance of the behaviors introduced into the abstract models.
 The rules are applied to an initial set of physiological models to obtain an abstraction tree, which will be used for closed-loop model checking of the pacemaker. 
 A straightforward search procedure is then used to conduct model checking using suitable heart models and return the most concrete and unambiguous counter-examples to the physicians for analysis.
 In this framework, physiological knowledge is only needed when constructing the initial model set and when analyzing counter-examples. 
 The application of the physiological abstraction rules and the verification procedure can be automated.
 The proposed method can potentially be generalized to other domains in which the device operates in a large variety of environmental conditions. More information regarding this research can be found in \cite{regar_tech}.
-\subsection*{Step 1: Abstraction Tree Construction}
+\subsection*{Step 1: Abstraction Tree construction}
 A set of heart models corresponding to different heart conditions are first developed. 
 The list can be expanded as new heart conditions are discovered.
 Because we start from a set of initial models, and each one may be abstracted using a number of abstraction rules, we have a choice of which rules to apply to which models, and the order in which to apply them. 
@@ -292,12 +299,12 @@ Thus an \emph{abstraction tree} $T_{HM}$ for the heart is created, as shown in \
 	\centering
 	\includegraphics[width=0.85\textwidth]{figs/abs.pdf}
 	%\vspace{-5pt}
-	\caption{\small Heart Model Abstraction Tree}
+	\caption{\small Heart Model Abstraction Tree with arrows showing the direction of the abstraction process starting from detailed models of different heart conditions. Model refinement is in the opposite direction.}
 	\vspace{-15pt}
 	\label{fig:HM_tree}
 \end{figure}
 
-\subsection*{Step 2: Requirement Encoding}
+\subsection*{Step 2: Requirement encoding}
 The following requirement is designed to prevent the pacemaker from pacing too fast: 
 ``If the intervals between self-activations of the atria are between 300ms to 1000ms (60bpm - 200bpm), the intervals between ventricular paces should be no shorter than 500ms.''
 Self-activation of the atria can be expressed using the location and clock of node automaton $N_A$.
@@ -314,7 +321,7 @@ The requirement can be formalized using the monitor  $M_{sing}(VP,500,\infty)$:
 %\vspace{-10pt}
 	%\label{fig:abs_exam}
 %\end{figure}
- \subsection*{Step 3: Choosing Appropriate Heart Models For the Requirement}
+ \subsection*{Step 3: Choosing appropriate heart models for the requirement}
 To verify the closed-loop system with pacemaker model $PM$ and abstraction tree $T_{HM}$ (\figref{HM_tree}) against requirement $Req1$, the most abstract appropriate models are selected from the tree. 
 The single event monitor $M_{sing}$ from \figref{monitor}(a) with variables $Var(M_{sing})=\{M_{sing}.t,M_{sing}.loc\}$ is used for this requirement. Model checking is performed on the closed-loop system including the heart model $M_H$, the pacemaker model $M_P$, and the monitor $M$. The requirement $\varphi_P$ can be then represented with TCTL formula:
  \textsf{A[] (not M.Err)}
@@ -339,15 +346,15 @@ thus these three heart models are output as the most abstract models that are ap
 	\centering
 	\includegraphics[width=0.8\textwidth]{figs/abs_rev.pdf}
 	%\vspace{-5pt}
-	\caption{\small Finding the most concrete counter-examples using the abstraction tree}
+	\caption{\small Model refinement: Finding the most concrete counter-examples using the abstraction tree}
 	\vspace{-10pt}
 	\label{fig:CE}
 \end{figure}
 	\vspace{-10pt}
-\subsection*{Step 4: Return the most Concrete Counter-Examples}
+\subsection*{Step 4: Return the most concrete counter-examples}
 After the appropriate models for $Req1$ are selected, we have the initial set
 $HM=\{H_n'',H_{at}'''',H_{vt}'''\}$.
-By model checking on all 3 initial models in UPPAAL we have: 
+By model checking on all three initial models in UPPAAL we have: 
 $$H_n''||PM\not\models Req1;\; H_{at}''''||PM\not\models Req1;\; H_{vt}'''||PM\not\models Req1$$
 %$$[1,[]]=ModelChecking(H_n'',PM,Req1)$$
  %$$[0,CE_1]=ModelChecking(H_{at}'''',PM,Req1)$$
@@ -370,7 +377,7 @@ The abstraction tree is then further explored. The heart models with counter-exa
 		%\label{fig:CE}
 %\end{figure}
 	\vspace{-10pt}
-\subsection*{Step 5: Analysis of the Counter-examples}
+\subsection*{Step 5: Analysis of the counter-examples}
 The counter-examples are then shared with physicians for analysis. In \figref{CE} we highlight three counter-examples. In the first counter-example, the intrinsic heart signals over time with up arrows as atrial activations and down arrows as ventricular activations. The signal for the second counter-example shows the pacemaker outputs with up arrows as atrial pacing and down arrows as ventricular pacing.%We only show the activations of the atrial node and ventricle pacing. 
 
 Counter-example $CE_{n}$ is returned by $H_n$ and none of its children models violate the requirement. By careful analysis we found that $CE_{n}$ features the combination of fast intrinsic atrial rate and prolonged A-V conduction delay, which is the combination of heart conditions $H_{st}$ and $H_{av}$. This scenario shows that the abstraction rules can introduce physiological heart conditions that were not explicitly modeled in the initial model set. The pacemaker improved the open-loop heart condition by pacing the ventricles $AVI$ after each atrial event, which is a correct operation of the pacemaker despite the requirement violation. 
@@ -385,7 +392,8 @@ Despite the filters in the pacemaker, the pacemaker still paces the ventricle fo
 %\hatodoin{Not very clear..do you mean that the intrinsoc centricular rate is fine because of AV filtering, but the PM is accelarating it?}
 This scenario is referred to as Atrial Tachycardia Response of a pacemaker. 
 
-From the analysis, pacemaker operations in $CE_{pvc}$ and $CE_{af}$ must be revised. However, the revision should not affect the behavior in $CE_{n}$. This example demonstrates that counter-examples from refined models provide more physiological context of the requirement violations, and distinguish the physiological conditions that can trigger the violations. The information is helpful for debugging and improving the algorithm. The physicians can also improve the physiological requirement so that these heart conditions can be then considered case by case.
-\section{Conclusion}
-Model checking is not widely use in industry due to scalability issues. However, with rigorous abstraction of the system and its environment, model checking can be used to identify 
-known and even unknown mechanisms to induce hazards. In this chapter we use a model of a dual chamber pacemaker as an example to demonstrate the use of model checking during risk analysis. During the process we identified the need to refine the heart models to eliminate false-positives introduced during the abstraction, and demonstrated the difficulty to do so manually. The abstraction tree approach is then proposed to reduce the effort needed for both the developers and the domain experts, which makes model checking a viable approach for providing safety and effectiveness evidence. 
+From the analysis, pacemaker operations in $CE_{pvc}$ and $CE_{af}$ must be revised. However, the revision should not affect the behavior in $CE_{n}$. This example demonstrates that counter-examples from refined models provide more physiological context of the requirement violations, and distinguish the physiological conditions that can trigger the violations. The information is helpful for debugging and improving the algorithm. The physicians can also improve the physiological requirement so that these heart conditions can be then considered case by case.\\
+
+\noindent\textbf{Discussion:}\\
+Model checking is not widely use in industry, in part, due to scalability issues and also because domain expertise must be a skill possessed by the verification engineer. However, with rigorous abstraction of the system and its environment, model checking can be used to identify 
+known and even unknown mechanisms to induce hazards. In this chapter, we use a model of a dual chamber pacemaker as an example to demonstrate the use of model checking during risk analysis. During the process we identified the need to refine the heart models to eliminate false-positives introduced during the abstraction, and demonstrated the difficulty to do so manually. The abstraction tree approach is then proposed to reduce the effort needed for both the developers and the domain experts, which makes model checking a viable approach for providing safety and effectiveness evidence. 
