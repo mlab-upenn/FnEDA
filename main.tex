@@ -44,7 +44,7 @@ University of Pennsylvania\\
 \begin{document}
 
 % the following settings can be set or left blank at first
-\copyrightowner{R.~Mangharam and Z.~Jiang}
+\copyrightowner{Z.~Jiang and R.~Mangharam}
 % \volume{1}
 % \issue{3}
 % \pubyear{2014}
@@ -63,11 +63,15 @@ University of Pennsylvania\\
 \mainmatter
 
 \begin{abstract}
-The design and implementation of software for medical devices is challenging due to their closed-loop interaction with the patient, who is a stochastic physical environment. The safety-critical nature and the lack of existing industry standards for verification, make this an ideal domain for exploring applications of formal modeling and closed-loop analysis. The biggest challenge is to balance the complexity and fidelity of the environment model, while preserving the safety and efficacy properties. In this effort, we use a dual chamber implantable pacemaker as a case study for modeling and verification of control algorithms for medical devices. We begin with detailed timed automata model of the pacemaker, based on the specifications and algorithm descriptions from Boston Scientific. 
+The design of bug-free and safe medical device software is challenging, especially in complex implantable devices. This is due to the device's closed-loop interaction with the patient's organs, which are stochastic physical environments. The life-critical nature and the lack of existing industry standards to enforce software verification make this an ideal domain for exploring design automation challenges for integrated functional and formal modeling with closed-loop analysis. The primary goal of high-confidence medical device software is to guarantee the device will never drive the patient into an unsafe condition even though we do not have complete understanding of the physiological plant.
 
-For closed-loop evaluation, a real-time Virtual Heart Model (VHM) has been developed to model the electrophysiological operation of the functioning and malfunctioning (i.e., during arrhythmia) heart. By extracting the timing properties of the heart and pacemaker device, we present a methodology to construct timed-automata models for formal verification and functional testing of the closed-loop system. The VHM's capability of generating clinically-relevant response has been validated for a variety of common arrhythmias. Based on a set of requirements, we describe a framework of Abstraction Trees that allows for interactive and physiologically relevant closed-loop verification and testing
- for basic pacemaker device operations such as maintaining the heart rate, atrial-ventricle synchrony and complex conditions such as pacemaker-mediated tachycardia. Through automatic model translation of abstract models to simulation-based testing and code generation for platform-level testing, this Model-Based Design (MBD) approach ensures the closed-loop safety properties are retained through the design toolchain and facilitates the development of verified software from verified models.
- This system is a step toward a verification and testing approach for medical cyber-physical systems with the patient-in-the-loop.
+There are two major differences between modeling physiology and modeling man-made systems:
+first, physiology is much more complex and less well-understood than man-made systems like cars and airplanes, and spans several scales from the molecular to the entire human body.
+Secondly, the variability between humans is orders of magnitude larger than that between two cars coming off the assembly line.
+
+Using the implantable cardiac pacemaker as an example of closed-loop device, and the heart as the organ to be modeled, we present several of the challenges and early results in model-based verification. We begin with detailed timed automata model of the pacemaker, based on the specifications and algorithm descriptions from Boston Scientific. For closed-loop evaluation, a real-time Virtual Heart Model (VHM) has been developed to model the electrophysiological operation of the functioning and malfunctioning (i.e., during arrhythmia) heart. By extracting the timing properties of the heart and pacemaker device, we present a methodology to construct timed-automata models for formal verification and functional testing of the closed-loop system. The VHM's capability of generating clinically-relevant response has been validated for a variety of common arrhythmias. Based on a set of requirements, we describe a framework of Abstraction Trees that allows for interactive and physiologically relevant closed-loop verification and testing for basic pacemaker device operations such as maintaining the heart rate, atrial-ventricle synchrony and complex conditions such as pacemaker-mediated tachycardia. 
+
+Through automatic model translation of abstract models to simulation-based testing and code generation for platform-level testing, this model-based design approach ensures the closed-loop safety properties are retained through the design toolchain and facilitates the development of verified software from verified models. This system is a step toward a verification and testing approach for medical cyber-physical systems with the patient-in-the-loop.
 
 \end{abstract}
 
