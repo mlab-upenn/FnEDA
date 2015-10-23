@@ -102,7 +102,7 @@ In each component two copies for both modes are modeled, and switch between each
 		\centering
 				%\vspace{-15pt}
 		\includegraphics[width=0.9\textwidth]{figs/duration.pdf}
-		\vspace{-10pt}
+		%\vspace{-10pt}
 		\caption{\small (1) Component \textsf{INT}: An atrial event (\textsf{AS,AR}) arrives before \textsf{thresh} after the previous atrial event is regarded as a \textsf{fast} event. Atrial event arrives after \textsf{thresh} and \textsf{AP} are regarded as \textsf{slow} event; (2) Component \textsf{CNT}: After 8 \textsf{fast} event the algorithm will start a duration by sending \textsf{du\_beg} and will switch to \textsf{VDI} mode when the duration ends (\textsf{du\_end}); (3) Component \textsf{DUR} :The duration length is 8 ventricular events (\textsf{VS,VP})}
 		  %\vspace{-15pt}
 		\label{fig:dur_count}
@@ -194,8 +194,12 @@ Due to the curse of dimensionality as models get more complex, and hence the lar
 Implantable pacemakers are designed to treat bradycardia by increasing the heart rate with external pacing. Therefore the heart rate should not only be increased to the minimum physiological need, but also should not be increased beyond physiological need. \figref{risk_req} demonstrates two Fault Tree Analysis (FTA) for these two top level hazards. In the remaining chapter we first specify hazards as properties, and use model checking to evaluate whether these hazards have been mitigated by the pacemaker. Then for one of the mitigation algorithm, we examine the mitigation effectiveness and the residue hazard.
 
 \section{Mitigating Top-level Hazards}
-The most essential function for the pacemaker is to treat bradycardia by maintaining the ventricular rate above a certain threshold. We define the region where the ventricular rate is slow, as \textsf{unsafe}. The monitor \textsf{PLRI\_test} is designed to measure intervals between ventricular events and is shown in \figref{safety1}. For property \\
-\textsf{$\varphi_{LRI}=$A[] (PLRI\_test.secV imply PLRI\_test.t$\leq$TLRI)}\\ we have a closed-loop system  with heart model $H_d$ (described in at the end of Chapter 2):\\ $H_4\| P\| PLRI\_test\models\varphi_{LRI}$.
+The most essential function for the pacemaker is to treat bradycardia by maintaining the ventricular rate above a certain threshold. We define the region where the ventricular rate is slow, as \textsf{unsafe}. The monitor \textsf{PLRI\_test} is designed to measure intervals between ventricular events and is shown in \figref{safety1}. For property
+\begin{center}
+\textsf{$\varphi_{LRI}=$A[] (PLRI\_test.secV imply PLRI\_test.t$\leq$TLRI)}
+\end{center}
+we have a closed-loop system  with heart model $H_d$ (described in at the end of Chapter 2): 
+$$H_4\| P\| PLRI\_test\models\varphi_{LRI}$$
 
 \begin{figure*}[t]
 \centering
@@ -223,9 +227,11 @@ The pacemaker is not designed to treat tachycardia so it can only pace the heart
 		\label{fig:vv}
 \end{figure}
   
-We require that a ventricle pace (VP) can only occur at least $TURI$ after a ventricle event (VS, VP). The monitor \textsf{PURI\_test} is shown in \figref{uri_test}. For the property\\
-$\varphi_{URI}=$\textsf{A[] (PURI\_test.secV imply PURI\_test.t$\geq$TURI)} \\
-we have $H_d\| P\| PURI\_test\models \varphi_{URI}$.
+We require that a ventricle pace (VP) can only occur at least $TURI$ after a ventricle event (VS, VP). The monitor \textsf{PURI\_test} is shown in \figref{uri_test}. For the property
+\begin{center}
+$\varphi_{URI}=$\textsf{A[] (PURI\_test.secV imply PURI\_test.t$\geq$TURI)}
+\end{center}
+we have: $$H_d\| P\| PURI\_test\models \varphi_{URI}$$
 
 \section{Evaluate the Mitigation}
 As described in Chapter \ref{Mode_switch}, the mode switch algorithm has been designed to mitigate the hazard that the A-V synchrony function of DDD pacemaker extends fast
@@ -324,10 +330,11 @@ The requirement can be formalized using the monitor  $M_{sing}(VP,500,\infty)$:
  \subsection*{Step 3: Choosing appropriate heart models for the requirement}
 To verify the closed-loop system with pacemaker model $PM$ and abstraction tree $T_{HM}$ (\figref{HM_tree}) against requirement $Req1$, the most abstract appropriate models are selected from the tree. 
 The single event monitor $M_{sing}$ from \figref{monitor}(a) with variables $Var(M_{sing})=\{M_{sing}.t,M_{sing}.loc\}$ is used for this requirement. Model checking is performed on the closed-loop system including the heart model $M_H$, the pacemaker model $M_P$, and the monitor $M$. The requirement $\varphi_P$ can be then represented with TCTL formula:
+\begin{center}
  \textsf{A[] (not M.Err)}
-
+\end{center}
 The variables in the requirement are:
-$Var(Req1)=\{N_A.t,N_A.loc,M_{sing}.loc\}$.
+$$Var(Req1)=\{N_A.t,N_A.loc,M_{sing}.loc\}$$
 \begin{figure}[b]
 		\centering
 		\includegraphics[width=0.8\textwidth]{figs/monitor.pdf}

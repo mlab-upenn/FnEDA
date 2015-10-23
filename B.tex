@@ -1,9 +1,9 @@
-\chapter{Understanding and Modeling the \\Physiological Environment}
+\chapter{Modeling the Physiological Environment}
 
 Closed-loop medical devices such as the implantable cardiac pacemaker and defibrillator are designed to operate autonomously and interact with the human body to maintain and improve the physiological condition of the patient. To evaluate the device within the closed-loop context of the human body, the knowledge of the physiological contexts (e.g. patient arrhythmia, physical activity) and the signals by which the device interacts with the organ(s) to manage the condition is essential. By constructing physiological models and encoding physiological requirements, our goal is to evaluate the safety and efficacy of the device therapy across a range of physiological conditions. 
 
 Consequently, it is important to model the physiological environment of the device such that details unrelated to the interaction between the device and the human are abstracted away, while essential information required to differentiate different patient conditions are maintained. As we will see, to validate the device operation across a range of physiological conditions and for a set of safety and efficacy properties, a family of models are needed which refine the closed-loop context to appropriately express the condition to be verified. In this chapter, we would therefore like to answer the following questions:
-
+\newpage
 \begin{itemize}
 \vspace{-5pt}
 \item How does the device interact with the physiological environment?
@@ -71,7 +71,7 @@ The implantable cardiac pacemakers are rhythm management devices designed to tre
 \section{Physiological Models of the Heart}
 To study the mechanisms of heart diseases and their effects on cardiac output, different physiological models of the heart have been developed. \figref{models} illustrates several aspects that these models capture. With the development of the imaging techniques like MRI, detailed anatomical structures of the heart can be modeled and studied (\cite{geometric}). These models are fundamental in other modeling aspects as well, as the anatomy of the heart dictates the electrical and mechanical behaviors of the heart. \figref{models}.(a) shows models for heart muscle fiber orientations by \cite{fiber}. With anatomy models the electrical and/ or mechanical properties of the heart can be studied. \figref{models}.(b) illustrate a model of blood flow within the ventricles (\cite{bloodflow}). Electrical properties of the heart at cellular level has been modeled (\cite{cellular}) and by combining these cellular models with the structural models, the electrical activities of the whole heart are studied, especially the mechanism of different arrhythmia (\cite{natalia},~\cite{Grosu_MHA},~\cite{Grosu_wave}). Intrinsic heart rate variability has been modeled to synthesize optimal control of pacemaker pacing. (\cite{Bogdan}) Abstraction of the electrical cellular model has also been attempted by \cite{Grosu_abstract} to reduce model complexity without sacrificing accuracy. The electrical properties and the mechanical properties of the heart are closely coupled. Models combining both of these aspects are also developed to study the effects of different arrhythmia on cardiac outputs (\cite{natalia},~\cite{eletro_mechanical}).
 
-\section{Heart Models for Closed-loop Evaluation of Implantable Cardiac Devices}
+\section{Heart Models for Closed-loop Validation of   Implant-able Cardiac Devices}
 Models should be developed according to their applications. The aforementioned models of the heart are mostly used for understanding the mechanisms of different heart diseases. Physiological models developed for closed-loop evaluation of medical devices should have the following considerations:\\
 \textbf{C1. Interfacing with the device: }The model should be able to generate physiological signals that the device sense from the real physiological entities. And the model should be able to take device output as input and change its states accordingly. Model complexity should also be adjusted according to the device interface to hide unnecessary details.\\
 \textbf{C2. Differentiate different physiological conditions: }To evaluate the safety and effectiveness of the device, the device has to be evaluated under certain physiological conditions specified by the requirements. For example, the pacemaker is supposed to maintain proper heart rate during Bradycardia. The model should be expressive enough to be able to differentiate the physiological condition (Bradycardia in the example) from other conditions. Failing to do so may result in false-positives or false-negatives in the evaluation result. \\
@@ -121,7 +121,7 @@ In the remaining chapter we will introduce our heart modeling efforts based on E
 %In the following sections, we demonstrate how to construct heart models for closed-loop verification of implantable pacemaker. Note that for two different applications the models are constructed differently as we address their respective requirements for environment models. 
 
 
-\section{Closed-loop Testing with Deterministic Heart Models}
+\section{Heart Models for Closed-loop Testing}
 %\begin{itemize}
 	%\item Why the models at this level have to be deterministic? Where can they be used?
     %\item How electrophysiology reflects the functions of the heart?
@@ -151,7 +151,7 @@ The contraction of heart muscles is triggered by external voltage applied to the
 \subsection{Heart Model Components}
 We introduce the model components that can be used to configure heart models corresponding to different heart conditions. As discussed earlier, the action potential of a heart tissue has 3 timing periods during which the tissue responds to external electrical stimuli differently. We use an extended timed-automata formulation (\cite{timed_automata}) to model the timing behaviors of a heart tissue during each cycle. 
 
-\textbf{Node Automata:} We refer to the tissue model as \emph{node automaton} and \figref{node_automata} shows the structure of a node automaton $i$. 3 states correspond to the timing periods of the action potential. From \textsf{Rest} state, the node can either self-activate or get activated by external stimuli (Act\_node) and go to \textsf{ERP} state. During \textsf{ERP} state the node does not respond to external stimuli (blocked). During \textsf{RRP} state, the node can still be activated and go to \textsf{ERP} state, however the ERP period and the conduction delay of the tissue are affected by the "earliness" of the activation arrived during the RRP period, which is tracked by a shared variable $C(i)$. The new ERP period is determined by a function over clock value $g(f(t))$ which mimics the beat-to-beat dynamics described in \cite{josephson}. The function $g$ and $f$ are given by:
+\textbf{Node Automata:} We refer to the tissue model as \emph{node automaton} and \figref{automata}.(a) shows the structure of a node automaton $i$. 3 states correspond to the timing periods of the action potential. From \textsf{Rest} state, the node can either self-activate or get activated by external stimuli (Act\_node) and go to \textsf{ERP} state. During \textsf{ERP} state the node does not respond to external stimuli (blocked). During \textsf{RRP} state, the node can still be activated and go to \textsf{ERP} state, however the ERP period and the conduction delay of the tissue are affected by the "earliness" of the activation arrived during the RRP period, which is tracked by a shared variable $C(i)$. The new ERP period is determined by a function over clock value $g(f(t))$ which mimics the beat-to-beat dynamics described in \cite{josephson}. The function $g$ and $f$ are given by:
 \begin{equation} \label{factor}
 						f(t) = 1-t/Trrp
 						\end{equation}
@@ -169,32 +169,32 @@ and
 						\right.
 						\end{equation}  
 where $T_{min}$ and $T_{max}$ are the minimum and maximum value for \emph{Terp} of the tissue.
-\begin{figure*}[!t]
-\centering
-		\subfigure [\small]{			
-		\includegraphics[width=0.32\textwidth]{figs/node_aut.png}
-		\label{fig:node_automata}
-		} 
-%	\hspace{.1in}%
-		\subfigure [\small] 
-		{
-		\includegraphics[width=0.32\textwidth]{figs/path_aut.png}
-		\label{fig:path_automata}
-		} 
-		\subfigure [\small] 
-		{
-		\includegraphics[width=0.25\textwidth]{figs/gen_setup.png}
-		\label{fig:general_setup}
-		} 
-\label{fig:h_automatas}
+\begin{figure}[!t]
+%\centering
+		%\subfigure [\small]{			
+		\includegraphics[width=1.2\textwidth]{figs/automata.pdf}
+		%\label{fig:node_automata}
+		%} 
+%%	\hspace{.1in}%
+		%\subfigure [\small] 
+		%{
+		%\includegraphics[width=0.32\textwidth]{figs/path.pdf}
+		%\label{fig:path_automata}
+		%} 
+		%\subfigure [\small] 
+		%{
+		%\includegraphics[width=0.25\textwidth]{figs/gen_setup.png}
+		%\label{fig:general_setup}
+		%} 
+
 %\vspace{-10pt}
-\caption{\small (a) Node automaton: The dotted transition is only valid for tissue (like SA node) that can be activated by an external trigger; (b) Path automaton modeling the electric conduction and propagation between two node automata; (c) Model of the electrical conduction system of the heart using a network of node \& path automata ~\cite{VHM_proc}.}
+\caption{\small (a) Node automaton: The dotted transition is only valid for tissue (like SA node) that can be activated by an external trigger; (b) Path automaton modeling the electric conduction and propagation between two node automata; (c) Model of the electrical conduction system of the heart using a network of node \& path automata ~\cite{VHM_proc}.}\label{fig:automata}
 %\vspace{-15pt}
-\end{figure*} 
+\end{figure} 
 
 Due to the limited number of observable points within the heart, modeling the electrophysiological behavior of every tissue of the heart and its full anatomy is unnecessary and unfeasible. In our heart models, only self-activating tissue and key hubs of the electrical conduction system are modeled as node automata. 
 
-\textbf{Path Automata:} The electrical conduction through the tissue between nodes are abstracted using \emph{path automata}. The path automata can be used to represent structural or topological (functional) electrical connections between nodes. \figref{path_automata} shows a path automaton connecting node a and b.
+\textbf{Path Automata:} The electrical conduction through the tissue between nodes are abstracted using \emph{path automata}. The path automata can be used to represent structural or topological (functional) electrical connections between nodes. \figref{automata}.(b) shows a path automaton connecting node a and b.
 
 The initial state of a path automaton is \emph{Idle}, which corresponds to no conduction. The states corresponding to the two conduction directions are named after the physiological terms: Antegrade (Ante) and Retrograde (Retro). These states can be intuitively described as forward and backward conductions. If path actuation \emph{Act\_path} event is received from one of the nodes connected to it, there is a transition to \emph{Ante} or \emph{Retro} state based on the activation source in the path automaton. At the same time, the clock invariant of the state is modified according to the shared variable \emph{C(a/b)}. This corresponds to the change of the conduction delay that is caused by the early activation. Similar to node automaton, the changing trend is extracted from clinical data and the function $h$ is defined as:
 \begin{equation} 
@@ -211,7 +211,7 @@ where $path\_len$ denotes the length of the path and $v$ is the conduction veloc
 After \emph{Tante} or \emph{Tretro} time expires, the path automaton sends out \emph{Act\_node(b)} or \emph{Act\_node(a)} respectively. A transition to \emph{Conflict} state occurs followed by the transition to \emph{Idle} state. The intermediate state \emph{Conflict} is designed to prevent back-flow, where the path is activated by the node \emph{b} it has just activated. If during \emph{Ante} or \emph{Retro} state another \emph{Act\_path} event is received from the other node connected to the path automaton, a transition to \emph{Double} state will occur, corresponding to the two-way conduction. In this case, the activation signals eventually cancel each other and the transition to \emph{Idle} state is taken.
 
 \subsection{Modeling the Heart's Electrical Conduction System}
-The node and path automata are the basic building blocks for heart modeling. Hearts with different conditions are modeled by using different conduction topologies with appropriate timing parameters for each node and path automata. \figref{general_setup} shows one such  topology of a network of node and path automata.
+The node and path automata are the basic building blocks for heart modeling. Hearts with different conditions are modeled by using different conduction topologies with appropriate timing parameters for each node and path automata. \figref{automata}.(c) shows one such  topology of a network of node and path automata.
 
 \subsection{Interaction with the Heart Model}
 In EP testing and during pacemaker implantation, the local electrical activities, measured as electrogram (EGM) signals, are used to diagnose heart conditions. During heart model construction, we can assign a node automaton at electrode locations and the transitions to the ERP state can be used to represent the local activation events. In a more general setup where electrodes are assigned anywhere within the heart model, a probe model is designed to generate synthetic EGM signals using spatio-temporal information from the proximity to the network of node and path automata. \figref{egm_s} shows the morphology of EGM signal changes with different conduction velocity and probe configurations. A detailed description of the probe model can be found in \cite{vhm_embc11}.
@@ -219,7 +219,7 @@ In EP testing and during pacemaker implantation, the local electrical activities
 \begin{figure}[!t]
 \center
 %\vspace{-15pt}
-		\includegraphics[width=0.45\textwidth]{figs/fig7.png}
+		\includegraphics[width=0.7\textwidth]{figs/fig7.png}
 %\vspace{-10pt}
 \caption{The influence of conduction velocity and probe configuration on the EGM morphology. The left columns show the placement of probes in relation to the path; the right columns show the functional EGM.}
 \label{fig:egm_s}
@@ -249,7 +249,7 @@ As shown in (\figref{HOC}), with an analog interface the heart model can interac
 \label{fig:HOC}
 %\vspace{-15pt}
 \end{figure}
-\section{Closed-loop Model Checking with Non-deterministic Heart Models }
+\section{Heart Models for Closed-loop Model Checking}
 %\begin{itemize}
 	%\item What does nondeterminism do? Where can these model be used?
     %\item How to replace complex dynamics of the deterministic models with nondeterminism?
@@ -270,7 +270,7 @@ The most challenging aspect during closed-loop model checking is the abstraction
 Timed automata (\cite{timed_automata}) is an extension of a finite automaton with a finite set of real-valued clocks. It has been used for modeling and verifying systems which are triggered by events and have timing constraints between events.  UPPAAL is a standard tool for modeling and verification of real-time systems, based on networks of timed automata. The graphical and text-based interface makes modeling more intuitive. Requirements can be specified using Computational Tree Logic (CTL), as described in \cite{Clarke}, and violations can be visualized in the simulation environment.
 
 \emph{The rest of this section describes the process of model abstraction and refinement where more abstract models cover more of the state space but can only prove simpler properties. As we refine models, they cover lesser state space but can prove more complex properties. The reader looking for a more intuitive understanding of the area may skip the detailed description in the rest of this chapter, during the first reading.}
-
+\newpage
 \subsubsection{Syntax of Timed Automata}
 A timed automaton \textbf{G} is a tuple $\left\langle S,S_0,\Sigma,X,inv,E\right\rangle$, where
 
@@ -301,16 +301,17 @@ For two timed automata $T^1=\left\langle S^1,S_0^1,\Sigma^1,X^1,inv^1,E^1\right\
 
 Certain properties are preserved for timed simulation relation. For $\varphi\in ATCTL$, if $M\preceq_t M'$, we have $M'\models \varphi\Rightarrow M\models\varphi$.\cite{simulation} However, $M'\not\models \varphi\Rightarrow M\not\models\varphi$ does not hold. Violations of $ATCTL$ yield \textsf{counter-examples} and the validity of which need to be checked on more refined model.
 
-It is known that timed simulation relation is also closed under composition \cite{simulation}. So when we have two heart models $H_1\preceq_t H_2$ we will have $H_1\| P\preceq_t H_2\| P$ where $P$ is the timed-automata model of the pacemaker. For $\varphi\in ATCTL$, we have $H_2\| P\models\varphi\Rightarrow H_1\| P\models\varphi$. With this property we can verify the pacemaker model with abstract heart model. In the rest of the section, we will describe how we develop our initial heart model from the physiological perspective and abstract the model step by step so that the complexity of the model is reduced for verification. Given two heart models $H_1$, $H_2$ and a timed simulation mapping \textsf{sim}=$\Omega_1\times\Omega_2$, there are no automated methods to check $H_1\preceq_t H_2$. In the Appendix, we show the manual proof for the timed simulation relation between two heart models $H_2$ and $H_3$. Other timed simulation relations can be proved similarly.
 \begin{figure}[!t]
 \center
 %\vspace{-10pt}
-\includegraphics[width=0.9\textwidth]{figs/Heart_abs.pdf}
+\includegraphics[width=\textwidth]{figs/Heart_abs.pdf}
 %\vspace{-10pt}
 \caption{(a) Electrical voltage change measured on the heart tissue and its adjacent tissue region (dotted) upon activation. The whole process is divided into timing periods with different behaviors. (b) The original tissue model which captures the refactory timing behaviors of the heart tissue. (c) The conduction property is separated to the path automaton and the heart can be modeled as conduction network. (d) Equivalent locations are merged. (e) The blocking property of the ERP location is replaced by a non-deterministic conduction in the path automaton. (f) Conduction between nodes are replaced by self-activations of the nodes. More details in \cite{STTT13}}
 \label{fig:HM_abs}
-%\vspace{-10pt}
+\vspace{-10pt}
 \end{figure} 
+It is known that timed simulation relation is also closed under composition \cite{simulation}. So when we have two heart models $H_1\preceq_t H_2$ we will have $H_1\| P\preceq_t H_2\| P$ where $P$ is the timed-automata model of the pacemaker. For $\varphi\in ATCTL$, we have $H_2\| P\models\varphi\Rightarrow H_1\| P\models\varphi$. With this property we can verify the pacemaker model with abstract heart model. In the rest of the section, we will describe how we develop our initial heart model from the physiological perspective and abstract the model step by step so that the complexity of the model is reduced for verification. Given two heart models $H_1$, $H_2$ and a timed simulation mapping \textsf{sim}=$\Omega_1\times\Omega_2$, there are no automated methods to check $H_1\preceq_t H_2$. In the Appendix, we show the manual proof for the timed simulation relation between two heart models $H_2$ and $H_3$. Other timed simulation relations can be proved similarly.
+
 \subsection{Abstraction 0: Initial Abstraction}
 For the initial heart model, we assume the heart tissue is modeled with all its spatial detail. For the temporal aspect, we model each tissue region as an automaton $N0$ shown in \figref{HM_abs}(b). The beat-to-beat dynamics of heart tissue, modeled by the deterministic model, is abstracted using non-determinism. For example, the ERP period and conduction delay of the tissue are non-deterministically chosen from ranges instead of deterministic functions. The whole heart can be modeled by composing tissue models with different parameters $H_0=N_0^1\|N_0^2\cdots N_0^n$. However, for a real heart, the number $n$ is very large and the connectivity and parameter values are difficult, and perhaps impossible, to determine, which makes verification with $H_0$ infeasible. 
 
@@ -325,14 +326,9 @@ Under the assumption that the ERP period of a node automaton is much longer than
 
 \subsection{Abstraction 3: Replacing Blocking with Non-deterministic Conduction}
 In Abstraction 3, we replace the blocking behavior of the \textsf{ERP} location of the node with non-deterministic conduction in the path automaton. There exists a transition\\ 
-$RE\| ID\| RE$ 
-$\xrightarrow[Act\_path\_1!]{Act\_node\_1?}$ 
-$\xrightarrow{Act\_path\_1?}$ 
-$RE\| ID\| RE$\\
+$$RE\| ID\| RE \xrightarrow[Act\_path\_1!]{Act\_node\_1?}\xrightarrow{Act\_path\_1?}RE\| ID\| RE$$
 in $N_3^1\| P_3^1\| N_3^2$ to replace transition\\
-$ER\| ID\| ER$ 
-$\xrightarrow{Act\_node\_1?}$ 
-$ER\| ID\| ER$\\
+$$ER\| ID\| ER \xrightarrow{Act\_node\_1?} ER\| ID\| ER$$
 in $N_2^1\| P_2^1\| N_2^2$
 
 Without the ERP constraint the AV node is no longer needed and the heart can be modeled as $H_3=N_3^1\| P_3\| N_3^2$.  The detailed proof for this timed simulation relation can be found in \cite{STTT13}. 
@@ -356,7 +352,7 @@ Using this technique, we systematically create a family of heart models with dif
 % \subsubsection{Replace ERP Blocking With Non-deterministic Conduction}
 % \subsubsection{Replace }
 
-\noindent\textbf{Discussion:}\\
+\subsection{Discussion}
 In this chapter, we use heart modeling as example to demonstrate how to develop physiological models for closed-loop evaluation of closed-loop medical devices. We emphasized that models should be developed according to their applications. We developed heart models based on clinical Electrophysiological Testing, and modeled the topological and temporal behaviors of the heart with timed-automata formulation. In the next chapter we will demonstrate the identification and validation of the heart models.
 
 

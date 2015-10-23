@@ -34,17 +34,24 @@
 \usepackage{amsfonts}
 
 
-\title{High-confidence Medical Device Software Development}
+\title{High-Confidence Medical Device Software Development}
 \author{
 Zhihao Jiang and Rahul Mangharam \\
 University of Pennsylvania\\
-\{zhihaoj, rahulm\}@seas.upenn.edu
-}
+United States}
 
 \begin{document}
-
-% the following settings can be set or left blank at first
 \copyrightowner{Z.~Jiang and R.~Mangharam}
+\volume{9}
+\issue{4}
+\pubyear{2015}
+\copyrightyear{2015}
+\isbn{978-1-68083-068-2}
+\doi{10.1561/1000000040}
+\firstpage{309}
+\lastpage{389}
+% the following settings can be set or left blank at first
+%\copyrightowner{Z.~Jiang and R.~Mangharam}
 % \volume{1}
 % \issue{3}
 % \pubyear{2014}
@@ -70,7 +77,7 @@ first, physiology is much more complex and less well-understood than man-made sy
 Secondly, the variability between humans is orders of magnitude larger than that between two cars coming off the assembly line.
 
 Using the implantable cardiac pacemaker as an example of closed-loop device, and the heart as the organ to be modeled, we present several of the challenges and early results in model-based device validation. We begin with detailed timed automata model of the pacemaker, based on the specifications and algorithm descriptions from Boston Scientific. For closed-loop evaluation, a real-time Virtual Heart Model (VHM) has been developed to model the electrophysiological operation of the functioning and malfunctioning (i.e., during arrhythmia) hearts. By extracting the timing properties of the heart and pacemaker device, we present a methodology to construct timed-automata models for formal model checking and functional testing of the closed-loop system. The VHM's capability of generating clinically-relevant response has been validated for a variety of common arrhythmias. Based on a set of requirements, we describe a framework of Abstraction Trees that allows for interactive and physiologically relevant closed-loop model checking and testing for basic pacemaker device operations such as maintaining the heart rate, atrial-ventricle synchrony and complex conditions such as avoiding pacemaker-mediated tachycardia. 
-
+\newpage
 Through automatic model translation of abstract models to simulation-based testing and code generation for platform-level testing, this model-based design approach ensures the closed-loop safety properties are retained through the design toolchain and facilitates the development of verified software from verified models. This system is a step toward a validation and testing approach for medical cyber-physical systems with the patient-in-the-loop.
 
 \end{abstract}
