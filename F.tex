@@ -46,7 +46,7 @@ In \cite{TECS}, we showed that for a large class of UPPAAL models, the generated
 \figref{PM_sf} demonstrates the Stateflow chart generated from the UPPAAL model of the DDD pacemaker model in \figref{PMdesign} using the UPP2SF tool.
 \begin{figure*} [!t]
 \center
-\includegraphics[width=0.98\textwidth]{figs/PM_SF_buffer_newC1.png} 
+\includegraphics[width=0.77\textwidth]{figs/PM_SF_buffer_newC1.png} 
 \caption{Pacemaker Stateflow chart converted from the UPPAAL model in~\figref{PMdesign} using UPP2SF; the heart and buffer models are highlighted.} 
 \label{fig:PM_sf}
 \end{figure*}
@@ -55,7 +55,7 @@ The code was generated for the general embedded real-time target and as a result
 
 \begin{figure*} [!t]
 \center
-\includegraphics[width=0.90\textwidth]{figs/CodeListingFinal.png}
+\includegraphics[width=\textwidth]{figs/CodeListingFinal.png}
 \caption{Structure of the pacemaker code obtained from the Stateflow chart shown in \figref{PM_sf}.}
 \label{fig:pm_code}
 \end{figure*}
@@ -134,7 +134,7 @@ Lead displacement affects many patients and can result in inappropriate or ineff
 %\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-One common case for lead dislodge is shown in \figref{dislodge_all}.(a), where the atrial lead has fallen into the right ventricle outflow tract. In this case the atrial lead senses from the ventricle rather than atrium and atrial pacing will initiate a ventricular event. \figref{dislodge_all}.(c) shows the simulated EGMs in this case. The figure reveals several facts: 1) No P wave is sensed or tracked (Marker 1). 2) Atrial Pace initiates an abnormal, wide QRS which is then sensed by the ventricle lead (Marker 2). 3) Intermittent appearance of VP on QRS 110 ms after the AP. The ventricular lead can receive signal from: 1) pacing signal sent from the atrial lead, 2) the intrinsic A-V conduction path. The two paths are shown in \figref{race_cond} and form a timing race condition. When the signal from the atrial lead arrives the ventricular lead first, it will trigger VS. If the intrinsic signal arrives the ventricular lead during the VSP sensing window (defined in previous section), it will trigger VSP. Although the pacing is 'safe' because the pacing is early enough to avoid the vulnerable refractory period, the damage caused by pacing on depolarized tissue is currently a matter of much investigation.\\
+One common case for lead dislodge is shown in \figref{dislodge_all}.(a), where the atrial lead has fallen into the right ventricle outflow tract. In this case the atrial lead senses from the ventricle rather than atrium and atrial pacing will initiate a ventricular event. \figref{dislodge_all}.(c) shows the simulated EGMs in this case. The figure reveals several facts: 1) No P wave is sensed or tracked (Marker 1). 2) Atrial Pace initiates an abnormal, wide QRS which is then sensed by the ventricle lead (Marker 2). 3) Intermittent appearance of VP on QRS 110 ms after the AP. The ventricular lead can receive signal from: 1) pacing signal sent from the atrial lead, 2) the intrinsic A-V conduction path. The two paths are shown in \figref{dislodge_all}.(a) and form a timing race condition. When the signal from the atrial lead arrives the ventricular lead first, it will trigger VS. If the intrinsic signal arrives the ventricular lead during the VSP sensing window (defined in previous section), it will trigger VSP. Although the pacing is 'safe' because the pacing is early enough to avoid the vulnerable refractory period, the damage caused by pacing on depolarized tissue is currently a matter of much investigation.\\
 
 \subsection{Summary:}
 In this chapter, we first introduced a model translation method from UPPAAL timed automata models to Stateflow charts. Combined with Simulink coder, the tool chain provides rigorous evidence of traceability from physiological requirements to the C code implementation. Oversensing, crosstalk and lead displacement are three examples in which the cause of the problem is not modeled in the abstract interface in the timed-automata model. In such cases, closed-loop testing with the more refined heart models and EGM interface can be used to provide safety evidence.

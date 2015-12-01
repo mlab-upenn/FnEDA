@@ -172,7 +172,7 @@ where $T_{min}$ and $T_{max}$ are the minimum and maximum value for \emph{Terp} 
 \begin{figure}[!t]
 %\centering
 		%\subfigure [\small]{			
-		\includegraphics[width=1.2\textwidth]{figs/automata.pdf}
+		\includegraphics[width=\textwidth]{figs/automata.pdf}
 		%\label{fig:node_automata}
 		%} 
 %%	\hspace{.1in}%
@@ -188,7 +188,7 @@ where $T_{min}$ and $T_{max}$ are the minimum and maximum value for \emph{Terp} 
 		%} 
 
 %\vspace{-10pt}
-\caption{\small (a) Node automaton: The dotted transition is only valid for tissue (like SA node) that can be activated by an external trigger; (b) Path automaton modeling the electric conduction and propagation between two node automata; (c) Model of the electrical conduction system of the heart using a network of node \& path automata ~\cite{VHM_proc}.}\label{fig:automata}
+\caption{\small (a) Node automaton: The dotted transition is only valid for tissue (like SA node) that can be activated by an external trigger; (b) Path automaton modeling the electric conduction and propagation between two node automata; (c) Electrical conduction system of the heart; (d) Model of the electrical conduction system of the heart using a network of node \& path automata ~\cite{VHM_proc}.}\label{fig:automata}
 %\vspace{-15pt}
 \end{figure} 
 
@@ -211,11 +211,7 @@ where $path\_len$ denotes the length of the path and $v$ is the conduction veloc
 After \emph{Tante} or \emph{Tretro} time expires, the path automaton sends out \emph{Act\_node(b)} or \emph{Act\_node(a)} respectively. A transition to \emph{Conflict} state occurs followed by the transition to \emph{Idle} state. The intermediate state \emph{Conflict} is designed to prevent back-flow, where the path is activated by the node \emph{b} it has just activated. If during \emph{Ante} or \emph{Retro} state another \emph{Act\_path} event is received from the other node connected to the path automaton, a transition to \emph{Double} state will occur, corresponding to the two-way conduction. In this case, the activation signals eventually cancel each other and the transition to \emph{Idle} state is taken.
 
 \subsection{Modeling the Heart's Electrical Conduction System}
-The node and path automata are the basic building blocks for heart modeling. Hearts with different conditions are modeled by using different conduction topologies with appropriate timing parameters for each node and path automata. \figref{automata}.(c) shows one such  topology of a network of node and path automata.
-
-\subsection{Interaction with the Heart Model}
-In EP testing and during pacemaker implantation, the local electrical activities, measured as electrogram (EGM) signals, are used to diagnose heart conditions. During heart model construction, we can assign a node automaton at electrode locations and the transitions to the ERP state can be used to represent the local activation events. In a more general setup where electrodes are assigned anywhere within the heart model, a probe model is designed to generate synthetic EGM signals using spatio-temporal information from the proximity to the network of node and path automata. \figref{egm_s} shows the morphology of EGM signal changes with different conduction velocity and probe configurations. A detailed description of the probe model can be found in \cite{vhm_embc11}.
-
+The node and path automata are the basic building blocks for heart modeling. Hearts with different conditions are modeled by using different conduction topologies with appropriate timing parameters for each node and path automata. \figref{automata}.(d) shows one such  topology of a network of node and path automata.
 \begin{figure}[!t]
 \center
 %\vspace{-15pt}
@@ -225,12 +221,9 @@ In EP testing and during pacemaker implantation, the local electrical activities
 \label{fig:egm_s}
 %\vspace{-15pt}
 \end{figure}
-\subsection{Heart-on-a-Chip Platform}
-Platform testing remains the primary means to verify and validate device software. Currently testing is done by feeding recorded open-loop heart signals to the device and evaluating the device output. Consequently, the change in the state of the heart condition, in response to device output, is not taken into account. Thus, device malfunctions involving state changes due to multiple closed-loop interactions will not be captured during open-loop testing. 
+\subsection{Interaction with the Heart Model}
+In EP testing and during pacemaker implantation, the local electrical activities, measured as electrogram (EGM) signals, are used to diagnose heart conditions. During heart model construction, we can assign a node automaton at electrode locations and the transitions to the ERP state can be used to represent the local activation events. In a more general setup where electrodes are assigned anywhere within the heart model, a probe model is designed to generate synthetic EGM signals using spatio-temporal information from the proximity to the network of node and path automata. \figref{egm_s} shows the morphology of EGM signal changes with different conduction velocity and probe configurations. A detailed description of the probe model can be found in \cite{vhm_embc11}.
 
-To this effect, the heart model described above is also implemented on hardware platform (\figref{modeling_heart}) for closed-loop testing. Since each heart model is a network of node and path automata running concurrently, we implemented the heart model on an FPGA, so that increasing in the number of nodes and paths would not affect real-time constraints. The second generation heart model implementation has been implemented on a lower cost fast micro-controller platform. The fast clock ensures that executions of all nodes and paths can be finished within 1ms. The Heart-on-a-Chip platform includes a heart model implementation which is able to represent common heart conditions such as bradycardia, tachycardia, heart block, etc (for mode details refer to \cite{VHM_proc}). The parameters of the heart model can be changed at run-time by either switching among pre-defined parameter sets, or sending values directly to the model through a user interface in Matlab. A monitoring system observes logical interactions between heart model and the pacemaker and checks them against safety invariants at run-time. 
-
-As shown in (\figref{HOC}), with an analog interface the heart model can interact with a commercial pacemaker in real time. Our analog interface uses an optical isolation circuit to separate the pacemaker circuit and the heart implementation. Signals generated from the heart are attenuated to the appropriate level to interact with a Boston Scientific pacemaker and analog pacing signals are converted to pacing events received by the heart model. 
 \begin{figure}[!t]
 \center
 %\vspace{-15pt}
@@ -240,6 +233,13 @@ As shown in (\figref{HOC}), with an analog interface the heart model can interac
 \label{fig:modeling_heart}
 %\vspace{-15pt}
 \end{figure}
+\subsection{Heart-on-a-Chip Platform}
+Platform testing remains the primary means to verify and validate device software. Currently testing is done by feeding recorded open-loop heart signals to the device and evaluating the device output. Consequently, the change in the state of the heart condition, in response to device output, is not taken into account. Thus, device malfunctions involving state changes due to multiple closed-loop interactions will not be captured during open-loop testing. 
+
+To this effect, the heart model described above is also implemented on hardware platform (\figref{modeling_heart}) for closed-loop testing. Since each heart model is a network of node and path automata running concurrently, we implemented the heart model on an FPGA, so that increasing in the number of nodes and paths would not affect real-time constraints. The second generation heart model implementation has been implemented on a lower cost fast micro-controller platform. The fast clock ensures that executions of all nodes and paths can be finished within 1ms. The Heart-on-a-Chip platform includes a heart model implementation which is able to represent common heart conditions such as bradycardia, tachycardia, heart block, etc (for mode details refer to \cite{VHM_proc}). The parameters of the heart model can be changed at run-time by either switching among pre-defined parameter sets, or sending values directly to the model through a user interface in Matlab. A monitoring system observes logical interactions between heart model and the pacemaker and checks them against safety invariants at run-time. 
+
+As shown in (\figref{HOC}), with an analog interface the heart model can interact with a commercial pacemaker in real time. Our analog interface uses an optical isolation circuit to separate the pacemaker circuit and the heart implementation. Signals generated from the heart are attenuated to the appropriate level to interact with a Boston Scientific pacemaker and analog pacing signals are converted to pacing events received by the heart model. 
+
 \begin{figure}[!b]
 \center
 %\vspace{-15pt}
@@ -268,9 +268,9 @@ The most challenging aspect during closed-loop model checking is the abstraction
 
 \subsection{Timed Automata and Timed Simulation}
 Timed automata (\cite{timed_automata}) is an extension of a finite automaton with a finite set of real-valued clocks. It has been used for modeling and verifying systems which are triggered by events and have timing constraints between events.  UPPAAL is a standard tool for modeling and verification of real-time systems, based on networks of timed automata. The graphical and text-based interface makes modeling more intuitive. Requirements can be specified using Computational Tree Logic (CTL), as described in \cite{Clarke}, and violations can be visualized in the simulation environment.
+\looseness-1
 
 \emph{The rest of this section describes the process of model abstraction and refinement where more abstract models cover more of the state space but can only prove simpler properties. As we refine models, they cover lesser state space but can prove more complex properties. The reader looking for a more intuitive understanding of the area may skip the detailed description in the rest of this chapter, during the first reading.}
-\newpage
 \subsubsection{Syntax of Timed Automata}
 A timed automaton \textbf{G} is a tuple $\left\langle S,S_0,\Sigma,X,inv,E\right\rangle$, where
 
@@ -286,7 +286,7 @@ A timed automaton \textbf{G} is a tuple $\left\langle S,S_0,\Sigma,X,inv,E\right
 For the clock variables $X$, the clock constraints $\Psi\in\Psi^X$ can be inductively defined by $\Psi:=x\bot c\|\Psi_1\wedge\Psi_2$, where $\bot\in\{\leq,=,\geq\}$, and $c\in\mathbb{N}$.
 \subsubsection{Semantics of Timed Automata}
 A state of a timed automaton is a pair $\left\langle s,v\right\rangle$ which contains the location $s\in S$ and the valuation $v$ for all clocks. The set of all states is $\Omega$. For all $\lambda\in X$, $v[\lambda :=0]$ denotes the valuation which sets all clocks $x\in\lambda$ as zero and the rest of the clocks unchanged. For all $t\in \textbf{R}$, $v+t$ denotes the valuation which increase all the clock value by $t$. There are two kinds of transitions between states. The \textsf{discrete transition} happens when the condition of an edge has been met. So we have:
-$$\left\langle s,\sigma,\Psi,\lambda,s'\right\rangle\in E,v\models \Psi,v[\lambda :=0]\models inv(s')$$
+$$\left\langle s,\sigma,\Psi,\lambda,s'\right\rangle\in E,v\models \Psi,v[\lambda :=0]\models inv(s')$$\looseness-1
 $$\Rightarrow (s,v)\xrightarrow{\sigma}(s',v[\lambda :=0])$$
 The \textsf{timed transition} happens when the timed automaton can stay in the same location for certain amount of time. We have:
 $$\delta\in \textsl{R},\forall \delta'\leq\delta, v+\delta'\models inv(s)$$
@@ -301,15 +301,7 @@ For two timed automata $T^1=\left\langle S^1,S_0^1,\Sigma^1,X^1,inv^1,E^1\right\
 
 Certain properties are preserved for timed simulation relation. For $\varphi\in ATCTL$, if $M\preceq_t M'$, we have $M'\models \varphi\Rightarrow M\models\varphi$.\cite{simulation} However, $M'\not\models \varphi\Rightarrow M\not\models\varphi$ does not hold. Violations of $ATCTL$ yield \textsf{counter-examples} and the validity of which need to be checked on more refined model.
 
-\begin{figure}[!t]
-\center
-%\vspace{-10pt}
-\includegraphics[width=\textwidth]{figs/Heart_abs.pdf}
-%\vspace{-10pt}
-\caption{(a) Electrical voltage change measured on the heart tissue and its adjacent tissue region (dotted) upon activation. The whole process is divided into timing periods with different behaviors. (b) The original tissue model which captures the refactory timing behaviors of the heart tissue. (c) The conduction property is separated to the path automaton and the heart can be modeled as conduction network. (d) Equivalent locations are merged. (e) The blocking property of the ERP location is replaced by a non-deterministic conduction in the path automaton. (f) Conduction between nodes are replaced by self-activations of the nodes. More details in \cite{STTT13}}
-\label{fig:HM_abs}
-\vspace{-10pt}
-\end{figure} 
+
 It is known that timed simulation relation is also closed under composition \cite{simulation}. So when we have two heart models $H_1\preceq_t H_2$ we will have $H_1\| P\preceq_t H_2\| P$ where $P$ is the timed-automata model of the pacemaker. For $\varphi\in ATCTL$, we have $H_2\| P\models\varphi\Rightarrow H_1\| P\models\varphi$. With this property we can verify the pacemaker model with abstract heart model. In the rest of the section, we will describe how we develop our initial heart model from the physiological perspective and abstract the model step by step so that the complexity of the model is reduced for verification. Given two heart models $H_1$, $H_2$ and a timed simulation mapping \textsf{sim}=$\Omega_1\times\Omega_2$, there are no automated methods to check $H_1\preceq_t H_2$. In the Appendix, we show the manual proof for the timed simulation relation between two heart models $H_2$ and $H_3$. Other timed simulation relations can be proved similarly.
 
 \subsection{Abstraction 0: Initial Abstraction}
@@ -322,6 +314,15 @@ At the first abstraction step, we separate the conduction delay (modeled by the 
 The heart model $H_1'$ still has equivalent locations. In Abstraction 2 we further abstract the node and path automata by merging equivalent states. In the new node automaton $N_2$ we merge the \textsf{RRP} state with the \textsf{Rest} state with:
 $$N_2.Trest\_min = N_1.Trest\_min+N_1.Trrp\_min$$
 $$N_2.Trest\_max = N_1.Trest\_max+N_1.Trrp\_max$$
+\begin{figure}[!h]
+\center
+%\vspace{-10pt}
+\includegraphics[width=\textwidth]{figs/Heart_abs.pdf}
+%\vspace{-10pt}
+\caption{(a) Electrical voltage change measured on the heart tissue and its adjacent tissue region (dotted) upon activation. The whole process is divided into timing periods with different behaviors. (b) The original tissue model which captures the refactory timing behaviors of the heart tissue. (c) The conduction property is separated to the path automaton and the heart can be modeled as conduction network. (d) Equivalent locations are merged. (e) The blocking property of the ERP location is replaced by a non-deterministic conduction in the path automaton. (f) Conduction between nodes are replaced by self-activations of the nodes. More details in \cite{STTT13}}
+\label{fig:HM_abs}
+%\vspace{-10pt}
+\end{figure} 
 Under the assumption that the ERP period of a node automaton is much longer than the conduction delay of a path automaton,  the \textsf{Double} and \textsf{Conflict} location of the path automaton is merged with the \textsf{Idle} state. The heart can be modeled as $H_2=N_2^1\| P_2^1\| N_2^2\| P_2^2\| N_2^3$.
 
 \subsection{Abstraction 3: Replacing Blocking with Non-deterministic Conduction}

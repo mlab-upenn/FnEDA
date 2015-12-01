@@ -75,9 +75,9 @@ However, in the closed loop case with the DDD pacemaker, the AVI component of a 
 		\includegraphics[width=0.5\textwidth]{figs/SVT_DDD.pdf}
 		\label{fig:SVT_DDD}
 		} 
-\vspace{-10pt}
+\vspace{-5pt}
 \caption{\small Benign open loop case: SVT without a pacemaker or with a pacemaker in sense-only mode (ODO) (b) Dangerous closed-loop-case SVT with DDD pacemaker which tries to match the fast atrial rate with a corresponding (and dangerous) fast ventricular rate.}
-%\vspace{-15pt}
+\vspace{-10pt}
 \end{figure*} 
 
 Pacemaker manufacturers have designed algorithms to detect and terminate these behaviors. Intuitively, the mode-switch algorithm first detects SVT. After confirmed detection, it switches the pacemaker from a dual-chamber mode to a single-chamber mode. During the single-chamber mode, the A-V synchrony function of the pacemaker is deactivated thus the ventricular rate is decoupled from the fast atrial rate. After the algorithm determines the end of SVT, it will switch the pacemaker back to the dual chamber mode. 
@@ -94,10 +94,6 @@ The mode-switch algorithm (also known as atrial tachycardia response) specificat
 % to show some interesting findings. The basic idea of this simplified model is explained in detail. \\
 %\mySubSubSection{UPPAAL model for mode-switch algorithm}
 In our UPPAAL model of the mode-switch algorithm, we use nominal parameter values from the clinical setting. We define \emph{trigger rate} at 170bpm (350ms), \emph{entry count} at 8, \emph{duration} for 8 ventricular events and \emph{fallback mode} as VDI. 
-
-In order to model both DDD and VDI modes and the switching between them, we made modifications to the AVI and LRI components.
-In each component two copies for both modes are modeled, and switch between each other when switching events (DDD, VDI) are received. During VDI mode, \textsf{VP} is delivered by the LRI component instead of the AVI component. The clock values are shared between both copies in order to preserve essential intervals even after switching. The modified AVI ($AVI'$) and LRI ($LRI'$)components are shown in \figref{avi_ms}. 
-
 \begin{figure*}
 		\centering
 				%\vspace{-15pt}
@@ -107,6 +103,11 @@ In each component two copies for both modes are modeled, and switch between each
 		  %\vspace{-15pt}
 		\label{fig:dur_count}
 \end{figure*} 
+
+In order to model both DDD and VDI modes and the switching between them, we made modifications to the AVI and LRI components.
+In each component two copies for both modes are modeled, and switch between each other when switching events (DDD, VDI) are received. During VDI mode, \textsf{VP} is delivered by the LRI component instead of the AVI component. The clock values are shared between both copies in order to preserve essential intervals even after switching. The modified AVI ($AVI'$) and LRI ($LRI'$)components are shown in \figref{avi_ms}. 
+\looseness-1
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
